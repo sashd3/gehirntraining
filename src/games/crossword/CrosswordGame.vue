@@ -12,6 +12,20 @@
       </p>
     </div>
 
+    <!-- Hidden input for native mobile keyboard -->
+    <input
+      ref="hiddenInput"
+      class="crossword-game__hidden-input"
+      type="text"
+      autocomplete="off"
+      autocorrect="off"
+      autocapitalize="characters"
+      spellcheck="false"
+      inputmode="text"
+      @input="onNativeInput"
+      @keydown="onNativeKeydown"
+    />
+
     <!-- Grid -->
     <div class="crossword-game__grid-wrapper">
       <CrosswordGrid
@@ -20,7 +34,7 @@
         :selected-cell="selectedCellObj"
         :selected-direction="selectedDirection"
         :user-input="userInputMap"
-        @cell-select="onCellSelectObj"
+        @cell-select="onCellSelectWithFocus"
       />
     </div>
 
@@ -29,7 +43,7 @@
       :clues="puzzle.clues"
       :selected-clue="currentClue"
       :completed-clues="completedClueKeys"
-      @clue-select="onClueSelect"
+      @clue-select="onClueSelectWithFocus"
     />
 
     <!-- Action buttons -->
@@ -48,8 +62,9 @@
       </button>
     </div>
 
-    <!-- Keyboard -->
+    <!-- Fallback keyboard only for desktop -->
     <CrosswordKeyboard
+      v-if="!isMobile"
       @key-press="onKeyPress"
       @backspace="onBackspace"
       @enter="onEnter"
@@ -58,7 +73,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { getRandomPuzzle } from '@/generators/crossword.generator'
 import CrosswordGrid from './CrosswordGrid.vue'
@@ -67,6 +82,53 @@ import CrosswordKeyboard from './CrosswordKeyboard.vue'
 import { Check, Info, RotateCcw } from 'lucide-vue-next'
 import type { Difficulty, GameResult } from '@/types/game'
 import type { CrosswordPuzzleData, CrosswordClue } from '@/data/crossword-puzzles/types'
+
+const hiddenInput = ref<HTMLInputElement | null>(null)
+const isMobile = ref(false)
+
+onMounted(() => {
+  isMobile.value = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
+    ('ontouchstart' in window && window.innerWidth < 768)
+})
+
+function focusHiddenInput() {
+  if (isMobile.value && hiddenInput.value) {
+    hiddenInput.value.value = ''
+    hiddenInput.value.focus()
+  }
+}
+
+function onCellSelectWithFocus(cell: { row: number; col: number }) {
+  onCellSelectObj(cell)
+  nextTick(() => focusHiddenInput())
+}
+
+function onClueSelectWithFocus(clue: CrosswordClue) {
+  onClueSelect(clue)
+  nextTick(() => focusHiddenInput())
+}
+
+function onNativeInput(e: Event) {
+  const input = e.target as HTMLInputElement
+  const val = input.value
+  if (val && val.length > 0) {
+    const lastChar = val.slice(-1)
+    if (/[a-zA-ZäöüÄÖÜß]/.test(lastChar)) {
+      onKeyPress(lastChar.toUpperCase())
+    }
+  }
+  input.value = ''
+}
+
+function onNativeKeydown(e: KeyboardEvent) {
+  if (e.key === 'Backspace') {
+    e.preventDefault()
+    onBackspace()
+  } else if (e.key === 'Enter') {
+    e.preventDefault()
+    onEnter()
+  }
+}
 
 const props = defineProps<{
   difficulty: Difficulty
@@ -437,6 +499,16 @@ watch(
   margin: 0 auto;
   width: 100%;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+
+  &__hidden-input {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    font-size: 16px; // prevents iOS zoom on focus
+  }
 
   // --- Current clue display ---
   &__clue-header {

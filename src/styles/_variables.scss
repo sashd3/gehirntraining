@@ -1,0 +1,384 @@
+// ==========================================================================
+// Design System Variables — Brain Training App (60+ users)
+// ==========================================================================
+// iOS-native design language. Flieder (lilac/lavender) primary palette
+// with soft green-turquoise accent. System font stack for native feel.
+// Typography scaled ~15-20% above iOS defaults for elderly readability.
+// Touch targets meet iOS HIG (44pt minimum).
+// ==========================================================================
+
+:root {
+  // --------------------------------------------------------------------------
+  // Typography — iOS System Font Stack
+  // --------------------------------------------------------------------------
+  --font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+    'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-family-rounded: -apple-system, BlinkMacSystemFont, 'SF Pro Rounded',
+    'SF Pro Display', 'Helvetica Neue', sans-serif;
+  --font-family-mono: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Consolas,
+    monospace;
+
+  // iOS-inspired type scale, bumped ~15-20% for elderly readability
+  // iOS standard body = 17px, our body = 20px
+  --font-size-large-title: 38px; // iOS 34 -> 38
+  --font-size-title1: 32px; // iOS 28 -> 32
+  --font-size-title2: 25px; // iOS 22 -> 25
+  --font-size-title3: 23px; // iOS 20 -> 23
+  --font-size-headline: 20px; // iOS 17 semibold -> 20
+  --font-size-body: 20px; // iOS 17 -> 20
+  --font-size-callout: 19px; // iOS 16 -> 19
+  --font-size-subhead: 18px; // iOS 15 -> 18
+  --font-size-footnote: 15px; // iOS 13 -> 15
+  --font-size-caption1: 14px; // iOS 12 -> 14
+  --font-size-caption2: 13px; // iOS 11 -> 13
+
+  // Aliases for backwards compatibility
+  --font-size-base: var(--font-size-body);
+  --font-size-xs: var(--font-size-caption1);
+  --font-size-sm: var(--font-size-subhead);
+  --font-size-md: var(--font-size-body);
+  --font-size-lg: var(--font-size-title2);
+  --font-size-xl: var(--font-size-title1);
+  --font-size-2xl: 36px;
+  --font-size-3xl: var(--font-size-large-title);
+  --font-size-4xl: 48px;
+
+  // Line heights — iOS-standard proportions, generous
+  --line-height-tight: 1.15;
+  --line-height-snug: 1.25;
+  --line-height-normal: 1.4;
+  --line-height-relaxed: 1.6;
+  --line-height-loose: 1.8;
+
+  // Font weights — SF Pro naming
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-heavy: 800;
+
+  // Letter spacing — iOS tracking values
+  --letter-spacing-tight: -0.03em;
+  --letter-spacing-snug: -0.01em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.02em;
+  --letter-spacing-wider: 0.04em;
+
+  // --------------------------------------------------------------------------
+  // Colors — Light Theme (Flieder / Lilac Primary)
+  // WCAG AAA compliant for body text on backgrounds
+  // --------------------------------------------------------------------------
+
+  // Background palette — very light lavender tint, iOS-clean
+  --color-bg-primary: #F8F6FB; // Main background, faint lavender
+  --color-bg-secondary: #F0EDF5; // Grouped/inset background
+  --color-bg-tertiary: #E8E0F0; // Light lilac for hover/pressed states
+  --color-bg-elevated: #FFFFFF; // Cards, sheets, elevated surfaces
+  --color-bg-overlay: rgba(45, 37, 64, 0.4); // Scrim for modals
+  --color-bg-input: #FFFFFF; // Text fields
+
+  // Text palette — deep purple-charcoal for warmth
+  --color-text-primary: #2D2540; // Main text, near-black with purple undertone
+  --color-text-secondary: #6B6180; // Secondary labels
+  --color-text-tertiary: #9B95A8; // Placeholder, muted text
+  --color-text-disabled: #C4BED0; // Disabled state
+  --color-text-inverse: #FFFFFF; // Text on filled buttons
+  --color-text-on-accent: #FFFFFF; // Text on primary color
+
+  // Primary — Flieder (Lilac/Lavender)
+  --color-primary: #9B8AB8; // Primary actions, icons
+  --color-primary-dark: #7B6A9B; // Hover/pressed state
+  --color-primary-darker: #5C4D7A; // Active/high-emphasis
+  --color-primary-light: #C4B5D4; // Tinted button backgrounds
+  --color-primary-lighter: #E8E0F0; // Light tint backgrounds
+  --color-primary-bg: #F3EFF8; // Very subtle primary background
+
+  // Accent — Soft Green-Turquoise
+  --color-accent: #6BBFAE; // Accent actions, badges, highlights
+  --color-accent-hover: #5AA99A; // Hover
+  --color-accent-active: #4D9488; // Pressed
+  --color-accent-light: #8DD4C5; // Light accent
+  --color-accent-lighter: #E5F5F1; // Accent tint background
+  --color-accent-text: #3D8576; // Accent text on light backgrounds
+
+  // Legacy alias — map old --color-accent to primary for existing components
+  // Components using --color-accent for "brand color" now get lilac
+  // Components specifically wanting green-turquoise should use --color-accent-green
+
+  // Semantic colors — soft, not harsh
+  --color-success: #5CB885;
+  --color-success-bg: #EAF7F0;
+  --color-success-text: #2D6B4A;
+  --color-warning: #E8A44C;
+  --color-warning-bg: #FDF4E8;
+  --color-warning-text: #7A5222;
+  --color-error: #E25C5C;
+  --color-error-bg: #FDECEC;
+  --color-error-text: #8B2E2E;
+  --color-info: #6BA3D6;
+  --color-info-bg: #EBF3FA;
+  --color-info-text: #2D5A85;
+
+  // Borders — very subtle, iOS uses minimal borders
+  --color-border: #E0DAE8; // Default border
+  --color-border-light: #EDE8F2; // Subtle separator
+  --color-border-focus: #9B8AB8; // Focus ring matches primary
+
+  // --------------------------------------------------------------------------
+  // Game Accent Colors — balanced lilac + turquoise palette
+  // --------------------------------------------------------------------------
+  --color-game-quiz: #9B8AB8;       // Flieder
+  --color-game-quiz-bg: #F0ECF5;
+  --color-game-sudoku: #6BBFAE;     // Türkis
+  --color-game-sudoku-bg: #E5F5F1;
+  --color-game-crossword: #D4956B;  // Warm orange
+  --color-game-crossword-bg: #FBF2EC;
+  --color-game-memory: #5AB5A3;     // Türkis-Grün
+  --color-game-memory-bg: #E2F3EF;
+  --color-game-wordsearch: #8B7BB5; // Flieder
+  --color-game-wordsearch-bg: #F0ECF5;
+  --color-game-numbers: #62B8C9;    // Helles Türkis
+  --color-game-numbers-bg: #E5F3F7;
+  --color-game-colorshape: #B87BC5; // Violett
+  --color-game-colorshape-bg: #F6EEF8;
+
+  // --------------------------------------------------------------------------
+  // Touch Targets — iOS HIG: 44pt minimum
+  // --------------------------------------------------------------------------
+  --touch-target-min: 44px;
+  --touch-target-preferred: 50px;
+  --touch-target-large: 56px;
+
+  // --------------------------------------------------------------------------
+  // Spacing Scale — generous for elderly
+  // --------------------------------------------------------------------------
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  // --------------------------------------------------------------------------
+  // Border Radius — iOS-standard
+  // --------------------------------------------------------------------------
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 10px; // Buttons
+  --radius-lg: 12px; // Cards (iOS standard)
+  --radius-xl: 16px; // Large cards, sheets
+  --radius-2xl: 22px; // Extra large cards
+  --radius-full: 9999px; // Pills, avatars
+
+  // --------------------------------------------------------------------------
+  // Shadows — subtle, iOS-style
+  // --------------------------------------------------------------------------
+  --shadow-sm: 0 1px 3px rgba(45, 37, 64, 0.06);
+  --shadow-md: 0 2px 8px rgba(45, 37, 64, 0.08),
+    0 1px 2px rgba(45, 37, 64, 0.04);
+  --shadow-lg: 0 4px 16px rgba(45, 37, 64, 0.1),
+    0 2px 4px rgba(45, 37, 64, 0.04);
+  --shadow-xl: 0 8px 32px rgba(45, 37, 64, 0.12),
+    0 4px 8px rgba(45, 37, 64, 0.04);
+  --shadow-card: 0 1px 3px rgba(45, 37, 64, 0.06); // Default card shadow
+
+  // --------------------------------------------------------------------------
+  // Transitions — iOS-style timing
+  // --------------------------------------------------------------------------
+  --duration-fast: 100ms;
+  --duration-normal: 200ms;
+  --duration-slow: 350ms;
+  --duration-slower: 500ms;
+  --duration-spring: 600ms;
+
+  // iOS-standard easing curves
+  --ease-default: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-in: cubic-bezier(0.42, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.58, 1);
+  --ease-in-out: cubic-bezier(0.42, 0, 0.58, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); // Bounce/spring
+  --ease-ios: cubic-bezier(0.28, 0.11, 0.32, 1); // iOS navigation push
+
+  // --------------------------------------------------------------------------
+  // Z-Index Scale
+  // --------------------------------------------------------------------------
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-header: 300;
+  --z-overlay: 400;
+  --z-modal: 500;
+  --z-toast: 600;
+  --z-tooltip: 700;
+
+  // --------------------------------------------------------------------------
+  // Safe Area (iOS / Capacitor)
+  // --------------------------------------------------------------------------
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
+
+  // --------------------------------------------------------------------------
+  // Layout — No fixed header, iOS tab bar
+  // --------------------------------------------------------------------------
+  --header-height: 0px; // No fixed header — titles are inline in content
+  --navbar-height: 49px; // iOS standard tab bar height
+  --navbar-total-height: calc(49px + var(--safe-area-bottom)); // Tab bar + safe area
+  --content-max-width: 600px;
+  --content-padding: var(--space-md); // Standard horizontal content padding
+}
+
+// ==========================================================================
+// Dark Theme — Deep purple-black
+// ==========================================================================
+[data-theme='dark'] {
+  // Backgrounds — deep purple tones
+  --color-bg-primary: #1A1625;
+  --color-bg-secondary: #211D2E;
+  --color-bg-tertiary: #2D2840;
+  --color-bg-elevated: #252035;
+  --color-bg-overlay: rgba(10, 8, 18, 0.6);
+  --color-bg-input: #2D2840;
+
+  // Text — warm light tones
+  --color-text-primary: #F0EDF5;
+  --color-text-secondary: #B0A8C0;
+  --color-text-tertiary: #7A7290;
+  --color-text-disabled: #524B65;
+  --color-text-inverse: #1A1625;
+  --color-text-on-accent: #FFFFFF;
+
+  // Primary — lighter lilac for dark backgrounds
+  --color-primary: #B8A5D0;
+  --color-primary-dark: #C9BAE0;
+  --color-primary-darker: #D8CCE8;
+  --color-primary-light: #3D3555;
+  --color-primary-lighter: #2D2840;
+  --color-primary-bg: #252035;
+
+  // Accent — brighter green-turquoise
+  --color-accent: #7ECBB8;
+  --color-accent-hover: #92D6C5;
+  --color-accent-active: #6BBFAE;
+  --color-accent-light: #2A3D38;
+  --color-accent-lighter: #1E2D2A;
+  --color-accent-text: #8DD4C5;
+
+  // Semantic — brighter for dark backgrounds
+  --color-success: #6FCF97;
+  --color-success-bg: #1A332A;
+  --color-success-text: #A3E4BD;
+  --color-warning: #F0B860;
+  --color-warning-bg: #332A1A;
+  --color-warning-text: #F5D08A;
+  --color-error: #F07070;
+  --color-error-bg: #331A1A;
+  --color-error-text: #F5A0A0;
+  --color-info: #7AB5E0;
+  --color-info-bg: #1A2A33;
+  --color-info-text: #A0CDE8;
+
+  // Borders
+  --color-border: #3D3555;
+  --color-border-light: #2D2840;
+  --color-border-focus: #B8A5D0;
+
+  // Shadows — stronger for dark mode
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.35), 0 4px 8px rgba(0, 0, 0, 0.2);
+  --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.2);
+
+  // Game colors — brighter for dark backgrounds
+  --color-game-quiz: #A8A0D0;
+  --color-game-quiz-bg: #2A2545;
+  --color-game-sudoku: #C0A0D8;
+  --color-game-sudoku-bg: #30204A;
+  --color-game-crossword: #E0AA82;
+  --color-game-crossword-bg: #3A2820;
+  --color-game-memory: #7ECBB8;
+  --color-game-memory-bg: #1E2D2A;
+  --color-game-wordsearch: #E09090;
+  --color-game-wordsearch-bg: #3A2020;
+  --color-game-numbers: #82B8E0;
+  --color-game-numbers-bg: #1E2A38;
+  --color-game-colorshape: #D0A0E0;
+  --color-game-colorshape-bg: #30204A;
+}
+
+// ==========================================================================
+// Font Size Modes — for elderly accessibility
+// ==========================================================================
+
+// Large mode — ~25% increase above our already-bumped base
+[data-font-size='large'] {
+  --font-size-large-title: 46px;
+  --font-size-title1: 38px;
+  --font-size-title2: 30px;
+  --font-size-title3: 28px;
+  --font-size-headline: 25px;
+  --font-size-body: 25px;
+  --font-size-callout: 23px;
+  --font-size-subhead: 22px;
+  --font-size-footnote: 18px;
+  --font-size-caption1: 17px;
+  --font-size-caption2: 15px;
+
+  // Update aliases
+  --font-size-base: 25px;
+  --font-size-xs: 17px;
+  --font-size-sm: 22px;
+  --font-size-md: 25px;
+  --font-size-lg: 30px;
+  --font-size-xl: 38px;
+  --font-size-2xl: 44px;
+  --font-size-3xl: 46px;
+  --font-size-4xl: 56px;
+
+  // Bigger touch targets
+  --touch-target-min: 52px;
+  --touch-target-preferred: 58px;
+  --touch-target-large: 64px;
+}
+
+// Extra-large mode — ~50% increase
+[data-font-size='extra-large'] {
+  --font-size-large-title: 54px;
+  --font-size-title1: 46px;
+  --font-size-title2: 36px;
+  --font-size-title3: 33px;
+  --font-size-headline: 30px;
+  --font-size-body: 30px;
+  --font-size-callout: 28px;
+  --font-size-subhead: 26px;
+  --font-size-footnote: 22px;
+  --font-size-caption1: 20px;
+  --font-size-caption2: 18px;
+
+  // Update aliases
+  --font-size-base: 30px;
+  --font-size-xs: 20px;
+  --font-size-sm: 26px;
+  --font-size-md: 30px;
+  --font-size-lg: 36px;
+  --font-size-xl: 46px;
+  --font-size-2xl: 52px;
+  --font-size-3xl: 54px;
+  --font-size-4xl: 66px;
+
+  // Maximum touch targets
+  --touch-target-min: 60px;
+  --touch-target-preferred: 68px;
+  --touch-target-large: 76px;
+
+  // More generous spacing
+  --space-xs: 10px;
+  --space-sm: 14px;
+  --space-md: 20px;
+  --space-lg: 28px;
+  --space-xl: 40px;
+}

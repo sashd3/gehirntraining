@@ -1,0 +1,27 @@
+// ==========================================================================
+// Brain Training App — Master Stylesheet
+// ==========================================================================
+// iOS-native design system with Flieder (lilac) primary palette.
+// Import order: tokens -> reset -> typography -> components -> utilities
+// ==========================================================================
+
+// Design tokens (CSS custom properties — colors, spacing, typography scale)
+@use 'variables';
+
+// Reset browser defaults (iOS-optimized)
+@use 'reset';
+
+// iOS-style typography system
+@use 'typography';
+
+// Button base styles (filled, tinted, outline, plain)
+@use 'buttons';
+
+// Vue transition classes (iOS push/pop, spring modals, sheets)
+@use 'transitions';
+
+// Accessibility utilities (focus rings, screen reader, touch targets)
+@use 'accessibility';
+
+// Layout grid & spacing utilities
+@use 'grid';

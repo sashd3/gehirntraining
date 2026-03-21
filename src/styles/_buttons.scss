@@ -1,0 +1,231 @@
+// ==========================================================================
+// Button Base Styles — iOS-Native
+// ==========================================================================
+// Lilac (Flieder) primary, soft rounded corners, subtle press animation.
+// Variants: filled, tinted, outline, plain — matching iOS button paradigms.
+// Touch targets: 44px minimum (iOS HIG), 50px preferred for elderly.
+// ==========================================================================
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  min-height: var(--touch-target-preferred); // 50px — comfortable for elderly
+  padding: var(--space-sm) var(--space-lg);
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  border: none;
+  border-radius: var(--radius-md); // 10px — iOS button standard
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-default),
+    color var(--duration-fast) var(--ease-default),
+    transform var(--duration-fast) var(--ease-default),
+    opacity var(--duration-fast) var(--ease-default);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+
+  // iOS-style scale-down on press
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
+  // Disabled state
+  &:disabled,
+  &[aria-disabled='true'] {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  // Focus ring for keyboard navigation
+  &:focus-visible {
+    outline: 3px solid var(--color-border-focus);
+    outline-offset: 2px;
+  }
+}
+
+// --------------------------------------------------------------------------
+// Variant: Primary (Filled)
+// Solid lilac background, white text
+// --------------------------------------------------------------------------
+.btn--primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-on-accent);
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-primary-dark);
+  }
+
+  &:active:not(:disabled) {
+    background-color: var(--color-primary-darker);
+  }
+}
+
+// --------------------------------------------------------------------------
+// Variant: Secondary / Tinted
+// Light lilac background, dark lilac text — iOS "tinted" button style
+// --------------------------------------------------------------------------
+.btn--secondary,
+.btn--tinted {
+  background-color: var(--color-primary-lighter);
+  color: var(--color-primary-darker);
+  border: none;
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-primary-light);
+  }
+
+  &:active:not(:disabled) {
+    background-color: var(--color-primary-light);
+  }
+}
+
+// --------------------------------------------------------------------------
+// Variant: Outline
+// Subtle lilac border, transparent background
+// --------------------------------------------------------------------------
+.btn--outline {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary-light);
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-primary-bg);
+  }
+
+  &:active:not(:disabled) {
+    background-color: var(--color-primary-lighter);
+  }
+}
+
+// --------------------------------------------------------------------------
+// Variant: Ghost / Plain
+// No background, just text — iOS "plain" button style
+// --------------------------------------------------------------------------
+.btn--ghost,
+.btn--plain {
+  background-color: transparent;
+  color: var(--color-primary);
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-primary-bg);
+  }
+
+  &:active:not(:disabled) {
+    background-color: var(--color-primary-lighter);
+  }
+}
+
+// --------------------------------------------------------------------------
+// Variant: Accent (Green-Turquoise)
+// For positive actions like "Start", "Continue"
+// --------------------------------------------------------------------------
+.btn--accent {
+  background-color: var(--color-accent);
+  color: var(--color-text-on-accent);
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-accent-hover);
+  }
+
+  &:active:not(:disabled) {
+    background-color: var(--color-accent-active);
+  }
+}
+
+// --------------------------------------------------------------------------
+// Variant: Danger
+// Soft red for destructive actions
+// --------------------------------------------------------------------------
+.btn--danger {
+  background-color: var(--color-error);
+  color: var(--color-text-on-accent);
+
+  &:hover:not(:disabled) {
+    background-color: #c94444;
+  }
+
+  &:active:not(:disabled) {
+    background-color: #b53a3a;
+  }
+}
+
+// --------------------------------------------------------------------------
+// Sizes
+// --------------------------------------------------------------------------
+
+.btn--sm {
+  min-height: var(--touch-target-min); // 44px
+  padding: var(--space-xs) var(--space-md);
+  font-size: var(--font-size-subhead);
+  border-radius: var(--radius-sm);
+}
+
+.btn--md {
+  min-height: var(--touch-target-preferred); // 50px
+  padding: var(--space-sm) var(--space-lg);
+  font-size: var(--font-size-body);
+}
+
+.btn--lg {
+  min-height: var(--touch-target-large); // 56px
+  padding: var(--space-md) var(--space-xl);
+  font-size: var(--font-size-headline);
+  border-radius: var(--radius-lg);
+}
+
+// --------------------------------------------------------------------------
+// Modifiers
+// --------------------------------------------------------------------------
+
+.btn--full-width {
+  width: 100%;
+}
+
+.btn--icon-only {
+  padding: var(--space-sm);
+  aspect-ratio: 1;
+  border-radius: var(--radius-full);
+}
+
+.btn--rounded {
+  border-radius: var(--radius-full);
+}
+
+.btn--loading {
+  position: relative;
+  color: transparent !important;
+  pointer-events: none;
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--color-primary-light);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: btn-spin 0.7s linear infinite;
+  }
+}
+
+// Loading spinner on filled buttons uses white
+.btn--primary.btn--loading::after,
+.btn--accent.btn--loading::after,
+.btn--danger.btn--loading::after {
+  border-color: rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+}
+
+@keyframes btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

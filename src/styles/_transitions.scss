@@ -1,0 +1,294 @@
+// ==========================================================================
+// Vue Transition Classes — iOS-Native Animations
+// ==========================================================================
+// Spring-based modals, push/pop navigation slides, iOS-standard timing.
+// All respect prefers-reduced-motion (handled globally in _reset.scss).
+// ==========================================================================
+
+// --------------------------------------------------------------------------
+// Fade — Standard crossfade
+// --------------------------------------------------------------------------
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity var(--duration-normal) var(--ease-default);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+// --------------------------------------------------------------------------
+// Fade Fast — Quick micro-interactions
+// --------------------------------------------------------------------------
+.fade-fast-enter-active,
+.fade-fast-leave-active {
+  transition: opacity var(--duration-fast) var(--ease-default);
+}
+
+.fade-fast-enter-from,
+.fade-fast-leave-to {
+  opacity: 0;
+}
+
+// --------------------------------------------------------------------------
+// Slide Up — Bottom sheets, action sheets
+// --------------------------------------------------------------------------
+.slide-up-enter-active {
+  transition:
+    transform var(--duration-slow) var(--ease-spring),
+    opacity var(--duration-normal) var(--ease-default);
+}
+
+.slide-up-leave-active {
+  transition:
+    transform var(--duration-normal) var(--ease-in),
+    opacity var(--duration-normal) var(--ease-default);
+}
+
+.slide-up-enter-from {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+// --------------------------------------------------------------------------
+// Slide Down — Dropdown menus, banners
+// --------------------------------------------------------------------------
+.slide-down-enter-active {
+  transition:
+    transform var(--duration-slow) var(--ease-spring),
+    opacity var(--duration-normal) var(--ease-default);
+}
+
+.slide-down-leave-active {
+  transition:
+    transform var(--duration-normal) var(--ease-in),
+    opacity var(--duration-normal) var(--ease-default);
+}
+
+.slide-down-enter-from {
+  opacity: 0;
+  transform: translateY(-24px);
+}
+
+.slide-down-leave-to {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+// --------------------------------------------------------------------------
+// iOS Push — Navigation forward (new screen slides in from right)
+// --------------------------------------------------------------------------
+.ios-push-enter-active {
+  transition:
+    transform var(--duration-slow) var(--ease-ios),
+    opacity var(--duration-slow) var(--ease-ios);
+}
+
+.ios-push-leave-active {
+  transition:
+    transform var(--duration-slow) var(--ease-ios),
+    opacity var(--duration-slow) var(--ease-ios);
+}
+
+.ios-push-enter-from {
+  opacity: 0.6;
+  transform: translateX(100%);
+}
+
+.ios-push-leave-to {
+  opacity: 0.8;
+  transform: translateX(-30%);
+}
+
+// --------------------------------------------------------------------------
+// iOS Pop — Navigation back (screen slides in from left)
+// --------------------------------------------------------------------------
+.ios-pop-enter-active {
+  transition:
+    transform var(--duration-slow) var(--ease-ios),
+    opacity var(--duration-slow) var(--ease-ios);
+}
+
+.ios-pop-leave-active {
+  transition:
+    transform var(--duration-slow) var(--ease-ios),
+    opacity var(--duration-slow) var(--ease-ios);
+}
+
+.ios-pop-enter-from {
+  opacity: 0.8;
+  transform: translateX(-30%);
+}
+
+.ios-pop-leave-to {
+  opacity: 0.6;
+  transform: translateX(100%);
+}
+
+// --------------------------------------------------------------------------
+// Slide Left / Right — Legacy aliases for push/pop
+// --------------------------------------------------------------------------
+.slide-left-enter-active,
+.slide-left-leave-active {
+  transition:
+    transform var(--duration-slow) var(--ease-ios),
+    opacity var(--duration-slow) var(--ease-ios);
+}
+
+.slide-left-enter-from {
+  opacity: 0.6;
+  transform: translateX(40px);
+}
+
+.slide-left-leave-to {
+  opacity: 0;
+  transform: translateX(-40px);
+}
+
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition:
+    transform var(--duration-slow) var(--ease-ios),
+    opacity var(--duration-slow) var(--ease-ios);
+}
+
+.slide-right-enter-from {
+  opacity: 0;
+  transform: translateX(-40px);
+}
+
+.slide-right-leave-to {
+  opacity: 0.6;
+  transform: translateX(40px);
+}
+
+// --------------------------------------------------------------------------
+// Scale — iOS-style modal/dialog entrance (spring feel)
+// --------------------------------------------------------------------------
+.scale-enter-active {
+  transition:
+    transform var(--duration-spring) var(--ease-spring),
+    opacity var(--duration-normal) var(--ease-default);
+}
+
+.scale-leave-active {
+  transition:
+    transform var(--duration-normal) var(--ease-in),
+    opacity var(--duration-normal) var(--ease-default);
+}
+
+.scale-enter-from {
+  opacity: 0;
+  transform: scale(0.85);
+}
+
+.scale-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+// --------------------------------------------------------------------------
+// Modal — Backdrop + content combined (iOS alert style)
+// Spring animation on entrance, quick exit
+// --------------------------------------------------------------------------
+.modal-enter-active {
+  transition: opacity var(--duration-normal) var(--ease-default);
+
+  .modal__content {
+    transition:
+      transform var(--duration-spring) var(--ease-spring),
+      opacity var(--duration-normal) var(--ease-default);
+  }
+}
+
+.modal-leave-active {
+  transition: opacity var(--duration-fast) var(--ease-default);
+
+  .modal__content {
+    transition:
+      transform var(--duration-normal) var(--ease-in),
+      opacity var(--duration-fast) var(--ease-default);
+  }
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+
+  .modal__content {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+}
+
+// --------------------------------------------------------------------------
+// Sheet — iOS-style bottom sheet
+// --------------------------------------------------------------------------
+.sheet-enter-active {
+  transition:
+    transform var(--duration-slow) var(--ease-spring),
+    opacity var(--duration-normal) var(--ease-default);
+}
+
+.sheet-leave-active {
+  transition:
+    transform var(--duration-normal) var(--ease-in),
+    opacity var(--duration-fast) var(--ease-default);
+}
+
+.sheet-enter-from {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+.sheet-leave-to {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+// --------------------------------------------------------------------------
+// List (TransitionGroup) — Staggered feel
+// --------------------------------------------------------------------------
+.list-enter-active,
+.list-leave-active {
+  transition: all var(--duration-normal) var(--ease-default);
+}
+
+.list-enter-from {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(-12px);
+}
+
+.list-move {
+  transition: transform var(--duration-normal) var(--ease-default);
+}
+
+// --------------------------------------------------------------------------
+// Tap Scale — Utility class for press feedback on any element
+// --------------------------------------------------------------------------
+.tap-scale {
+  transition: transform var(--duration-fast) var(--ease-default);
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+.tap-scale-subtle {
+  transition: transform var(--duration-fast) var(--ease-default);
+
+  &:active {
+    transform: scale(0.98);
+  }
+}

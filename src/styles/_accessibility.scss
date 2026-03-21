@@ -1,0 +1,180 @@
+// ==========================================================================
+// Accessibility Utilities
+// ==========================================================================
+// Focus management, screen reader helpers, and high contrast support
+// for elderly users with potential visual impairments.
+// ==========================================================================
+
+// --------------------------------------------------------------------------
+// Focus Ring
+// --------------------------------------------------------------------------
+// 3px solid ring, high contrast, visible on both light and dark themes.
+// Applied via :focus-visible so it only shows for keyboard navigation.
+// --------------------------------------------------------------------------
+
+:focus-visible {
+  outline: 3px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+// Utility class for custom focus styles
+.focus-ring {
+  &:focus-visible {
+    outline: 3px solid var(--color-border-focus);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+}
+
+// --------------------------------------------------------------------------
+// Screen Reader Only
+// --------------------------------------------------------------------------
+// Visually hidden but accessible to screen readers.
+// --------------------------------------------------------------------------
+
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+// Show when focused (skip-to-content links)
+.sr-only-focusable {
+  &:not(:focus):not(:focus-within) {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    clip-path: inset(50%) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+
+  &:focus {
+    position: fixed;
+    top: var(--safe-area-top);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: var(--z-toast);
+    padding: var(--space-sm) var(--space-lg);
+    background-color: var(--color-accent);
+    color: var(--color-text-on-accent);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+// --------------------------------------------------------------------------
+// High Contrast Helpers
+// --------------------------------------------------------------------------
+
+// Force high contrast on specific elements
+.high-contrast {
+  color: var(--color-text-primary) !important;
+  -webkit-text-stroke: 0.5px var(--color-text-primary);
+}
+
+// Ensure minimum contrast for decorative text
+.ensure-contrast {
+  text-shadow: 0 0 1px var(--color-bg-primary);
+}
+
+// --------------------------------------------------------------------------
+// Touch Target Enforcement
+// --------------------------------------------------------------------------
+// Ensure interactive elements meet minimum touch target size.
+// --------------------------------------------------------------------------
+
+.touch-target {
+  position: relative;
+  min-width: var(--touch-target-min);
+  min-height: var(--touch-target-min);
+
+  // Expand touch area beyond visual bounds if needed
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+}
+
+// --------------------------------------------------------------------------
+// Reduced Motion
+// --------------------------------------------------------------------------
+// Additional helpers beyond the global reset rule.
+// --------------------------------------------------------------------------
+
+.motion-safe {
+  @media (prefers-reduced-motion: reduce) {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+.motion-reduce {
+  @media (prefers-reduced-motion: reduce) {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+// --------------------------------------------------------------------------
+// ARIA Live Region Styles
+// --------------------------------------------------------------------------
+
+[aria-live='polite'],
+[aria-live='assertive'] {
+  // Ensure live regions are not visually disruptive unless intended
+  &.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+  }
+}
+
+// --------------------------------------------------------------------------
+// Disabled State
+// --------------------------------------------------------------------------
+
+[aria-disabled='true'],
+[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+// --------------------------------------------------------------------------
+// Interactive Element Helpers
+// --------------------------------------------------------------------------
+
+// Ensure all clickable elements have pointer cursor
+[role='button'],
+[role='tab'],
+[role='menuitem'],
+[role='option'] {
+  cursor: pointer;
+}
+
+// Large text mode helper
+.text-readable {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  letter-spacing: var(--letter-spacing-wide);
+}

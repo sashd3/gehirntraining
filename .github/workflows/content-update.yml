@@ -1,0 +1,38 @@
+name: Content Update Check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/data/**'
+      - 'src/i18n/**'
+
+jobs:
+  validate-content:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Type check
+        run: npx vue-tsc --noEmit
+
+      - name: Build
+        run: npm run build
+
+      - name: Count content
+        run: |
+          echo "=== Content Summary ==="
+          echo "Quiz questions:"
+          grep -rh "id:" src/data/quiz-questions/*.ts | grep -c "'"
+          echo "Crossword puzzles:"
+          grep -rh "cw-" src/data/crossword-puzzles/*.ts | grep -c "'"

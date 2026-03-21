@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli'
 
 const config: CapacitorConfig = {
-  appId: 'com.braintraining.app',
-  appName: 'Gehirntraining',
+  appId: 'com.trainyourbrain.app',
+  appName: 'Train your Brain',
   webDir: 'dist',
   plugins: {
     SplashScreen: {
@@ -16,7 +16,7 @@ const config: CapacitorConfig = {
     },
   },
   ios: {
-    scheme: 'Gehirntraining',
+    scheme: 'Train your Brain',
     contentInset: 'automatic',
   },
 }

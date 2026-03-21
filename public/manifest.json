@@ -1,6 +1,6 @@
 {
-  "name": "Gehirntraining",
-  "short_name": "Gehirntraining",
+  "name": "Train your Brain",
+  "short_name": "Train your Brain",
   "description": "Trainieren Sie Ihr Gehirn mit Quiz, Kreuzworträtsel, Sudoku und mehr",
   "start_url": "/",
   "display": "standalone",

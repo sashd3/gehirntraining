@@ -35,3 +35,6 @@ coverage/
 # Capacitor
 ios/App/App/public/
 .playwright-mcp/
+
+# Local Netlify folder
+.netlify

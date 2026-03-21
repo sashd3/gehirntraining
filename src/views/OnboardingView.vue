@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/stores/user.store'
+import { Brain, UserCircle, Type } from 'lucide-vue-next'
 
 const router = useRouter()
 const { t } = useI18n()
@@ -55,7 +56,7 @@ async function complete() {
     <Transition name="step" mode="out-in">
       <div v-if="step === 0" key="welcome" class="step-content">
         <div class="step-visual">
-          <div class="welcome-icon">🧠</div>
+          <div class="welcome-icon"><Brain :size="64" color="var(--color-primary)" /></div>
         </div>
         <h1 class="step-title">Willkommen!</h1>
         <p class="step-subtitle">Gehirntraining für jeden Tag</p>
@@ -71,7 +72,7 @@ async function complete() {
       <!-- Step 1: Name -->
       <div v-else-if="step === 1" key="name" class="step-content">
         <div class="step-visual">
-          <div class="welcome-icon">👋</div>
+          <div class="welcome-icon"><UserCircle :size="64" color="var(--color-primary)" /></div>
         </div>
         <h1 class="step-title">Wie heißen Sie?</h1>
         <p class="step-subtitle">Damit wir Sie begrüßen können</p>
@@ -91,7 +92,7 @@ async function complete() {
       <!-- Step 2: Font Size -->
       <div v-else-if="step === 2" key="font" class="step-content">
         <div class="step-visual">
-          <div class="welcome-icon">🔤</div>
+          <div class="welcome-icon"><Type :size="64" color="var(--color-primary)" /></div>
         </div>
         <h1 class="step-title">Schriftgröße</h1>
         <p class="step-subtitle">Wählen Sie eine angenehme Größe</p>
@@ -190,9 +191,17 @@ async function complete() {
 }
 
 .welcome-icon {
-  font-size: 80px;
   line-height: 1;
   animation: gentle-bounce 2s ease-in-out infinite;
+}
+
+.welcome-icon--circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--color-accent, #4A90D9);
+  opacity: 0.15;
+  margin: 0 auto;
 }
 
 @keyframes gentle-bounce {

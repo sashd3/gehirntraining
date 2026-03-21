@@ -8,6 +8,7 @@ import {
   getAvailableThemes,
   getThemePreview,
 } from '@/generators/memory.generator'
+import { Lightbulb, Trophy } from 'lucide-vue-next'
 
 const props = defineProps<{
   difficulty: Difficulty
@@ -202,7 +203,7 @@ watch(() => props.difficulty, () => {
   <div class="memory-game" :class="{ 'memory-game--paused': isPaused }">
     <!-- Theme Selection -->
     <div v-if="phase === 'theme-select'" class="memory-theme-select">
-      <h2 class="memory-theme-select__title">Thema waehlen</h2>
+      <h2 class="memory-theme-select__title">Thema wählen</h2>
       <div class="memory-theme-select__grid">
         <button
           v-for="theme in availableThemes"
@@ -238,7 +239,7 @@ watch(() => props.difficulty, () => {
           <span class="memory-header__value">{{ matchedPairs }}/{{ totalPairs }}</span>
         </div>
         <div class="memory-header__stat">
-          <span class="memory-header__label">Zuege</span>
+          <span class="memory-header__label">Züge</span>
           <span class="memory-header__value">{{ moves }}</span>
         </div>
       </div>
@@ -283,7 +284,7 @@ watch(() => props.difficulty, () => {
           aria-label="Hinweis"
           @click="useHint"
         >
-          <span class="memory-hint-btn__icon">&#128161;</span>
+          <Lightbulb :size="18" class="memory-hint-btn__icon" />
           Hinweis ({{ hintsUsed }})
         </button>
       </div>
@@ -292,11 +293,11 @@ watch(() => props.difficulty, () => {
       <Transition name="memory-complete">
         <div v-if="phase === 'complete'" class="memory-complete">
           <div class="memory-complete__card">
-            <div class="memory-complete__icon">&#127881;</div>
+            <div class="memory-complete__icon"><Trophy :size="48" /></div>
             <h2 class="memory-complete__title">Alle Paare gefunden!</h2>
             <p class="memory-complete__score">{{ score }} Punkte</p>
             <p class="memory-complete__stats">
-              Zeit: {{ formattedTime }} &middot; Zuege: {{ moves }} &middot; Hinweise: {{ hintsUsed }}
+              Zeit: {{ formattedTime }} &middot; Züge: {{ moves }} &middot; Hinweise: {{ hintsUsed }}
             </p>
           </div>
         </div>

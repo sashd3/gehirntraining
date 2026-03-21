@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import BaseIcon from '@/components/ui/BaseIcon.vue'
+import { Home, BarChart3, Settings } from 'lucide-vue-next'
 
 interface NavTab {
   name: string
   label: string
-  icon: string
+  icon: any
   route: string
 }
 
 const tabs: NavTab[] = [
-  { name: 'home', label: 'Home', icon: 'home', route: '/' },
-  { name: 'progress', label: 'Fortschritt', icon: 'chart', route: '/progress' },
-  { name: 'settings', label: 'Einstellungen', icon: 'settings', route: '/settings' },
+  { name: 'home', label: 'Home', icon: Home, route: '/' },
+  { name: 'progress', label: 'Fortschritt', icon: BarChart3, route: '/progress' },
+  { name: 'settings', label: 'Einstellungen', icon: Settings, route: '/settings' },
 ]
 
 const route = useRoute()
@@ -48,7 +48,7 @@ function navigateTo(tab: NavTab) {
         @click="navigateTo(tab)"
       >
         <span class="app-navbar__icon">
-          <BaseIcon :name="tab.icon" :size="24" />
+          <component :is="tab.icon" :size="24" />
         </span>
         <span class="app-navbar__label">{{ tab.label }}</span>
       </button>

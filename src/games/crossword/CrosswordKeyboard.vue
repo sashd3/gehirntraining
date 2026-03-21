@@ -35,13 +35,13 @@
         :aria-label="t('common.back')"
         @click="$emit('backspace')"
       >
-        &#x232B;
+        <Delete :size="20" />
       </button>
       <button
         class="crossword-keyboard__key crossword-keyboard__key--action crossword-keyboard__key--enter"
         @click="$emit('enter')"
       >
-        &#x23CE;
+        <CornerDownLeft :size="18" />
       </button>
     </div>
   </div>
@@ -49,6 +49,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import { Delete, CornerDownLeft } from 'lucide-vue-next'
 
 const { t } = useI18n()
 

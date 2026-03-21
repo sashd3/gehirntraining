@@ -61,10 +61,10 @@ export const swissEuropeQuestions: QuizQuestion[] = [
   {
     id: 'swe-e-008',
     question: 'Welche Farbe hat das Schweizerkreuz auf der Flagge?',
-    answers: ['Rot auf Weiss', 'Weiss auf Rot', 'Gelb auf Rot', 'Weiss auf Blau'],
+    answers: ['Rot auf Weiß', 'Weiß auf Rot', 'Gelb auf Rot', 'Weiß auf Blau'],
     correctIndex: 1,
     difficulty: 'easy',
-    explanation: 'Die Schweizer Flagge zeigt ein weisses Kreuz auf rotem Grund.',
+    explanation: 'Die Schweizer Flagge zeigt ein weißes Kreuz auf rotem Grund.',
   },
   {
     id: 'swe-e-009',
@@ -132,7 +132,7 @@ export const swissEuropeQuestions: QuizQuestion[] = [
   },
   {
     id: 'swe-e-017',
-    question: 'Wie heisst das Schweizer Gericht aus geschmolzenem Käse im Caquelon?',
+    question: 'Wie heißt das Schweizer Gericht aus geschmolzenem Käse im Caquelon?',
     answers: ['Raclette', 'Fondue', 'Rösti', 'Älplermagronen'],
     correctIndex: 1,
     difficulty: 'easy',
@@ -156,7 +156,7 @@ export const swissEuropeQuestions: QuizQuestion[] = [
   },
   {
     id: 'swe-e-020',
-    question: 'Wie heisst das berühmte Schloss von König Ludwig II. in Bayern?',
+    question: 'Wie heißt das berühmte Schloss von König Ludwig II. in Bayern?',
     answers: ['Schloss Schönbrunn', 'Neuschwanstein', 'Schloss Versailles', 'Heidelberger Schloss'],
     correctIndex: 1,
     difficulty: 'easy',
@@ -222,7 +222,7 @@ export const swissEuropeQuestions: QuizQuestion[] = [
   },
   {
     id: 'swe-m-003',
-    question: 'Wie heisst der längste Eisenbahntunnel der Welt, der in der Schweiz liegt?',
+    question: 'Wie heißt der längste Eisenbahntunnel der Welt, der in der Schweiz liegt?',
     answers: ['Lötschberg-Basistunnel', 'Gotthard-Basistunnel', 'Simplon-Tunnel', 'Ceneri-Basistunnel'],
     correctIndex: 1,
     difficulty: 'medium',
@@ -326,7 +326,7 @@ export const swissEuropeQuestions: QuizQuestion[] = [
   },
   {
     id: 'swe-m-016',
-    question: 'Wie heisst das Schweizer Parlament?',
+    question: 'Wie heißt das Schweizer Parlament?',
     answers: ['Bundestag', 'Bundesversammlung', 'Nationalversammlung', 'Landtag'],
     correctIndex: 1,
     difficulty: 'medium',
@@ -489,10 +489,10 @@ export const swissEuropeQuestions: QuizQuestion[] = [
   {
     id: 'swe-h-011',
     question: 'Was ist das Konkordanzsystem in der Schweizer Politik?',
-    answers: ['Ein System der Gewaltenteilung', 'Die Beteiligung aller grossen Parteien an der Regierung', 'Ein Wahlsystem mit Sperrklausel', 'Die Unterordnung der Kantone unter den Bund'],
+    answers: ['Ein System der Gewaltenteilung', 'Die Beteiligung aller großen Parteien an der Regierung', 'Ein Wahlsystem mit Sperrklausel', 'Die Unterordnung der Kantone unter den Bund'],
     correctIndex: 1,
     difficulty: 'hard',
-    explanation: 'Das Konkordanzsystem bedeutet, dass alle grossen Parteien im Bundesrat vertreten sind und Kompromisslösungen angestrebt werden.',
+    explanation: 'Das Konkordanzsystem bedeutet, dass alle großen Parteien im Bundesrat vertreten sind und Kompromisslösungen angestrebt werden.',
   },
   {
     id: 'swe-h-012',
@@ -512,11 +512,11 @@ export const swissEuropeQuestions: QuizQuestion[] = [
   },
   {
     id: 'swe-h-014',
-    question: 'Welcher Vertrag beendete den Dreissigjährigen Krieg und anerkannte die Souveränität der Eidgenossenschaft?',
+    question: 'Welcher Vertrag beendete den Dreißigjährigen Krieg und anerkannte die Souveränität der Eidgenossenschaft?',
     answers: ['Augsburger Religionsfrieden', 'Westfälischer Friede', 'Frieden von Utrecht', 'Prager Frieden'],
     correctIndex: 1,
     difficulty: 'hard',
-    explanation: 'Der Westfälische Friede von 1648 beendete den Dreissigjährigen Krieg und anerkannte formal die Souveränität der Eidgenossenschaft.',
+    explanation: 'Der Westfälische Friede von 1648 beendete den Dreißigjährigen Krieg und anerkannte formal die Souveränität der Eidgenossenschaft.',
   },
   {
     id: 'swe-h-015',

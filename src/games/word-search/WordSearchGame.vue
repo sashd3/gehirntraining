@@ -7,6 +7,7 @@ import {
   checkWordSelection,
   getWordCells,
 } from '@/generators/word-search.generator'
+import { Clock, Check, X, Lightbulb, Trophy } from 'lucide-vue-next'
 
 const props = defineProps<{
   difficulty: Difficulty
@@ -240,11 +241,11 @@ watch(() => props.difficulty, () => {
     <!-- Header -->
     <div class="wordsearch-header">
       <div class="wordsearch-header__pill">
-        <span>&#9200;</span>
+        <Clock :size="16" class="wordsearch-header__clock" />
         <span>{{ formattedTime }}</span>
       </div>
       <div class="wordsearch-header__pill wordsearch-header__pill--accent">
-        {{ foundWords.length }}/{{ totalWords }} Woerter
+        {{ foundWords.length }}/{{ totalWords }} Wörter
       </div>
     </div>
 
@@ -255,8 +256,8 @@ watch(() => props.difficulty, () => {
         class="wordsearch-feedback"
         :class="`wordsearch-feedback--${feedbackType}`"
       >
-        <span v-if="feedbackType === 'success'" class="wordsearch-feedback__icon">&#10003;</span>
-        <span v-else class="wordsearch-feedback__icon">&#10007;</span>
+        <span v-if="feedbackType === 'success'" class="wordsearch-feedback__icon"><Check :size="16" /></span>
+        <span v-else class="wordsearch-feedback__icon"><X :size="16" /></span>
         {{ feedbackMessage }}
       </div>
     </Transition>
@@ -299,7 +300,7 @@ watch(() => props.difficulty, () => {
 
     <!-- Word List -->
     <div class="wordsearch-words">
-      <h3 class="wordsearch-words__title">Woerter</h3>
+      <h3 class="wordsearch-words__title">Wörter</h3>
       <div class="wordsearch-words__list">
         <span
           v-for="word in puzzle?.words"
@@ -319,7 +320,7 @@ watch(() => props.difficulty, () => {
         :disabled="isComplete"
         @click="useHint"
       >
-        <span class="wordsearch-hint-btn__icon">&#128161;</span>
+        <Lightbulb :size="18" class="wordsearch-hint-btn__icon" />
         Hinweis ({{ hintsUsed }})
       </button>
     </div>
@@ -328,8 +329,8 @@ watch(() => props.difficulty, () => {
     <Transition name="ws-complete">
       <div v-if="isComplete" class="wordsearch-complete">
         <div class="wordsearch-complete__card">
-          <div class="wordsearch-complete__icon">&#127881;</div>
-          <h2 class="wordsearch-complete__title">Alle Woerter gefunden!</h2>
+          <div class="wordsearch-complete__icon"><Trophy :size="48" /></div>
+          <h2 class="wordsearch-complete__title">Alle Wörter gefunden!</h2>
           <p class="wordsearch-complete__score">{{ score }} Punkte</p>
           <p class="wordsearch-complete__stats">
             Zeit: {{ formattedTime }} &middot; Versuche: {{ moves }} &middot; Hinweise: {{ hintsUsed }}

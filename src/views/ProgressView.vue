@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useProgressStore } from '@/stores/progress.store'
 import { gameRegistry } from '@/engine/game-registry'
-import { getGameIconPath, strokeIcons } from '@/composables/useGameIcons'
+import { getGameIconComponent } from '@/composables/useGameIcons'
 
 const { t } = useI18n()
 const progressStore = useProgressStore()
@@ -66,7 +66,7 @@ function formatTime(seconds: number): string {
         >
           <div class="gsc-body">
             <div class="gsc-header">
-              <svg class="gsc-icon" width="24" height="24" viewBox="0 0 24 24" :fill="strokeIcons.has(game.id) ? 'none' : game.color" :stroke="strokeIcons.has(game.id) ? game.color : 'none'" stroke-width="2"><path :d="getGameIconPath(game.id)" /></svg>
+              <component :is="getGameIconComponent(game.id)" :size="24" :color="game.color" class="gsc-icon" />
               <div class="gsc-title-area">
                 <h3 class="gsc-name">{{ t(game.nameKey) }}</h3>
                 <span class="gsc-count">{{ game.progress!.totalPlayed }} Spiele</span>

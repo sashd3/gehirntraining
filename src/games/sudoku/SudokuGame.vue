@@ -8,6 +8,7 @@ import {
   getSudokuHint,
   isBoardComplete,
 } from '@/generators/sudoku.generator'
+import { Clock, PenTool, Undo2, Eraser, Lightbulb, CheckCircle } from 'lucide-vue-next'
 
 const props = defineProps<{
   difficulty: Difficulty
@@ -341,7 +342,7 @@ watch(() => props.difficulty, () => {
     <!-- Header bar -->
     <div class="sudoku-header">
       <div class="sudoku-header__pill">
-        <span class="sudoku-header__icon">&#9200;</span>
+        <Clock :size="16" class="sudoku-header__icon" />
         <span class="sudoku-header__value">{{ formattedTime }}</span>
       </div>
       <div class="sudoku-header__pill sudoku-header__pill--primary">
@@ -394,27 +395,27 @@ watch(() => props.difficulty, () => {
           aria-label="Notizen Modus"
           @click="toggleNotesMode"
         >
-          <span class="sudoku-tool-btn__icon">&#9998;</span>
+          <PenTool :size="18" class="sudoku-tool-btn__icon" />
           <span class="sudoku-tool-btn__label">Notizen</span>
         </button>
 
         <button
           class="sudoku-tool-btn"
-          aria-label="Rueckgaengig"
+          aria-label="Rückgängig"
           :disabled="moveHistory.length === 0"
           @click="undo"
         >
-          <span class="sudoku-tool-btn__icon">&#8634;</span>
-          <span class="sudoku-tool-btn__label">Zurueck</span>
+          <Undo2 :size="18" class="sudoku-tool-btn__icon" />
+          <span class="sudoku-tool-btn__label">Zurück</span>
         </button>
 
         <button
           class="sudoku-tool-btn"
-          aria-label="Zelle loeschen"
+          aria-label="Zelle löschen"
           @click="clearCell"
         >
-          <span class="sudoku-tool-btn__icon">&#10060;</span>
-          <span class="sudoku-tool-btn__label">Loeschen</span>
+          <Eraser :size="18" class="sudoku-tool-btn__icon" />
+          <span class="sudoku-tool-btn__label">Löschen</span>
         </button>
 
         <button
@@ -422,7 +423,7 @@ watch(() => props.difficulty, () => {
           aria-label="Hinweis"
           @click="useHint"
         >
-          <span class="sudoku-tool-btn__icon">&#128161;</span>
+          <Lightbulb :size="18" class="sudoku-tool-btn__icon" />
           <span class="sudoku-tool-btn__label">Hinweis ({{ hintsUsed }})</span>
         </button>
       </div>
@@ -445,11 +446,11 @@ watch(() => props.difficulty, () => {
     <Transition name="sudoku-complete">
       <div v-if="isComplete" class="sudoku-complete">
         <div class="sudoku-complete__card">
-          <div class="sudoku-complete__icon">&#10003;</div>
+          <div class="sudoku-complete__icon"><CheckCircle :size="48" /></div>
           <h2 class="sudoku-complete__title">Geschafft!</h2>
           <p class="sudoku-complete__score">{{ score }} Punkte</p>
           <p class="sudoku-complete__stats">
-            Zeit: {{ formattedTime }} &middot; Zuege: {{ moveCount }} &middot; Hinweise: {{ hintsUsed }}
+            Zeit: {{ formattedTime }} &middot; Züge: {{ moveCount }} &middot; Hinweise: {{ hintsUsed }}
           </p>
         </div>
       </div>

@@ -35,25 +35,16 @@
     <!-- Action buttons -->
     <div class="crossword-game__actions">
       <button class="crossword-game__btn crossword-game__btn--primary" @click="onCheckProgress">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-          <path d="M3.5 9.5L7 13L14.5 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Puzzle pruefen
+        <Check :size="18" />
+        Rätsel prüfen
       </button>
       <button class="crossword-game__btn crossword-game__btn--outlined" @click="onRevealHint">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-          <circle cx="9" cy="9" r="6.5" stroke="currentColor" stroke-width="1.5"/>
-          <path d="M9 6V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          <circle cx="9" cy="12.5" r="0.75" fill="currentColor"/>
-        </svg>
+        <Info :size="18" />
         Hinweis geben
       </button>
       <button class="crossword-game__btn crossword-game__btn--ghost" @click="onReset">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-          <path d="M3.5 3.5V7.5H7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M4.25 11.5A5.5 5.5 0 1 0 5.1 6.5L3.5 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Zuruecksetzen
+        <RotateCcw :size="18" />
+        Zurücksetzen
       </button>
     </div>
 
@@ -73,6 +64,7 @@ import { getRandomPuzzle } from '@/generators/crossword.generator'
 import CrosswordGrid from './CrosswordGrid.vue'
 import CrosswordClues from './CrosswordClues.vue'
 import CrosswordKeyboard from './CrosswordKeyboard.vue'
+import { Check, Info, RotateCcw } from 'lucide-vue-next'
 import type { Difficulty, GameResult } from '@/types/game'
 import type { CrosswordPuzzleData, CrosswordClue } from '@/data/crossword-puzzles/types'
 
@@ -516,7 +508,7 @@ watch(
       transform: scale(0.98);
     }
 
-    // "Reatsel pruefen" -- filled accent button
+    // "Rätsel prüfen" -- filled accent button
     &--primary {
       border: none;
       background-color: var(--color-accent, #6BBFAE);
@@ -539,7 +531,7 @@ watch(
       }
     }
 
-    // "Zuruecksetzen" -- gray outlined button
+    // "Zurücksetzen" -- gray outlined button
     &--ghost {
       border: 1.5px solid var(--color-border-light, #E8E5EC);
       background-color: transparent;

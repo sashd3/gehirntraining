@@ -68,12 +68,8 @@
         }"
       >
         <span class="quiz-game__toast-icon">
-          <svg v-if="isLastAnswerCorrect" width="22" height="22" viewBox="0 0 22 22" fill="none">
-            <path d="M4 11.5L9 16.5L18 6.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <svg v-else width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-          </svg>
+          <Check v-if="isLastAnswerCorrect" :size="22" />
+          <X v-else :size="20" />
         </span>
         <span class="quiz-game__toast-text">
           {{ isLastAnswerCorrect
@@ -94,6 +90,7 @@ import type { QuizQuestion as QuizQuestionType } from '@/types/quiz'
 import { selectQuizQuestions } from '@/generators/quiz.generator'
 import QuizQuestion from './QuizQuestion.vue'
 import QuizAnswer from './QuizAnswer.vue'
+import { Check, X } from 'lucide-vue-next'
 
 const QUESTIONS_PER_GAME = 10
 const POINTS_PER_CORRECT = 150

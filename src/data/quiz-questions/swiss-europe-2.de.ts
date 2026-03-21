@@ -140,7 +140,7 @@ export const swissEuropeQuestions2: QuizQuestion[] = [
   },
   {
     id: 'swe2-e-018',
-    question: 'Welche Sportart ist in der Schweiz nach Fussball die beliebteste Mannschaftssportart?',
+    question: 'Welche Sportart ist in der Schweiz nach Fußball die beliebteste Mannschaftssportart?',
     answers: ['Handball', 'Basketball', 'Eishockey', 'Volleyball'],
     correctIndex: 2,
     difficulty: 'easy',
@@ -330,7 +330,7 @@ export const swissEuropeQuestions2: QuizQuestion[] = [
     answers: ['Elbe', 'Weichsel', 'Oder', 'Donau'],
     correctIndex: 2,
     difficulty: 'medium',
-    explanation: 'Die Oder (polnisch: Odra) bildet zusammen mit der Neisse einen grossen Teil der deutsch-polnischen Grenze.',
+    explanation: 'Die Oder (polnisch: Odra) bildet zusammen mit der Neiße einen großen Teil der deutsch-polnischen Grenze.',
   },
   {
     id: 'swe2-m-017',
@@ -394,7 +394,7 @@ export const swissEuropeQuestions2: QuizQuestion[] = [
     answers: ['Eine Energiekrise', 'Eine Staatsschuldenkrise mehrerer Euro-Länder', 'Ein Handelsstreit mit den USA', 'Eine Krise der Europäischen Zentralbank'],
     correctIndex: 1,
     difficulty: 'medium',
-    explanation: 'Die Eurokrise war eine Staatsschuldenkrise, die vor allem Griechenland, Irland, Portugal, Spanien und Italien betraf und die EU vor grosse Herausforderungen stellte.',
+    explanation: 'Die Eurokrise war eine Staatsschuldenkrise, die vor allem Griechenland, Irland, Portugal, Spanien und Italien betraf und die EU vor große Herausforderungen stellte.',
   },
   {
     id: 'swe2-m-025',
@@ -556,19 +556,19 @@ export const swissEuropeQuestions2: QuizQuestion[] = [
     answers: ['Bordeaux', 'Burgund', 'Champagne', 'Rhône-Tal'],
     correctIndex: 1,
     difficulty: 'hard',
-    explanation: 'Burgund (Bourgogne) mit der berühmten Côte d\'Or ist bekannt für erstklassige Pinot-Noir-Rotweine und Chardonnay-Weissweine.',
+    explanation: 'Burgund (Bourgogne) mit der berühmten Côte d\'Or ist bekannt für erstklassige Pinot-Noir-Rotweine und Chardonnay-Weißweine.',
   },
   {
     id: 'swe2-h-020',
     question: 'Wo befindet sich der Europäische Gerichtshof für Menschenrechte?',
-    answers: ['Luxemburg', 'Brüssel', 'Strassburg', 'Den Haag'],
+    answers: ['Luxemburg', 'Brüssel', 'Straßburg', 'Den Haag'],
     correctIndex: 2,
     difficulty: 'hard',
-    explanation: 'Der Europäische Gerichtshof für Menschenrechte (EGMR) hat seinen Sitz in Strassburg und gehört zum Europarat, nicht zur EU.',
+    explanation: 'Der Europäische Gerichtshof für Menschenrechte (EGMR) hat seinen Sitz in Straßburg und gehört zum Europarat, nicht zur EU.',
   },
   {
     id: 'swe2-h-021',
-    question: 'Wie heisst das Schweizer Skigebiet, das für den White Turf – Pferderennen auf dem zugefrorenen See – bekannt ist?',
+    question: 'Wie heißt das Schweizer Skigebiet, das für den White Turf – Pferderennen auf dem zugefrorenen See – bekannt ist?',
     answers: ['Davos', 'Verbier', 'St. Moritz', 'Gstaad'],
     correctIndex: 2,
     difficulty: 'hard',
@@ -580,7 +580,7 @@ export const swissEuropeQuestions2: QuizQuestion[] = [
     answers: ['Bewaffnete Neutralität', 'Immerwährende bewaffnete Neutralität', 'Absolute Neutralität', 'Bedingte Neutralität'],
     correctIndex: 1,
     difficulty: 'hard',
-    explanation: 'Die immerwährende bewaffnete Neutralität der Schweiz wurde am Wiener Kongress 1815 von den europäischen Grossmächten formal anerkannt.',
+    explanation: 'Die immerwährende bewaffnete Neutralität der Schweiz wurde am Wiener Kongress 1815 von den europäischen Großmächten formal anerkannt.',
   },
   {
     id: 'swe2-h-023',
@@ -600,7 +600,7 @@ export const swissEuropeQuestions2: QuizQuestion[] = [
   },
   {
     id: 'swe2-h-025',
-    question: 'Wie heisst das Schweizer System, in dem die ETH Zürich und EPFL als Bundesinstitutionen geführt werden?',
+    question: 'Wie heißt das Schweizer System, in dem die ETH Zürich und EPFL als Bundesinstitutionen geführt werden?',
     answers: ['Kantonales Hochschulsystem', 'ETH-Bereich', 'Schweizerische Akademie der Wissenschaften', 'Staatssekretariat für Bildung'],
     correctIndex: 1,
     difficulty: 'hard',

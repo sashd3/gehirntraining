@@ -7,6 +7,8 @@ import { useProgressStore } from '@/stores/progress.store'
 import { useUserStore } from '@/stores/user.store'
 import { useTimer } from '@/composables/useTimer'
 import { useSound } from '@/composables/useSound'
+import { getGameIconComponent } from '@/composables/useGameIcons'
+import { ChevronLeft, Pause, Star } from 'lucide-vue-next'
 import type { Difficulty, GameResult } from '@/types/game'
 
 const props = defineProps<{
@@ -104,9 +106,7 @@ onUnmounted(() => {
     <div v-if="phase === 'setup'" class="game-setup">
       <div class="setup-nav">
         <button class="back-btn" @click="goHome">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <ChevronLeft :size="20" />
           <span>{{ t('common.back') }}</span>
         </button>
       </div>
@@ -114,7 +114,7 @@ onUnmounted(() => {
       <div class="setup-content">
         <!-- Game icon -->
         <div class="setup-icon" :style="{ backgroundColor: gameColor + '18' }">
-          <span class="setup-icon-letter" :style="{ color: gameColor }">{{ gameName.charAt(0) }}</span>
+          <component :is="getGameIconComponent(gameId)" :size="44" :color="gameColor" />
         </div>
 
         <h1 class="setup-title">{{ gameName }}</h1>
@@ -153,10 +153,7 @@ onUnmounted(() => {
       <!-- Minimal game header -->
       <div class="play-header">
         <button class="pause-btn" @click="pauseGame" aria-label="Pause">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <rect x="5" y="4" width="3.5" height="12" rx="1" fill="currentColor"/>
-            <rect x="11.5" y="4" width="3.5" height="12" rx="1" fill="currentColor"/>
-          </svg>
+          <Pause :size="20" />
         </button>
 
         <div class="play-header-center">
@@ -183,10 +180,7 @@ onUnmounted(() => {
         <div v-if="phase === 'paused'" class="pause-overlay" @click="resumeGame">
           <div class="pause-sheet" @click.stop>
             <div class="pause-icon-area">
-              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                <rect x="12" y="8" width="8" height="32" rx="3" fill="var(--color-primary, #9B8AB8)"/>
-                <rect x="28" y="8" width="8" height="32" rx="3" fill="var(--color-primary, #9B8AB8)"/>
-              </svg>
+              <Pause :size="48" color="var(--color-primary, #9B8AB8)" />
             </div>
             <h2 class="pause-title">{{ t('common.pause') }}</h2>
             <p class="pause-subtitle">{{ t('common.tapToResume') || 'Tippen zum Fortsetzen' }}</p>
@@ -214,9 +208,7 @@ onUnmounted(() => {
             class="star"
             :class="{ filled: i <= result.stars }"
           >
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-            </svg>
+            <Star :size="48" fill="currentColor" :stroke-width="0" />
           </span>
         </div>
 

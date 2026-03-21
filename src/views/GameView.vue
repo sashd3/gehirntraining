@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n'
 import { getGameById } from '@/engine/game-registry'
 import GameWrapper from '@/components/game/GameWrapper.vue'
 import type { Difficulty } from '@/types/game'
+import { SearchX } from 'lucide-vue-next'
 
 const route = useRoute()
 const { t } = useI18n()
@@ -44,7 +45,7 @@ function onDifficultyChange(diff: Difficulty) {
   </div>
   <div v-else class="game-not-found">
     <div class="not-found-content">
-      <p class="not-found-icon">🔍</p>
+      <p class="not-found-icon"><SearchX :size="48" /></p>
       <p class="not-found-text">Spiel nicht gefunden</p>
     </div>
   </div>

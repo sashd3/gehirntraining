@@ -24,9 +24,7 @@
             {{ clue.clue }}
           </span>
           <span v-if="isCompleted(clue)" class="crossword-clues__check">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M3 8.5L6.5 12L13 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            <Check :size="16" />
           </span>
         </button>
       </div>
@@ -56,9 +54,7 @@
             {{ clue.clue }}
           </span>
           <span v-if="isCompleted(clue)" class="crossword-clues__check">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M3 8.5L6.5 12L13 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            <Check :size="16" />
           </span>
         </button>
       </div>
@@ -68,6 +64,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { Check } from 'lucide-vue-next'
 import type { CrosswordClue } from '@/data/crossword-puzzles/types'
 
 const props = defineProps<{

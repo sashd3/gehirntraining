@@ -5,7 +5,8 @@ import { useI18n } from 'vue-i18n'
 import { useProgressStore } from '@/stores/progress.store'
 import { useDailyChallengeStore } from '@/stores/daily-challenge.store'
 import { gameRegistry, getGameById } from '@/engine/game-registry'
-import { getGameIconPath, strokeIcons } from '@/composables/useGameIcons'
+import { getGameIconComponent } from '@/composables/useGameIcons'
+import { Flame, Gamepad2, ChevronRight, Clock, Layers, Check, Play } from 'lucide-vue-next'
 
 const router = useRouter()
 const { t } = useI18n()
@@ -64,9 +65,7 @@ function openDailyChallenge() {
     <div class="stats-row">
       <div class="stat-card">
         <div class="stat-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M12 23c-1.1 0-2.1-.3-3-1C5.4 20 3 16.4 3 12c0-2 .6-3.8 1.7-5.2C6 5 8.5 3.5 12 1c3.5 2.5 6 4 7.3 5.8C20.4 8.2 21 10 21 12c0 4.4-2.4 8-6 10-.9.7-1.9 1-3 1z" fill="#FF6B35"/>
-          </svg>
+          <Flame :size="20" color="#FF6B35" />
         </div>
         <div class="stat-content">
           <span class="stat-label">{{ t('home.streakLabel', 'TAGE IN FOLGE') }}</span>
@@ -75,9 +74,7 @@ function openDailyChallenge() {
       </div>
       <div class="stat-card">
         <div class="stat-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M17 4H7a2 2 0 00-2 2v2a2 2 0 002 2h1l-1 6h2l.5-3h5l.5 3h2l-1-6h1a2 2 0 002-2V6a2 2 0 00-2-2zM7 8V6h10v2H7zm7.5 8h-5l.5-3h4l.5 3zM6 20h12" stroke="#7C6BC4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <Gamepad2 :size="20" color="#7C6BC4" />
         </div>
         <div class="stat-content">
           <span class="stat-label">{{ t('home.totalGamesLabel', 'GESAMTSPIELE') }}</span>
@@ -97,16 +94,11 @@ function openDailyChallenge() {
       <p class="daily-challenge__subtitle">{{ dailyChallengeSubtitle }}</p>
       <div class="daily-challenge__meta">
         <span v-if="dailyEstimatedMinutes" class="daily-challenge__tag">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-            <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <Clock :size="14" />
           ~{{ dailyEstimatedMinutes }} Min.
         </span>
         <span v-if="dailyCategoryLabel" class="daily-challenge__tag">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <Layers :size="14" />
           Fokus: {{ dailyCategoryLabel }}
         </span>
       </div>
@@ -116,13 +108,12 @@ function openDailyChallenge() {
         @click="openDailyChallenge"
       >
         <template v-if="dailyChallenge.completed">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <Check :size="20" />
           {{ t('home.challengeCompleted', 'ABGESCHLOSSEN') }}
         </template>
         <template v-else>
           {{ t('home.startChallenge', 'HERAUSFORDERUNG STARTEN') }}
+          <Play :size="18" fill="currentColor" />
         </template>
       </button>
     </div>
@@ -138,18 +129,7 @@ function openDailyChallenge() {
         @click="openGame(game.id)"
       >
         <div class="game-card__icon" :style="{ backgroundColor: game.color + '18' }">
-          <svg
-            width="26"
-            height="26"
-            viewBox="0 0 24 24"
-            :fill="strokeIcons.has(game.id) ? 'none' : game.color"
-            :stroke="strokeIcons.has(game.id) ? game.color : 'none'"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path :d="getGameIconPath(game.id)" />
-          </svg>
+          <component :is="getGameIconComponent(game.id)" :size="28" :color="game.color" />
         </div>
         <div class="game-card__body">
           <span class="game-card__name">{{ t(game.nameKey) }}</span>
@@ -165,9 +145,7 @@ function openDailyChallenge() {
           </div>
         </div>
         <div class="game-card__chevron">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <ChevronRight :size="20" />
         </div>
       </button>
     </div>
@@ -250,7 +228,8 @@ function openDailyChallenge() {
 // Daily Challenge Card
 // ---------------------------------------------------------------------------
 .daily-challenge {
-  background: linear-gradient(135deg, var(--color-primary, #9B8AB8) 0%, var(--color-accent, #6BBFAE) 100%);
+  background: var(--color-bg-elevated, #FFFFFF);
+  border: 1.5px solid var(--color-border, #E0DAE8);
   border-radius: var(--radius-xl);
   padding: var(--space-lg);
   margin-bottom: var(--space-xl);
@@ -266,26 +245,26 @@ function openDailyChallenge() {
   display: inline-block;
   font-size: var(--font-size-caption2, 11px);
   font-weight: var(--font-weight-bold);
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--color-primary, #9B8AB8);
   text-transform: uppercase;
   letter-spacing: var(--letter-spacing-wide, 0.1em);
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--color-primary-lighter, #E8E0F0);
   padding: var(--space-3xs, 2px) var(--space-sm);
   border-radius: var(--radius-full);
   margin-bottom: var(--space-sm);
 }
 
 .daily-challenge__title {
-  font-size: var(--font-size-large-title, 34px);
+  font-size: var(--font-size-title1, 28px);
   font-weight: var(--font-weight-bold);
-  color: #fff;
+  color: var(--color-text-primary);
   margin-bottom: var(--space-2xs, 4px);
   line-height: var(--line-height-tight, 1.1);
 }
 
 .daily-challenge__subtitle {
   font-size: var(--font-size-body, 17px);
-  color: rgba(255, 255, 255, 0.88);
+  color: var(--color-text-secondary);
   margin-bottom: var(--space-md);
   line-height: var(--line-height-normal, 1.4);
 }
@@ -304,13 +283,12 @@ function openDailyChallenge() {
   gap: 4px;
   font-size: var(--font-size-caption1, 13px);
   font-weight: var(--font-weight-medium);
-  color: rgba(255, 255, 255, 0.9);
-  background: rgba(255, 255, 255, 0.18);
-  padding: var(--space-3xs, 3px) var(--space-sm);
-  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  padding: 0;
 
   svg {
     flex-shrink: 0;
+    color: var(--color-text-tertiary);
   }
 }
 
@@ -319,34 +297,31 @@ function openDailyChallenge() {
   align-items: center;
   justify-content: center;
   gap: var(--space-xs);
-  width: 100%;
-  padding: var(--space-md) var(--space-lg);
-  background: var(--color-accent, #6BBFAE);
+  width: auto;
+  padding: var(--space-md) var(--space-2xl, 32px);
+  background: var(--color-primary, #9B8AB8);
   color: #fff;
   border: none;
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-headline, 17px);
+  border-radius: var(--radius-full, 50px);
+  font-size: var(--font-size-subhead, 15px);
   font-weight: var(--font-weight-bold);
   font-family: var(--font-family);
   letter-spacing: var(--letter-spacing-wide, 0.04em);
+  text-transform: uppercase;
   cursor: pointer;
-  min-height: 52px;
-  box-shadow: 0 4px 14px rgba(107, 191, 174, 0.4);
-  transition: transform var(--duration-fast, 0.15s) var(--ease-default, ease),
-              opacity var(--duration-fast, 0.15s) var(--ease-default, ease);
+  min-height: 50px;
+  box-shadow: 0 4px 14px rgba(155, 138, 184, 0.35);
+  transition: transform var(--duration-fast, 0.15s) var(--ease-default, ease);
 
   &:active {
     transform: scale(0.97);
   }
 
   &:disabled {
-    background: rgba(255, 255, 255, 0.35);
+    background: var(--color-border, #E0DAE8);
     box-shadow: none;
+    color: var(--color-text-tertiary);
     cursor: default;
-
-    &:active {
-      transform: none;
-    }
   }
 }
 

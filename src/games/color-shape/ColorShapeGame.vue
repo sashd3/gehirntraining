@@ -270,7 +270,7 @@ watch(() => props.difficulty, () => {
     <div v-if="phase === 'ready'" class="colorshape-ready">
       <h2 class="colorshape-ready__title">Farben &amp; Formen</h2>
       <p class="colorshape-ready__desc">
-        Entscheide so schnell wie moeglich, ob das angezeigte Wort
+        Entscheide so schnell wie möglich, ob das angezeigte Wort
         zur {{ difficulty === 'easy' ? 'Farbe' : 'Farbe oder Form' }} passt.
       </p>
       <p class="colorshape-ready__info">

@@ -7,6 +7,7 @@ import {
   checkAnswer,
   getCorrectAnswer,
 } from '@/generators/number-sequence.generator'
+import { Clock, Check, X, Lightbulb, Delete, Trophy } from 'lucide-vue-next'
 
 const props = defineProps<{
   difficulty: Difficulty
@@ -203,7 +204,7 @@ watch(() => props.difficulty, () => {
     <!-- Header -->
     <div class="numseq-header">
       <div class="numseq-header__pill">
-        <span>&#9200;</span>
+        <Clock :size="16" />
         <span>{{ formattedTime }}</span>
       </div>
       <div class="numseq-header__pill">
@@ -251,10 +252,10 @@ watch(() => props.difficulty, () => {
     <Transition name="feedback-slide">
       <div v-if="roundFeedback" class="numseq-feedback" :class="`numseq-feedback--${roundFeedback}`">
         <template v-if="roundFeedback === 'correct'">
-          <span class="numseq-feedback__icon">&#10003;</span> Richtig!
+          <span class="numseq-feedback__icon"><Check :size="18" /></span> Richtig!
         </template>
         <template v-else-if="roundFeedback === 'wrong'">
-          <span class="numseq-feedback__icon">&#10007;</span>
+          <span class="numseq-feedback__icon"><X :size="18" /></span>
           Leider falsch. Die richtige Antwort war {{ currentPuzzle ? getCorrectAnswer(currentPuzzle, currentPuzzle.hiddenIndices[0]) : '' }}.
         </template>
       </div>
@@ -262,7 +263,7 @@ watch(() => props.difficulty, () => {
 
     <!-- Hint / Explanation -->
     <div v-if="showExplanation && currentPuzzle" class="numseq-hint">
-      <span class="numseq-hint__icon">&#128161;</span>
+      <Lightbulb :size="18" class="numseq-hint__icon" />
       {{ currentPuzzle.hint }}
     </div>
 
@@ -303,7 +304,7 @@ watch(() => props.difficulty, () => {
           :disabled="!!roundFeedback"
           @click="backspace"
         >
-          &#9003;
+          <Delete :size="20" />
         </button>
       </div>
 
@@ -321,14 +322,14 @@ watch(() => props.difficulty, () => {
           :disabled="!!roundFeedback"
           @click="clearInput"
         >
-          Loeschen
+          Löschen
         </button>
         <button
           class="numseq-action-btn numseq-action-btn--submit"
           :disabled="!userInput || !!roundFeedback"
           @click="submitAnswer"
         >
-          Pruefen
+          Prüfen
         </button>
       </div>
     </div>
@@ -337,7 +338,7 @@ watch(() => props.difficulty, () => {
     <Transition name="complete-fade">
       <div v-if="isComplete" class="numseq-complete">
         <div class="numseq-complete__card">
-          <div class="numseq-complete__icon">&#127942;</div>
+          <div class="numseq-complete__icon"><Trophy :size="48" /></div>
           <h2 class="numseq-complete__title">Geschafft!</h2>
           <p class="numseq-complete__score">{{ score }} Punkte</p>
           <p class="numseq-complete__detail">

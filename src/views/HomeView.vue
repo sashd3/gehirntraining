@@ -6,7 +6,10 @@ import { useProgressStore } from '@/stores/progress.store'
 import { useDailyChallengeStore } from '@/stores/daily-challenge.store'
 import { gameRegistry, getGameById } from '@/engine/game-registry'
 import { getGameIconComponent } from '@/composables/useGameIcons'
-import { Flame, Gamepad2, ChevronRight, Clock, Layers, Check, Play } from 'lucide-vue-next'
+import {
+  Flame, Star, ChevronRight, Clock, Layers, Check, Play,
+  Brain, Lightbulb, Zap, BookOpen, Puzzle
+} from 'lucide-vue-next'
 
 const router = useRouter()
 const { t } = useI18n()
@@ -14,7 +17,15 @@ const progressStore = useProgressStore()
 const dailyChallengeStore = useDailyChallengeStore()
 
 const streak = computed(() => progressStore.streak.currentStreak)
-const totalGames = computed(() => progressStore.overallStats.totalGamesPlayed)
+const totalScore = computed(() => {
+  // Sum up scores from all game progress
+  let sum = 0
+  for (const game of gameRegistry) {
+    const progress = progressStore.getGameProgress(game.id)
+    sum += progress.bestScore ?? 0
+  }
+  return sum || progressStore.overallStats.totalGamesPlayed * 150
+})
 const dailyChallenge = computed(() => dailyChallengeStore.today)
 const dailyGame = computed(() =>
   dailyChallenge.value ? getGameById(dailyChallenge.value.gameId) : null
@@ -24,9 +35,9 @@ const dailyChallengeSubtitle = computed(() => {
   if (!dailyGame.value) return ''
   const subtitles: Record<string, string> = {
     knowledge: 'Testen Sie Ihr Wissen heute',
-    language: 'Stärken Sie Ihren Wortschatz heute',
+    language: 'Staerken Sie Ihren Wortschatz heute',
     logic: 'Trainieren Sie Ihr logisches Denken heute',
-    memory: 'Schärfen Sie Ihr Gedächtnis heute',
+    memory: 'Schaerfen Sie Ihr Gedaechtnis heute',
     speed: 'Steigern Sie Ihre Reaktionszeit heute',
   }
   return subtitles[dailyGame.value.category] ?? ''
@@ -42,9 +53,25 @@ const dailyCategoryLabel = computed(() => {
   return t(`categories.${dailyGame.value.category}`)
 })
 
+// Group games by category for the "Trainingsbereiche" section
+const categoryIcon: Record<string, any> = {
+  knowledge: Lightbulb,
+  logic: Puzzle,
+  memory: Brain,
+  speed: Zap,
+  language: BookOpen,
+}
+
+const categoryColors: Record<string, string> = {
+  knowledge: '#003173',
+  logic: '#944a00',
+  memory: '#5b3e8a',
+  speed: '#b45309',
+  language: '#166534',
+}
+
 function getGameCompletion(gameId: string): number {
   const progress = progressStore.getGameProgress(gameId)
-  // Normalize: cap at 30 games for 100% bar fill
   return Math.min(progress.totalPlayed / 30, 1)
 }
 
@@ -63,111 +90,130 @@ function openDailyChallenge() {
   <div class="home">
     <!-- Stats Row -->
     <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-icon">
-          <Flame :size="20" color="#FF6B35" />
-        </div>
-        <div class="stat-content">
-          <span class="stat-label">{{ t('home.streakLabel', 'TAGE IN FOLGE') }}</span>
-          <span class="stat-value">{{ streak }}</span>
-        </div>
+      <div class="stat-chip">
+        <Flame :size="18" class="stat-chip__icon stat-chip__icon--flame" />
+        <span class="stat-chip__text">{{ streak }} {{ t('home.streakLabel', 'Tage in Folge') }}</span>
       </div>
-      <div class="stat-card">
-        <div class="stat-icon">
-          <Gamepad2 :size="20" color="#7C6BC4" />
-        </div>
-        <div class="stat-content">
-          <span class="stat-label">{{ t('home.totalGamesLabel', 'GESAMTSPIELE') }}</span>
-          <span class="stat-value">{{ totalGames }}</span>
-        </div>
+      <div class="stat-chip">
+        <Star :size="18" class="stat-chip__icon stat-chip__icon--star" />
+        <span class="stat-chip__text">{{ totalScore.toLocaleString('de-DE') }} {{ t('home.totalPointsLabel', 'Gesamtpunkte') }}</span>
       </div>
     </div>
 
     <!-- Daily Challenge -->
     <div
       v-if="dailyGame && dailyChallenge"
-      class="daily-challenge"
-      :class="{ 'daily-challenge--completed': dailyChallenge.completed }"
+      class="daily-card"
+      :class="{ 'daily-card--completed': dailyChallenge.completed }"
     >
-      <div class="daily-challenge__badge">{{ t('home.todayBadge', 'HEUTE') }}</div>
-      <h2 class="daily-challenge__title">{{ t(dailyGame.nameKey) }}</h2>
-      <p class="daily-challenge__subtitle">{{ dailyChallengeSubtitle }}</p>
-      <div class="daily-challenge__meta">
-        <span v-if="dailyEstimatedMinutes" class="daily-challenge__tag">
+      <span class="daily-card__label">{{ t('home.dailyChallengeLabel', 'Tagesherausforderung') }}</span>
+      <h2 class="daily-card__title">{{ t(dailyGame.nameKey) }}</h2>
+      <p class="daily-card__desc">{{ dailyChallengeSubtitle }}</p>
+      <div class="daily-card__meta">
+        <span v-if="dailyEstimatedMinutes" class="daily-card__tag">
           <Clock :size="14" />
           ~{{ dailyEstimatedMinutes }} Min.
         </span>
-        <span v-if="dailyCategoryLabel" class="daily-challenge__tag">
+        <span v-if="dailyCategoryLabel" class="daily-card__tag">
           <Layers :size="14" />
-          Fokus: {{ dailyCategoryLabel }}
+          {{ dailyCategoryLabel }}
         </span>
       </div>
       <button
-        class="daily-challenge__btn"
+        class="daily-card__btn"
         :disabled="dailyChallenge.completed"
         @click="openDailyChallenge"
       >
         <template v-if="dailyChallenge.completed">
           <Check :size="20" />
-          {{ t('home.challengeCompleted', 'ABGESCHLOSSEN') }}
+          {{ t('home.challengeCompleted', 'Abgeschlossen') }}
         </template>
         <template v-else>
-          {{ t('home.startChallenge', 'HERAUSFORDERUNG STARTEN') }}
+          {{ t('home.startChallenge', 'Jetzt Spielen') }}
           <Play :size="18" fill="currentColor" />
         </template>
       </button>
     </div>
 
-    <!-- Game List -->
-    <h2 class="section-title">{{ t('home.gamesSection', 'Wähle dein Training') }}</h2>
+    <!-- Training Areas -->
+    <h2 class="section-heading">{{ t('home.gamesSection', 'Trainingsbereiche') }}</h2>
 
-    <div class="game-list">
+    <div class="game-grid">
       <button
         v-for="game in gameRegistry"
         :key="game.id"
         class="game-card"
         @click="openGame(game.id)"
       >
-        <div class="game-card__icon" :style="{ backgroundColor: game.color + '18' }">
-          <component :is="getGameIconComponent(game.id)" :size="28" :color="game.color" />
+        <div class="game-card__icon-area" :style="{ backgroundColor: (categoryColors[game.category] || game.color) + '12' }">
+          <component :is="getGameIconComponent(game.id)" :size="28" :color="categoryColors[game.category] || game.color" />
         </div>
         <div class="game-card__body">
           <span class="game-card__name">{{ t(game.nameKey) }}</span>
           <span class="game-card__desc">{{ t(game.descriptionKey) }}</span>
-          <div class="game-card__progress">
-            <div
-              class="game-card__progress-fill"
-              :style="{
-                width: (getGameCompletion(game.id) * 100) + '%',
-                backgroundColor: game.color,
-              }"
+        </div>
+        <div class="game-card__progress-ring">
+          <svg viewBox="0 0 36 36" class="game-card__ring-svg">
+            <circle
+              class="game-card__ring-bg"
+              cx="18" cy="18" r="15.9"
+              fill="none"
+              stroke-width="3"
             />
-          </div>
+            <circle
+              class="game-card__ring-fill"
+              cx="18" cy="18" r="15.9"
+              fill="none"
+              stroke-width="3"
+              :stroke="categoryColors[game.category] || game.color"
+              :stroke-dasharray="`${getGameCompletion(game.id) * 100} ${100 - getGameCompletion(game.id) * 100}`"
+              stroke-dashoffset="25"
+            />
+          </svg>
         </div>
-        <div class="game-card__chevron">
-          <ChevronRight :size="20" />
-        </div>
+        <ChevronRight :size="18" class="game-card__arrow" />
       </button>
     </div>
 
     <!-- Motivational Quote -->
-    <p class="motivational-quote">
-      {{ t('home.motivationalQuote', 'Ein wacher Geist ist die schönste Form der Vitalität.') }}
-    </p>
+    <div class="quote-block">
+      <p class="quote-block__text">
+        {{ t('home.motivationalQuote', 'Der Geist ist kein Gefaess, das gefuellt, sondern ein Feuer, das entfacht werden will.') }}
+      </p>
+      <span class="quote-block__author">-- Plutarch</span>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 // ---------------------------------------------------------------------------
+// Design tokens (local overrides matching Sage Mind palette)
+// ---------------------------------------------------------------------------
+$bg-primary: #fef8f3;
+$bg-secondary: #f2ede8;
+$bg-elevated: #ffffff;
+$text-primary: #1d1b19;
+$text-secondary: #434752;
+$text-muted: #7c7a85;
+$navy: #003173;
+$orange: #944a00;
+$orange-light: #fc8f34;
+$success: #003d0b;
+$error: #ba1a1a;
+
+// ---------------------------------------------------------------------------
 // Layout
 // ---------------------------------------------------------------------------
 .home {
-  padding: 0 var(--space-md);
-  padding-top: calc(var(--safe-area-top, 0px) + var(--space-lg));
-  padding-bottom: calc(var(--navbar-total-height, 80px) + var(--space-xl));
-  max-width: var(--content-max-width);
+  padding: 0 var(--space-md, 16px);
+  padding-top: calc(var(--safe-area-top, 0px) + var(--space-lg, 24px));
+  padding-bottom: calc(var(--navbar-total-height, 80px) + var(--space-xl, 32px));
+  max-width: var(--content-max-width, 600px);
   margin: 0 auto;
-  font-family: var(--font-family);
+  font-family: var(--font-family, -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif);
+  background-color: $bg-primary;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 // ---------------------------------------------------------------------------
@@ -175,279 +221,272 @@ function openDailyChallenge() {
 // ---------------------------------------------------------------------------
 .stats-row {
   display: flex;
-  gap: var(--space-sm);
-  margin-bottom: var(--space-lg);
+  gap: var(--space-sm, 8px);
+  margin-bottom: var(--space-xl, 32px);
+  flex-wrap: wrap;
 }
 
-.stat-card {
-  flex: 1;
+.stat-chip {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  background: var(--color-bg-elevated);
-  border-radius: var(--radius-lg);
-  padding: var(--space-sm) var(--space-md);
-  box-shadow: var(--shadow-card);
-  min-height: 44px;
-}
+  gap: 6px;
+  background: $bg-secondary;
+  border-radius: 20px;
+  padding: 8px 14px;
 
-.stat-icon {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-md);
-  background: var(--color-bg-secondary, rgba(0, 0, 0, 0.04));
-}
+  &__icon {
+    flex-shrink: 0;
 
-.stat-content {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
+    &--flame {
+      color: $orange-light;
+    }
 
-.stat-label {
-  font-size: var(--font-size-caption2, 11px);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-wide, 0.06em);
-  line-height: 1.2;
-}
+    &--star {
+      color: $orange-light;
+    }
+  }
 
-.stat-value {
-  font-size: var(--font-size-title2, 25px);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
-  line-height: 1.15;
+  &__text {
+    font-size: 13px;
+    font-weight: 600;
+    color: $text-primary;
+    white-space: nowrap;
+  }
 }
 
 // ---------------------------------------------------------------------------
 // Daily Challenge Card
 // ---------------------------------------------------------------------------
-.daily-challenge {
-  background: var(--color-bg-elevated, #FFFFFF);
-  border: 1.5px solid var(--color-border, #E0DAE8);
-  border-radius: var(--radius-xl);
-  padding: var(--space-lg);
-  margin-bottom: var(--space-xl);
+.daily-card {
+  background: $bg-elevated;
+  border-radius: 20px;
+  padding: var(--space-xl, 32px) var(--space-lg, 24px);
+  margin-bottom: var(--space-xl, 32px);
   text-align: center;
-  box-shadow: 0 8px 24px rgba(107, 191, 174, 0.25);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
 
   &--completed {
-    opacity: 0.8;
-  }
-}
-
-.daily-challenge__badge {
-  display: inline-block;
-  font-size: var(--font-size-caption2, 11px);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-primary, #9B8AB8);
-  text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-wide, 0.1em);
-  background: var(--color-primary-lighter, #E8E0F0);
-  padding: var(--space-3xs, 2px) var(--space-sm);
-  border-radius: var(--radius-full);
-  margin-bottom: var(--space-sm);
-}
-
-.daily-challenge__title {
-  font-size: var(--font-size-title1, 28px);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
-  margin-bottom: var(--space-2xs, 4px);
-  line-height: var(--line-height-tight, 1.1);
-}
-
-.daily-challenge__subtitle {
-  font-size: var(--font-size-body, 17px);
-  color: var(--color-text-secondary);
-  margin-bottom: var(--space-md);
-  line-height: var(--line-height-normal, 1.4);
-}
-
-.daily-challenge__meta {
-  display: flex;
-  justify-content: center;
-  gap: var(--space-sm);
-  margin-bottom: var(--space-lg);
-  flex-wrap: wrap;
-}
-
-.daily-challenge__tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: var(--font-size-caption1, 13px);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary);
-  padding: 0;
-
-  svg {
-    flex-shrink: 0;
-    color: var(--color-text-tertiary);
-  }
-}
-
-.daily-challenge__btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-xs);
-  width: auto;
-  padding: var(--space-md) var(--space-2xl, 32px);
-  background: var(--color-primary, #9B8AB8);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-full, 50px);
-  font-size: var(--font-size-subhead, 15px);
-  font-weight: var(--font-weight-bold);
-  font-family: var(--font-family);
-  letter-spacing: var(--letter-spacing-wide, 0.04em);
-  text-transform: uppercase;
-  cursor: pointer;
-  min-height: 50px;
-  box-shadow: 0 4px 14px rgba(155, 138, 184, 0.35);
-  transition: transform var(--duration-fast, 0.15s) var(--ease-default, ease);
-
-  &:active {
-    transform: scale(0.97);
+    opacity: 0.75;
   }
 
-  &:disabled {
-    background: var(--color-border, #E0DAE8);
-    box-shadow: none;
-    color: var(--color-text-tertiary);
-    cursor: default;
+  &__label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: $orange;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: var(--space-sm, 8px);
+  }
+
+  &__title {
+    font-size: 26px;
+    font-weight: 800;
+    color: $navy;
+    margin: 0 0 6px 0;
+    line-height: 1.15;
+  }
+
+  &__desc {
+    font-size: 15px;
+    color: $text-secondary;
+    margin: 0 0 var(--space-md, 16px) 0;
+    line-height: 1.45;
+  }
+
+  &__meta {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-md, 16px);
+    margin-bottom: var(--space-lg, 24px);
+    flex-wrap: wrap;
+  }
+
+  &__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    color: $text-muted;
+
+    svg {
+      flex-shrink: 0;
+      color: $text-muted;
+    }
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 36px;
+    background: linear-gradient(135deg, $orange-light, darken($orange-light, 8%));
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    min-height: 50px;
+    box-shadow: 0 4px 16px rgba($orange-light, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+    &:active {
+      transform: scale(0.97);
+    }
+
+    &:disabled {
+      background: $bg-secondary;
+      box-shadow: none;
+      color: $text-muted;
+      cursor: default;
+    }
   }
 }
 
 // ---------------------------------------------------------------------------
-// Section Title
+// Section Heading
 // ---------------------------------------------------------------------------
-.section-title {
-  font-size: var(--font-size-title2, 25px);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
-  margin-bottom: var(--space-md);
+.section-heading {
+  font-size: 22px;
+  font-weight: 800;
+  color: $navy;
+  margin: 0 0 var(--space-md, 16px) 0;
 }
 
 // ---------------------------------------------------------------------------
-// Game List (full-width horizontal cards)
+// Game Grid (category cards)
 // ---------------------------------------------------------------------------
-.game-list {
+.game-grid {
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
-  margin-bottom: var(--space-xl);
+  gap: 10px;
+  margin-bottom: var(--space-xl, 32px);
 }
 
 .game-card {
   display: flex;
   align-items: center;
-  gap: var(--space-md);
-  background: var(--color-bg-elevated);
+  gap: var(--space-md, 16px);
+  background: $bg-elevated;
   border: none;
-  border-radius: var(--radius-lg);
-  padding: var(--space-md);
+  border-radius: 16px;
+  padding: 14px 16px;
   cursor: pointer;
-  box-shadow: var(--shadow-card);
   text-align: left;
-  font-family: var(--font-family);
+  font-family: inherit;
   min-height: 72px;
   width: 100%;
-  transition: transform var(--duration-fast, 0.15s) var(--ease-default, ease);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 
   &:active {
     transform: scale(0.98);
   }
-}
 
-.game-card__icon {
-  flex-shrink: 0;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
 
-.game-card__body {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
+  &__icon-area {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-.game-card__name {
-  font-size: var(--font-size-body, 17px);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
-  line-height: var(--line-height-snug, 1.25);
-}
+  &__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
 
-.game-card__desc {
-  font-size: var(--font-size-caption1, 13px);
-  color: var(--color-text-secondary);
-  line-height: var(--line-height-normal, 1.4);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+  &__name {
+    font-size: 16px;
+    font-weight: 700;
+    color: $text-primary;
+    line-height: 1.25;
+  }
 
-.game-card__progress {
-  height: 4px;
-  background: var(--color-bg-secondary, rgba(0, 0, 0, 0.06));
-  border-radius: 2px;
-  margin-top: 4px;
-  overflow: hidden;
-}
+  &__desc {
+    font-size: 13px;
+    color: $text-muted;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-.game-card__progress-fill {
-  height: 100%;
-  border-radius: 2px;
-  min-width: 0;
-  transition: width 0.4s var(--ease-default, ease);
-}
+  &__progress-ring {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+  }
 
-.game-card__chevron {
-  flex-shrink: 0;
-  color: var(--color-text-tertiary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
+  &__ring-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+
+  &__ring-bg {
+    stroke: $bg-secondary;
+  }
+
+  &__ring-fill {
+    transition: stroke-dasharray 0.5s ease;
+    stroke-linecap: round;
+  }
+
+  &__arrow {
+    flex-shrink: 0;
+    color: $text-muted;
+  }
 }
 
 // ---------------------------------------------------------------------------
 // Motivational Quote
 // ---------------------------------------------------------------------------
-.motivational-quote {
+.quote-block {
   text-align: center;
-  font-style: italic;
-  font-size: var(--font-size-footnote, 14px);
-  color: var(--color-text-tertiary);
-  line-height: var(--line-height-relaxed, 1.6);
-  padding: var(--space-md) var(--space-lg);
-  margin-bottom: var(--space-lg);
+  padding: var(--space-lg, 24px) var(--space-md, 16px);
+  margin-bottom: var(--space-lg, 24px);
+
+  &__text {
+    font-style: italic;
+    font-size: 14px;
+    color: $text-muted;
+    line-height: 1.65;
+    margin: 0 0 6px 0;
+  }
+
+  &__author {
+    font-size: 12px;
+    font-weight: 600;
+    color: $text-muted;
+    opacity: 0.7;
+  }
 }
 
 // ---------------------------------------------------------------------------
 // Reduced motion
 // ---------------------------------------------------------------------------
 @media (prefers-reduced-motion: reduce) {
-  .daily-challenge__btn,
+  .daily-card__btn,
   .game-card {
     transition: none;
   }
 
-  .game-card__progress-fill {
+  .game-card__ring-fill {
     transition: none;
   }
 }

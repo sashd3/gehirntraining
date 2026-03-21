@@ -1,10 +1,10 @@
 <template>
   <div class="quiz-game">
-    <!-- Header: Progress text + thin progress bar -->
+    <!-- Header: Progress bar -->
     <div class="quiz-game__header">
       <div class="quiz-game__progress-row">
-        <span class="quiz-game__progress-counter">
-          {{ currentQuestionIndex + 1 }}/{{ totalQuestions }}
+        <span class="quiz-game__progress-label">
+          Frage {{ currentQuestionIndex + 1 }} / {{ totalQuestions }}
         </span>
         <span class="quiz-game__score-badge">
           {{ score }} {{ t('common.score') }}
@@ -29,8 +29,8 @@
           />
         </div>
 
-        <!-- Answer options -->
-        <div class="quiz-game__answers">
+        <!-- Answer options: 2x2 Grid -->
+        <div class="quiz-game__answers-grid">
           <QuizAnswer
             v-for="(answer, idx) in currentQuestion?.answers ?? []"
             :key="`${currentQuestionIndex}-${idx}`"
@@ -57,28 +57,30 @@
       </div>
     </Transition>
 
-    <!-- Bottom feedback toast (slides up from bottom) -->
-    <Transition name="toast-slide">
-      <div
-        v-if="showResult"
-        class="quiz-game__toast"
-        :class="{
-          'quiz-game__toast--correct': isLastAnswerCorrect,
-          'quiz-game__toast--wrong': !isLastAnswerCorrect,
-        }"
-      >
-        <span class="quiz-game__toast-icon">
-          <Check v-if="isLastAnswerCorrect" :size="22" />
-          <X v-else :size="20" />
-        </span>
-        <span class="quiz-game__toast-text">
-          {{ isLastAnswerCorrect
-            ? `Richtig! +${POINTS_PER_CORRECT} Punkte verdient.`
-            : 'Leider falsch.'
-          }}
-        </span>
-      </div>
-    </Transition>
+    <!-- Confirm button -->
+    <div class="quiz-game__bottom">
+      <Transition name="toast-slide">
+        <div
+          v-if="showResult"
+          class="quiz-game__feedback"
+          :class="{
+            'quiz-game__feedback--correct': isLastAnswerCorrect,
+            'quiz-game__feedback--wrong': !isLastAnswerCorrect,
+          }"
+        >
+          <span class="quiz-game__feedback-icon">
+            <Check v-if="isLastAnswerCorrect" :size="20" />
+            <X v-else :size="20" />
+          </span>
+          <span class="quiz-game__feedback-text">
+            {{ isLastAnswerCorrect
+              ? `Richtig! +${POINTS_PER_CORRECT} Punkte`
+              : 'Leider falsch.'
+            }}
+          </span>
+        </div>
+      </Transition>
+    </div>
   </div>
 </template>
 
@@ -231,54 +233,68 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
+// Design tokens
+$bg-primary: #fef8f3;
+$bg-secondary: #f2ede8;
+$bg-elevated: #ffffff;
+$text-primary: #1d1b19;
+$text-secondary: #434752;
+$text-muted: #7c7a85;
+$navy: #003173;
+$orange: #944a00;
+$orange-light: #fc8f34;
+$success: #003d0b;
+$error: #ba1a1a;
+
 .quiz-game {
   display: flex;
   flex-direction: column;
   gap: var(--space-lg, 24px);
   padding: var(--space-md, 16px);
-  padding-bottom: 80px; // space for toast
+  padding-bottom: 100px;
   max-width: var(--content-max-width, 600px);
   margin: 0 auto;
   width: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  font-family: var(--font-family, -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif);
   position: relative;
   min-height: 100%;
+  background-color: $bg-primary;
 
   // --- Header ---
   &__header {
-    padding: 0 var(--space-xs, 4px);
+    padding: 0;
   }
 
   &__progress-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--space-xs, 4px);
+    margin-bottom: 8px;
   }
 
-  &__progress-counter {
-    font-size: var(--font-size-sm, 14px);
-    font-weight: 600;
-    color: var(--color-text-secondary, #8A8494);
+  &__progress-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: $navy;
   }
 
   &__score-badge {
-    font-size: var(--font-size-sm, 14px);
+    font-size: 14px;
     font-weight: 600;
-    color: var(--color-primary, #9B8AB8);
+    color: $orange;
   }
 
   &__progress-track {
     width: 100%;
-    height: 4px;
-    background-color: rgba(155, 138, 184, 0.15);
+    height: 6px;
+    background-color: $bg-secondary;
     border-radius: 100px;
     overflow: hidden;
   }
 
   &__progress-fill {
     height: 100%;
-    background-color: var(--color-primary, #9B8AB8);
+    background: linear-gradient(90deg, $navy, lighten($navy, 15%));
     border-radius: 100px;
     transition: width 0.4s ease-out;
   }
@@ -292,60 +308,63 @@ onBeforeUnmount(() => {
 
   // --- Question card ---
   &__question-card {
-    background-color: var(--color-bg-elevated, #FFFFFF);
-    border-radius: 16px;
+    background-color: $bg-elevated;
+    border-radius: 20px;
     padding: var(--space-xl, 32px) var(--space-lg, 24px);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
     text-align: center;
   }
 
-  // --- Answer list ---
-  &__answers {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm, 10px);
+  // --- Answer grid: 2x2 ---
+  &__answers-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
 
-  // --- Explanation (inline, below answers) ---
+  // --- Explanation ---
   &__explanation {
     padding: var(--space-md, 16px) var(--space-lg, 24px);
-    background-color: var(--color-bg-secondary, #F4F2F7);
-    border-radius: 12px;
+    background-color: $bg-secondary;
+    border-radius: 14px;
   }
 
   &__explanation-text {
     margin: 0;
-    font-size: var(--font-size-md, 16px);
+    font-size: 15px;
     line-height: 1.6;
-    color: var(--color-text-secondary, #8A8494);
+    color: $text-secondary;
   }
 
-  // --- Bottom toast ---
-  &__toast {
+  // --- Bottom feedback ---
+  &__bottom {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
+    z-index: 100;
+  }
+
+  &__feedback {
     display: flex;
     align-items: center;
-    gap: var(--space-sm, 10px);
+    gap: 10px;
     padding: var(--space-md, 16px) var(--space-lg, 24px);
     padding-bottom: calc(var(--space-md, 16px) + env(safe-area-inset-bottom, 0px));
-    z-index: 100;
 
     &--correct {
-      background-color: var(--color-success, #5CB885);
-      color: #FFFFFF;
+      background-color: $success;
+      color: #ffffff;
     }
 
     &--wrong {
-      background-color: var(--color-bg-elevated, #FFFFFF);
-      color: var(--color-text-primary, #2D2540);
-      border-top: 1px solid var(--color-border-light, #E8E5EC);
+      background-color: $bg-elevated;
+      color: $text-primary;
+      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
     }
   }
 
-  &__toast-icon {
+  &__feedback-icon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -354,16 +373,15 @@ onBeforeUnmount(() => {
     height: 28px;
   }
 
-  &__toast-text {
-    font-size: var(--font-size-md, 16px);
-    font-weight: 600;
+  &__feedback-text {
+    font-size: 15px;
+    font-weight: 700;
     line-height: 1.4;
   }
 }
 
 // --- Transitions ---
 
-// Question slide in/out
 .quiz-slide-enter-active {
   transition: opacity 0.35s ease-out, transform 0.35s ease-out;
 }
@@ -379,7 +397,6 @@ onBeforeUnmount(() => {
   transform: translateX(-30px);
 }
 
-// Explanation fade in
 .explanation-fade-enter-active {
   transition: opacity 0.4s ease-out, transform 0.4s ease-out;
 }
@@ -392,7 +409,6 @@ onBeforeUnmount(() => {
   transform: translateY(0);
 }
 
-// Toast slides up from bottom
 .toast-slide-enter-active {
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }

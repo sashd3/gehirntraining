@@ -48,10 +48,6 @@
 
     <!-- Action buttons -->
     <div class="crossword-game__actions">
-      <button class="crossword-game__btn crossword-game__btn--primary" @click="onCheckProgress">
-        <Check :size="18" />
-        Rätsel prüfen
-      </button>
       <button class="crossword-game__btn crossword-game__btn--outlined" @click="onRevealHint">
         <Info :size="18" />
         Hinweis geben
@@ -446,9 +442,11 @@ function checkCompletedClues() {
 
 function isGameComplete(): boolean {
   if (!puzzle.value) return false
+  // Check that ALL cells are filled AND correct
   for (let r = 0; r < puzzle.value.height; r++) {
     for (let c = 0; c < puzzle.value.width; c++) {
-      if (puzzle.value.grid[r][c] !== '#' && userGrid.value[r][c] === '') {
+      if (puzzle.value.grid[r][c] === '#') continue
+      if (userGrid.value[r][c].toUpperCase() !== puzzle.value.grid[r][c].toUpperCase()) {
         return false
       }
     }

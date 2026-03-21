@@ -1,58 +1,73 @@
 <template>
   <div class="crossword-clues">
-    <!-- iOS-style Segmented Control -->
-    <div class="crossword-clues__segmented" role="tablist">
-      <div
-        class="crossword-clues__segment-bg"
-        :class="{ 'crossword-clues__segment-bg--right': activeTab === 'down' }"
-      />
-      <button
-        class="crossword-clues__segment"
-        :class="{ 'crossword-clues__segment--active': activeTab === 'across' }"
-        role="tab"
-        :aria-selected="activeTab === 'across'"
-        @click="activeTab = 'across'"
-      >
-        Waagerecht
-      </button>
-      <button
-        class="crossword-clues__segment"
-        :class="{ 'crossword-clues__segment--active': activeTab === 'down' }"
-        role="tab"
-        :aria-selected="activeTab === 'down'"
-        @click="activeTab = 'down'"
-      >
-        Senkrecht
-      </button>
+    <!-- Waagerecht section -->
+    <div class="crossword-clues__section">
+      <div class="crossword-clues__section-header">
+        <h3 class="crossword-clues__section-title">Waagerecht</h3>
+      </div>
+      <div class="crossword-clues__list">
+        <button
+          v-for="clue in acrossClues"
+          :key="`across-${clue.number}`"
+          class="crossword-clues__item"
+          :class="{
+            'crossword-clues__item--active': isSelected(clue),
+            'crossword-clues__item--completed': isCompleted(clue),
+          }"
+          @click="$emit('clue-select', clue)"
+        >
+          <span class="crossword-clues__number">{{ clue.number }}</span>
+          <span
+            class="crossword-clues__text"
+            :class="{ 'crossword-clues__text--completed': isCompleted(clue) }"
+          >
+            {{ clue.clue }}
+          </span>
+          <span v-if="isCompleted(clue)" class="crossword-clues__check">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8.5L6.5 12L13 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+      </div>
     </div>
 
-    <!-- Clue list -->
-    <div class="crossword-clues__list" role="tabpanel">
-      <button
-        v-for="clue in visibleClues"
-        :key="`${clue.direction}-${clue.number}`"
-        class="crossword-clues__item"
-        :class="{
-          'crossword-clues__item--selected': isSelected(clue),
-          'crossword-clues__item--completed': isCompleted(clue),
-        }"
-        @click="$emit('clue-select', clue)"
-      >
-        <span class="crossword-clues__number">{{ clue.number }}.</span>
-        <span
-          class="crossword-clues__text"
-          :class="{ 'crossword-clues__text--completed': isCompleted(clue) }"
+    <!-- Senkrecht section -->
+    <div class="crossword-clues__section">
+      <div class="crossword-clues__section-header">
+        <h3 class="crossword-clues__section-title">Senkrecht</h3>
+      </div>
+      <div class="crossword-clues__list">
+        <button
+          v-for="clue in downClues"
+          :key="`down-${clue.number}`"
+          class="crossword-clues__item"
+          :class="{
+            'crossword-clues__item--active': isSelected(clue),
+            'crossword-clues__item--completed': isCompleted(clue),
+          }"
+          @click="$emit('clue-select', clue)"
         >
-          {{ clue.clue }}
-        </span>
-        <span v-if="isCompleted(clue)" class="crossword-clues__check">&#10003;</span>
-      </button>
+          <span class="crossword-clues__number">{{ clue.number }}</span>
+          <span
+            class="crossword-clues__text"
+            :class="{ 'crossword-clues__text--completed': isCompleted(clue) }"
+          >
+            {{ clue.clue }}
+          </span>
+          <span v-if="isCompleted(clue)" class="crossword-clues__check">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8.5L6.5 12L13 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import type { CrosswordClue } from '@/data/crossword-puzzles/types'
 
 const props = defineProps<{
@@ -65,11 +80,15 @@ defineEmits<{
   'clue-select': [clue: CrosswordClue]
 }>()
 
-const activeTab = ref<'across' | 'down'>('across')
-
-const visibleClues = computed(() =>
+const acrossClues = computed(() =>
   props.clues
-    .filter((c) => c.direction === activeTab.value)
+    .filter((c) => c.direction === 'across')
+    .sort((a, b) => a.number - b.number),
+)
+
+const downClues = computed(() =>
+  props.clues
+    .filter((c) => c.direction === 'down')
     .sort((a, b) => a.number - b.number),
 )
 
@@ -90,120 +109,104 @@ function isCompleted(clue: CrosswordClue): boolean {
 .crossword-clues {
   display: flex;
   flex-direction: column;
-  border-radius: var(--radius-lg);
-  background-color: var(--color-bg-elevated);
-  box-shadow: var(--shadow-card, var(--shadow-sm));
+  gap: 0;
+  background-color: var(--color-bg-elevated, #FFFFFF);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
   overflow: hidden;
-  font-family: var(--font-family);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
 
-  // iOS-style segmented control
-  &__segmented {
-    display: flex;
-    position: relative;
-    margin: var(--space-sm);
-    padding: 2px;
-    background-color: var(--color-bg-secondary);
-    border-radius: var(--radius-sm);
-  }
-
-  &__segment-bg {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: calc(50% - 2px);
-    height: calc(100% - 4px);
-    background-color: var(--color-bg-elevated);
-    border-radius: calc(var(--radius-sm) - 1px);
-    box-shadow: 0 1px 3px rgba(45, 37, 64, 0.1);
-    transition: transform var(--duration-normal) var(--ease-default);
-
-    &--right {
-      transform: translateX(100%);
+  // --- Section ---
+  &__section {
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--color-border-light, #E8E5EC);
     }
   }
 
-  &__segment {
-    flex: 1;
-    position: relative;
-    z-index: 1;
-    padding: var(--space-xs) var(--space-md);
-    min-height: var(--touch-target-min);
-    border: none;
-    background: none;
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    font-family: var(--font-family);
-    cursor: pointer;
-    transition: color var(--duration-normal) var(--ease-default);
-    -webkit-tap-highlight-color: transparent;
-
-    &--active {
-      color: var(--color-primary);
-      font-weight: var(--font-weight-semibold);
-    }
+  &__section-header {
+    padding: var(--space-md, 16px) var(--space-md, 16px) var(--space-xs, 4px);
+    border-bottom: 2px solid var(--color-text-primary, #2D2540);
+    margin: 0 var(--space-md, 16px);
   }
 
+  &__section-title {
+    margin: 0;
+    font-size: var(--font-size-md, 16px);
+    font-weight: 700;
+    color: var(--color-text-primary, #2D2540);
+    letter-spacing: 0.01em;
+  }
+
+  // --- Scrollable clue list ---
   &__list {
-    @include scroll-container;
-    max-height: 240px;
-    padding: 4px 0;
+    max-height: 200px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: var(--space-xs, 4px) 0;
   }
 
+  // --- Individual clue ---
   &__item {
     display: flex;
     align-items: flex-start;
-    gap: var(--space-sm);
+    gap: var(--space-sm, 10px);
     width: 100%;
-    padding: var(--space-sm) var(--space-md);
-    min-height: var(--touch-target-min);
+    padding: var(--space-sm, 10px) var(--space-md, 16px);
+    min-height: 44px;
     border: none;
     background: none;
     text-align: left;
     cursor: pointer;
-    transition: background-color var(--duration-fast) var(--ease-default);
+    transition: background-color 0.15s ease;
     -webkit-tap-highlight-color: transparent;
-    font-family: var(--font-family);
-
-    @include focus-ring;
+    font-family: inherit;
 
     &:active {
-      background-color: var(--color-bg-tertiary);
+      background-color: var(--color-bg-secondary, #F4F2F7);
     }
 
-    &--selected {
-      background-color: var(--color-primary-lighter, var(--color-bg-tertiary));
+    // Active/selected clue highlight
+    &--active {
+      background-color: rgba(155, 138, 184, 0.1);
     }
 
+    // Completed clue — subtle
     &--completed {
-      opacity: 0.7;
+      opacity: 0.65;
     }
   }
 
+  // --- Clue number ---
   &__number {
-    font-size: var(--font-size-md);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
-    min-width: 28px;
+    font-size: var(--font-size-sm, 14px);
+    font-weight: 700;
+    color: var(--color-primary, #9B8AB8);
+    min-width: 24px;
     flex-shrink: 0;
+    padding-top: 1px;
   }
 
+  // --- Clue text ---
   &__text {
     flex: 1;
-    font-size: var(--font-size-md);
-    line-height: var(--line-height-normal);
-    color: var(--color-text-primary);
+    font-size: var(--font-size-md, 16px);
+    line-height: 1.45;
+    color: var(--color-text-primary, #2D2540);
 
     &--completed {
       text-decoration: line-through;
-      color: var(--color-text-tertiary);
+      color: var(--color-text-secondary, #8A8494);
     }
   }
 
+  // --- Checkmark for completed ---
   &__check {
-    color: var(--color-success);
-    font-size: var(--font-size-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
+    color: var(--color-success, #5CB885);
+    padding-top: 2px;
   }
 }
 </style>

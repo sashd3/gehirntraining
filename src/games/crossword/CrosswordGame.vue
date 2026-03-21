@@ -1,14 +1,15 @@
 <template>
   <div v-if="puzzle" class="crossword-game">
     <!-- Current clue display -->
-    <div v-if="currentClue" class="crossword-game__active-clue">
-      <div class="crossword-game__clue-badge">
-        <span class="crossword-game__clue-number">{{ currentClue.number }}</span>
-        <span class="crossword-game__clue-direction">
-          {{ currentClue.direction === 'across' ? 'Waagerecht' : 'Senkrecht' }}
-        </span>
-      </div>
-      <p class="crossword-game__clue-text">{{ currentClue.clue }}</p>
+    <div class="crossword-game__clue-header">
+      <span class="crossword-game__clue-label">AKTUELLER HINWEIS</span>
+      <p v-if="currentClue" class="crossword-game__clue-text">
+        <span class="crossword-game__clue-number">{{ currentClue.number }}.</span>
+        {{ currentClue.clue }}
+      </p>
+      <p v-else class="crossword-game__clue-text crossword-game__clue-text--placeholder">
+        Klicke auf eine Zelle, um zu beginnen
+      </p>
     </div>
 
     <!-- Grid -->
@@ -23,17 +24,6 @@
       />
     </div>
 
-    <!-- Score and check -->
-    <div class="crossword-game__toolbar">
-      <div class="crossword-game__score-pill">
-        <span class="crossword-game__score-label">{{ t('common.score') }}</span>
-        <span class="crossword-game__score-value">{{ correctLetters }}</span>
-      </div>
-      <button class="crossword-game__check-btn" @click="onCheckProgress">
-        {{ t('common.done') }}
-      </button>
-    </div>
-
     <!-- Clues -->
     <CrosswordClues
       :clues="puzzle.clues"
@@ -41,6 +31,31 @@
       :completed-clues="completedClueKeys"
       @clue-select="onClueSelect"
     />
+
+    <!-- Action buttons -->
+    <div class="crossword-game__actions">
+      <button class="crossword-game__btn crossword-game__btn--primary" @click="onCheckProgress">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M3.5 9.5L7 13L14.5 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Puzzle pruefen
+      </button>
+      <button class="crossword-game__btn crossword-game__btn--outlined" @click="onRevealHint">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <circle cx="9" cy="9" r="6.5" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M9 6V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="9" cy="12.5" r="0.75" fill="currentColor"/>
+        </svg>
+        Hinweis geben
+      </button>
+      <button class="crossword-game__btn crossword-game__btn--ghost" @click="onReset">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M3.5 3.5V7.5H7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M4.25 11.5A5.5 5.5 0 1 0 5.1 6.5L3.5 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Zuruecksetzen
+      </button>
+    </div>
 
     <!-- Keyboard -->
     <CrosswordKeyboard
@@ -82,6 +97,7 @@ const completedClueNumbers = ref<number[]>([])
 const correctLetters = ref(0)
 const totalLetters = ref(0)
 const startTime = ref(Date.now())
+const hintsUsed = ref(0)
 
 // --- Bridges for child component interfaces ---
 
@@ -147,6 +163,7 @@ function initGame() {
   )
   correctLetters.value = 0
   completedClueNumbers.value = []
+  hintsUsed.value = 0
   startTime.value = Date.now()
 
   const firstClue = p.clues.find((c) => c.direction === 'across') ?? p.clues[0]
@@ -270,6 +287,50 @@ function onCheckProgress() {
   }
 }
 
+function onRevealHint() {
+  if (!puzzle.value || !selectedCell.value) return
+  const [row, col] = selectedCell.value
+  if (puzzle.value.grid[row]?.[col] === '#') return
+
+  const correctLetter = puzzle.value.grid[row][col].toUpperCase()
+  const currentVal = userGrid.value[row][col]
+
+  // Only reveal if cell is empty or wrong
+  if (currentVal.toUpperCase() !== correctLetter) {
+    if (currentVal && currentVal.toUpperCase() === correctLetter) {
+      // already correct — do nothing
+      return
+    }
+    // Remove old correct count if overwriting a correct letter
+    if (currentVal && currentVal.toUpperCase() === puzzle.value.grid[row][col].toUpperCase()) {
+      correctLetters.value--
+    }
+    userGrid.value[row][col] = correctLetter
+    correctLetters.value++
+    hintsUsed.value++
+    emit('score-update', correctLetters.value)
+    checkCompletedClues()
+    advanceCell()
+    if (isGameComplete()) {
+      completeGame()
+    }
+  }
+}
+
+function onReset() {
+  if (!puzzle.value) return
+  userGrid.value = puzzle.value.grid.map((row) => row.map((cell) => (cell === '#' ? '#' : '')))
+  correctLetters.value = 0
+  completedClueNumbers.value = []
+  emit('score-update', 0)
+
+  const firstClue = puzzle.value.clues.find((c) => c.direction === 'across') ?? puzzle.value.clues[0]
+  if (firstClue) {
+    selectedCell.value = [firstClue.row, firstClue.col]
+    selectedDirection.value = firstClue.direction
+  }
+}
+
 function advanceCell() {
   if (!selectedCell.value || !puzzle.value) return
   const [row, col] = selectedCell.value
@@ -355,7 +416,7 @@ function completeGame() {
     maxScore,
     duration,
     accuracy,
-    hintsUsed: 0,
+    hintsUsed: hintsUsed.value,
     isNewBest: false,
     stars,
   })
@@ -378,110 +439,115 @@ watch(
 .crossword-game {
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
-  padding: var(--space-md);
-  max-width: var(--content-max-width);
+  gap: var(--space-md, 16px);
+  padding: var(--space-md, 16px);
+  max-width: var(--content-max-width, 600px);
   margin: 0 auto;
   width: 100%;
-  font-family: var(--font-family);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
 
-  &__active-clue {
+  // --- Current clue display ---
+  &__clue-header {
     display: flex;
     flex-direction: column;
-    gap: var(--space-xs);
-    padding: var(--space-md) var(--space-lg);
-    background-color: var(--color-bg-elevated);
-    border-radius: var(--radius-lg);
-    border-left: 4px solid var(--color-primary);
-    box-shadow: var(--shadow-card, var(--shadow-sm));
-    min-height: var(--touch-target-min);
+    gap: var(--space-xs, 4px);
+    padding: var(--space-md, 16px) var(--space-lg, 24px);
+    background-color: var(--color-bg-elevated, #FFFFFF);
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
   }
 
-  &__clue-badge {
-    display: flex;
-    align-items: center;
-    gap: var(--space-xs);
+  &__clue-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary, #8A8494);
   }
 
   &__clue-number {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
-  }
-
-  &__clue-direction {
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: var(--letter-spacing-wider);
-    padding: 2px 8px;
-    background-color: var(--color-primary-lighter, var(--color-bg-tertiary));
-    border-radius: var(--radius-full);
+    font-weight: 700;
+    color: var(--color-primary, #9B8AB8);
   }
 
   &__clue-text {
     margin: 0;
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-medium);
-    line-height: var(--line-height-relaxed);
-    color: var(--color-text-primary);
+    font-size: var(--font-size-lg, 18px);
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--color-text-primary, #2D2540);
+
+    &--placeholder {
+      color: var(--color-text-secondary, #8A8494);
+      font-weight: 400;
+    }
   }
 
+  // --- Grid ---
   &__grid-wrapper {
-    padding: var(--space-xs) 0;
+    padding: var(--space-xs, 4px) 0;
   }
 
-  &__toolbar {
+  // --- Action buttons ---
+  &__actions {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 var(--space-xs);
+    flex-direction: column;
+    gap: var(--space-sm, 10px);
+    padding: 0 var(--space-xs, 4px);
   }
 
-  &__score-pill {
-    display: flex;
-    align-items: center;
-    gap: var(--space-xs);
-    padding: var(--space-xs) var(--space-sm);
-    background-color: var(--color-bg-secondary);
-    border-radius: var(--radius-full);
-  }
-
-  &__score-label {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-  }
-
-  &__score-value {
-    font-size: var(--font-size-md);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
-  }
-
-  &__check-btn {
+  &__btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: var(--touch-target-min);
-    padding: var(--space-sm) var(--space-xl);
-    border: none;
-    border-radius: var(--radius-md);
-    background-color: var(--color-primary);
-    color: var(--color-text-on-accent);
-    font-size: var(--font-size-md);
-    font-weight: var(--font-weight-bold);
-    font-family: var(--font-family);
+    gap: var(--space-sm, 10px);
+    width: 100%;
+    min-height: 48px;
+    padding: var(--space-sm, 10px) var(--space-lg, 24px);
+    border-radius: 12px;
+    font-size: var(--font-size-md, 16px);
+    font-weight: 600;
+    font-family: inherit;
     cursor: pointer;
-    transition: all var(--duration-normal) var(--ease-default);
+    transition: all 0.2s ease;
     -webkit-tap-highlight-color: transparent;
-    box-shadow: var(--shadow-sm);
-
-    @include focus-ring;
 
     &:active {
-      transform: scale(0.97);
-      background-color: var(--color-primary-dark, #7B6A9B);
+      transform: scale(0.98);
+    }
+
+    // "Reatsel pruefen" -- filled accent button
+    &--primary {
+      border: none;
+      background-color: var(--color-accent, #6BBFAE);
+      color: #FFFFFF;
+      box-shadow: 0 2px 8px rgba(107, 191, 174, 0.25);
+
+      &:active {
+        background-color: #5AA99A;
+      }
+    }
+
+    // "Hinweis geben" -- outlined accent button
+    &--outlined {
+      border: 2px solid var(--color-accent, #6BBFAE);
+      background-color: transparent;
+      color: var(--color-accent, #6BBFAE);
+
+      &:active {
+        background-color: rgba(107, 191, 174, 0.08);
+      }
+    }
+
+    // "Zuruecksetzen" -- gray outlined button
+    &--ghost {
+      border: 1.5px solid var(--color-border-light, #E8E5EC);
+      background-color: transparent;
+      color: var(--color-text-secondary, #8A8494);
+
+      &:active {
+        background-color: var(--color-bg-secondary, #F4F2F7);
+      }
     }
   }
 }

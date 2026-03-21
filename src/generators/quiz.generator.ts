@@ -5,6 +5,7 @@ import { scienceQuestions } from '@/data/quiz-questions/science.de'
 import { geographyQuestions } from '@/data/quiz-questions/geography.de'
 import { generalQuestions } from '@/data/quiz-questions/general.de'
 import { swissEuropeQuestions } from '@/data/quiz-questions/swiss-europe.de'
+import { swissEuropeQuestions2 } from '@/data/quiz-questions/swiss-europe-2.de'
 
 // Map data-file questions to the app's QuizQuestion type
 type RawQuestion = (typeof historyQuestions)[number]
@@ -33,7 +34,7 @@ function getQuestionsByCategory(category: QuizCategory): QuizQuestion[] {
     case 'general':
       return generalQuestions.map((q) => toQuizQuestion(q, 'general'))
     case 'swiss-europe':
-      return swissEuropeQuestions.map((q) => toQuizQuestion(q, 'swiss-europe'))
+      return [...swissEuropeQuestions, ...swissEuropeQuestions2].map((q) => toQuizQuestion(q, 'swiss-europe'))
   }
 }
 

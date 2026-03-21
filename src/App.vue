@@ -5,6 +5,7 @@ import { useUserStore } from '@/stores/user.store'
 import { useProgressStore } from '@/stores/progress.store'
 import { useDailyChallengeStore } from '@/stores/daily-challenge.store'
 import { useTheme } from '@/composables/useTheme'
+import { cloudLoad, cloudRestore, cloudSaveDebounced } from '@/services/cloud-sync.service'
 
 const { locale } = useI18n()
 const userStore = useUserStore()
@@ -13,11 +14,34 @@ const dailyChallengeStore = useDailyChallengeStore()
 const { applyTheme } = useTheme()
 
 onMounted(async () => {
+  // Try to restore from cloud if local is empty
+  const hasLocalProfile = !!localStorage.getItem('brain-training:user-profile')
+  if (!hasLocalProfile) {
+    await cloudRestore()
+  }
+
   await userStore.loadProfile()
   await progressStore.loadAllProgress()
   await dailyChallengeStore.loadToday()
   applyTheme()
   locale.value = userStore.settings.language
+
+  // Background: check cloud for newer data
+  cloudLoad().then(cloudData => {
+    if (cloudData && cloudData.lastSyncedAt) {
+      const localProfile = localStorage.getItem('brain-training:user-profile')
+      if (localProfile) {
+        const local = JSON.parse(localProfile)
+        // If cloud data is newer, restore it
+        if (cloudData.lastSyncedAt > (local.lastSyncedAt || 0)) {
+          cloudRestore().then(() => {
+            userStore.loadProfile()
+            progressStore.loadAllProgress()
+          })
+        }
+      }
+    }
+  })
 })
 
 watchEffect(() => {

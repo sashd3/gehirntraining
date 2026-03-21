@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import type { UserProfile, UserSettings } from '@/types/user'
 import { defaultUserProfile, defaultUserSettings } from '@/types/user'
 import { storageService } from '@/services/storage.service'
+import { cloudSaveDebounced } from '@/services/cloud-sync.service'
 
 const STORAGE_KEY = 'brain-training:user-profile'
 
@@ -38,6 +39,7 @@ export const useUserStore = defineStore('user', () => {
 
   async function saveProfile(): Promise<void> {
     await storageService.set(STORAGE_KEY, profile.value)
+    cloudSaveDebounced()
   }
 
   async function updateSettings(patch: Partial<UserSettings>): Promise<void> {

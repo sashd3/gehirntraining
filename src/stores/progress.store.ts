@@ -9,6 +9,7 @@ import type {
   Achievement,
 } from '@/types/progress'
 import { storageService } from '@/services/storage.service'
+import { cloudSaveDebounced } from '@/services/cloud-sync.service'
 
 const PROGRESS_KEY = 'brain-training:progress'
 const STATS_KEY = 'brain-training:overall-stats'
@@ -148,8 +149,9 @@ export const useProgressStore = defineStore('progress', () => {
       sessionHistory.value = sessionHistory.value.slice(0, 100)
     }
 
-    // Persist
+    // Persist locally + sync to cloud
     await saveAll()
+    cloudSaveDebounced()
   }
 
   function updateStreak(): void {

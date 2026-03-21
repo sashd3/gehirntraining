@@ -28,7 +28,7 @@ const gameStore = useGameStore()
 const progressStore = useProgressStore()
 const userStore = useUserStore()
 const { play } = useSound()
-const { elapsed, formatted, start: startTimer, pause: pauseTimer, resume: resumeTimer, reset: resetTimer } = useTimer()
+const { elapsed, formattedTime: formatted, start: startTimer, pause: pauseTimer, resume: resumeTimer, reset: resetTimer } = useTimer()
 
 const phase = ref<'setup' | 'playing' | 'paused' | 'complete'>('setup')
 const result = ref<GameResult | null>(null)

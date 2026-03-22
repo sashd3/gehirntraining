@@ -48,19 +48,6 @@ const indexLabel = computed(() => String.fromCharCode(65 + props.index))
 </script>
 
 <style lang="scss" scoped>
-// Design tokens
-$bg-primary: #fef8f3;
-$bg-secondary: #f2ede8;
-$bg-elevated: #ffffff;
-$text-primary: #1d1b19;
-$text-secondary: #434752;
-$text-muted: #7c7a85;
-$navy: #003173;
-$orange: #944a00;
-$orange-light: #fc8f34;
-$success: #003d0b;
-$error: #ba1a1a;
-
 .quiz-answer {
   display: flex;
   flex-direction: column;
@@ -72,8 +59,8 @@ $error: #ba1a1a;
   padding: 14px 12px;
   border: none;
   border-radius: 16px;
-  background-color: $bg-elevated;
-  color: $text-primary;
+  background-color: var(--color-bg-elevated);
+  color: var(--color-text-primary);
   font-size: 15px;
   font-weight: 600;
   font-family: var(--font-family, -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif);
@@ -90,7 +77,7 @@ $error: #ba1a1a;
   }
 
   &:hover:not(:disabled) {
-    background-color: darken($bg-elevated, 2%);
+    background-color: var(--color-bg-secondary);
   }
 
   // Letter badge
@@ -101,8 +88,8 @@ $error: #ba1a1a;
     width: 32px;
     height: 32px;
     border-radius: 10px;
-    background-color: $bg-secondary;
-    color: $text-muted;
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-tertiary);
     font-size: 13px;
     font-weight: 800;
     flex-shrink: 0;
@@ -127,73 +114,73 @@ $error: #ba1a1a;
   }
 
   &__circle {
-    color: darken($bg-secondary, 10%);
+    color: var(--color-text-tertiary);
   }
 
   &__check {
-    color: $navy;
+    color: var(--color-primary);
   }
 
   // --- States ---
 
   // Selected (before reveal): navy highlight
   &--selected {
-    background-color: rgba($navy, 0.06);
-    box-shadow: 0 0 0 2px $navy;
+    background-color: var(--color-primary-bg, #F3EFF8);
+    box-shadow: 0 0 0 2px var(--color-primary);
 
     .quiz-answer__letter {
-      background-color: $navy;
+      background-color: var(--color-primary);
       color: #ffffff;
     }
 
     .quiz-answer__check {
-      color: $navy;
+      color: var(--color-primary);
     }
   }
 
   // Correct + selected: green
   &--correct {
-    background-color: rgba($success, 0.06);
-    box-shadow: 0 0 0 2px $success;
+    background-color: var(--color-success-bg, #EAF7F0);
+    box-shadow: 0 0 0 2px var(--color-success);
 
     .quiz-answer__letter {
-      background-color: $success;
+      background-color: var(--color-success);
       color: #ffffff;
     }
 
     .quiz-answer__check {
-      color: $success;
+      color: var(--color-success);
     }
   }
 
   // Wrong + selected: red
   &--wrong {
-    background-color: rgba($error, 0.05);
-    box-shadow: 0 0 0 2px $error;
+    background-color: var(--color-error-bg, #FDECEC);
+    box-shadow: 0 0 0 2px var(--color-error);
 
     .quiz-answer__letter {
-      background-color: rgba($error, 0.12);
-      color: $error;
+      background-color: var(--color-error-bg, #FDECEC);
+      color: var(--color-error);
     }
 
     .quiz-answer__check,
     .quiz-answer__circle {
-      color: $error;
+      color: var(--color-error);
     }
   }
 
   // Correct revealed (not selected): subtle green
   &--reveal-correct {
-    box-shadow: 0 0 0 2px $success;
-    background-color: $bg-elevated;
+    box-shadow: 0 0 0 2px var(--color-success);
+    background-color: var(--color-bg-elevated);
 
     .quiz-answer__letter {
-      background-color: $success;
+      background-color: var(--color-success);
       color: #ffffff;
     }
 
     .quiz-answer__check {
-      color: $success;
+      color: var(--color-success);
     }
   }
 

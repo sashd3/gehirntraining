@@ -63,11 +63,11 @@ const categoryIcon: Record<string, any> = {
 }
 
 const categoryColors: Record<string, string> = {
-  knowledge: '#003173',
-  logic: '#944a00',
-  memory: '#5b3e8a',
-  speed: '#b45309',
-  language: '#166534',
+  knowledge: '#9B8AB8',
+  logic: '#6BBFAE',
+  memory: '#5AB5A3',
+  speed: '#B87BC5',
+  language: '#8B7BB5',
 }
 
 function getGameCompletion(gameId: string): number {
@@ -186,20 +186,7 @@ function openDailyChallenge() {
 </template>
 
 <style lang="scss" scoped>
-// ---------------------------------------------------------------------------
-// Design tokens (local overrides matching Sage Mind palette)
-// ---------------------------------------------------------------------------
-$bg-primary: #fef8f3;
-$bg-secondary: #f2ede8;
-$bg-elevated: #ffffff;
-$text-primary: #1d1b19;
-$text-secondary: #434752;
-$text-muted: #7c7a85;
-$navy: #003173;
-$orange: #944a00;
-$orange-light: #fc8f34;
-$success: #003d0b;
-$error: #ba1a1a;
+// All colors use CSS custom properties from the design system
 
 // ---------------------------------------------------------------------------
 // Layout
@@ -211,7 +198,7 @@ $error: #ba1a1a;
   max-width: var(--content-max-width, 600px);
   margin: 0 auto;
   font-family: var(--font-family, -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif);
-  background-color: $bg-primary;
+  background-color: var(--color-bg-primary);
   min-height: 100vh;
   min-height: 100dvh;
 }
@@ -230,7 +217,7 @@ $error: #ba1a1a;
   display: flex;
   align-items: center;
   gap: 6px;
-  background: $bg-secondary;
+  background: var(--color-bg-secondary);
   border-radius: 20px;
   padding: 8px 14px;
 
@@ -238,18 +225,18 @@ $error: #ba1a1a;
     flex-shrink: 0;
 
     &--flame {
-      color: $orange-light;
+      color: var(--color-accent-light);
     }
 
     &--star {
-      color: $orange-light;
+      color: var(--color-accent-light);
     }
   }
 
   &__text {
     font-size: 13px;
     font-weight: 600;
-    color: $text-primary;
+    color: var(--color-text-primary);
     white-space: nowrap;
   }
 }
@@ -258,7 +245,7 @@ $error: #ba1a1a;
 // Daily Challenge Card
 // ---------------------------------------------------------------------------
 .daily-card {
-  background: $bg-elevated;
+  background: var(--color-bg-elevated);
   border-radius: 20px;
   padding: var(--space-xl, 32px) var(--space-lg, 24px);
   margin-bottom: var(--space-xl, 32px);
@@ -273,7 +260,7 @@ $error: #ba1a1a;
     display: inline-block;
     font-size: 11px;
     font-weight: 700;
-    color: $orange;
+    color: var(--color-accent);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     margin-bottom: var(--space-sm, 8px);
@@ -282,14 +269,14 @@ $error: #ba1a1a;
   &__title {
     font-size: 26px;
     font-weight: 800;
-    color: $navy;
+    color: var(--color-primary);
     margin: 0 0 6px 0;
     line-height: 1.15;
   }
 
   &__desc {
     font-size: 15px;
-    color: $text-secondary;
+    color: var(--color-text-secondary);
     margin: 0 0 var(--space-md, 16px) 0;
     line-height: 1.45;
   }
@@ -308,11 +295,11 @@ $error: #ba1a1a;
     gap: 4px;
     font-size: 13px;
     font-weight: 500;
-    color: $text-muted;
+    color: var(--color-text-tertiary);
 
     svg {
       flex-shrink: 0;
-      color: $text-muted;
+      color: var(--color-text-tertiary);
     }
   }
 
@@ -322,7 +309,7 @@ $error: #ba1a1a;
     justify-content: center;
     gap: 8px;
     padding: 14px 36px;
-    background: linear-gradient(135deg, $orange-light, darken($orange-light, 8%));
+    background: var(--color-primary, #9B8AB8);
     color: #fff;
     border: none;
     border-radius: 50px;
@@ -332,7 +319,7 @@ $error: #ba1a1a;
     letter-spacing: 0.02em;
     cursor: pointer;
     min-height: 50px;
-    box-shadow: 0 4px 16px rgba($orange-light, 0.35);
+    box-shadow: 0 4px 16px rgba(155, 138, 184, 0.35);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 
     &:active {
@@ -340,9 +327,9 @@ $error: #ba1a1a;
     }
 
     &:disabled {
-      background: $bg-secondary;
+      background: var(--color-bg-secondary);
       box-shadow: none;
-      color: $text-muted;
+      color: var(--color-text-tertiary);
       cursor: default;
     }
   }
@@ -354,7 +341,7 @@ $error: #ba1a1a;
 .section-heading {
   font-size: 22px;
   font-weight: 800;
-  color: $navy;
+  color: var(--color-primary);
   margin: 0 0 var(--space-md, 16px) 0;
 }
 
@@ -372,7 +359,7 @@ $error: #ba1a1a;
   display: flex;
   align-items: center;
   gap: var(--space-md, 16px);
-  background: $bg-elevated;
+  background: var(--color-bg-elevated);
   border: none;
   border-radius: 16px;
   padding: 14px 16px;
@@ -413,13 +400,13 @@ $error: #ba1a1a;
   &__name {
     font-size: 16px;
     font-weight: 700;
-    color: $text-primary;
+    color: var(--color-text-primary);
     line-height: 1.25;
   }
 
   &__desc {
     font-size: 13px;
-    color: $text-muted;
+    color: var(--color-text-tertiary);
     line-height: 1.4;
     white-space: nowrap;
     overflow: hidden;
@@ -439,7 +426,7 @@ $error: #ba1a1a;
   }
 
   &__ring-bg {
-    stroke: $bg-secondary;
+    stroke: var(--color-bg-secondary);
   }
 
   &__ring-fill {
@@ -449,7 +436,7 @@ $error: #ba1a1a;
 
   &__arrow {
     flex-shrink: 0;
-    color: $text-muted;
+    color: var(--color-text-tertiary);
   }
 }
 
@@ -464,7 +451,7 @@ $error: #ba1a1a;
   &__text {
     font-style: italic;
     font-size: 14px;
-    color: $text-muted;
+    color: var(--color-text-tertiary);
     line-height: 1.65;
     margin: 0 0 6px 0;
   }
@@ -472,7 +459,7 @@ $error: #ba1a1a;
   &__author {
     font-size: 12px;
     font-weight: 600;
-    color: $text-muted;
+    color: var(--color-text-tertiary);
     opacity: 0.7;
   }
 }

@@ -233,19 +233,6 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
-// Design tokens
-$bg-primary: #fef8f3;
-$bg-secondary: #f2ede8;
-$bg-elevated: #ffffff;
-$text-primary: #1d1b19;
-$text-secondary: #434752;
-$text-muted: #7c7a85;
-$navy: #003173;
-$orange: #944a00;
-$orange-light: #fc8f34;
-$success: #003d0b;
-$error: #ba1a1a;
-
 .quiz-game {
   display: flex;
   flex-direction: column;
@@ -258,7 +245,7 @@ $error: #ba1a1a;
   font-family: var(--font-family, -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif);
   position: relative;
   min-height: 100%;
-  background-color: $bg-primary;
+  background-color: var(--color-bg-primary);
 
   // --- Header ---
   &__header {
@@ -275,26 +262,26 @@ $error: #ba1a1a;
   &__progress-label {
     font-size: 14px;
     font-weight: 700;
-    color: $navy;
+    color: var(--color-primary);
   }
 
   &__score-badge {
     font-size: 14px;
     font-weight: 600;
-    color: $orange;
+    color: var(--color-accent);
   }
 
   &__progress-track {
     width: 100%;
     height: 6px;
-    background-color: $bg-secondary;
+    background-color: var(--color-bg-secondary);
     border-radius: 100px;
     overflow: hidden;
   }
 
   &__progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, $navy, lighten($navy, 15%));
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light, #C4B5D4));
     border-radius: 100px;
     transition: width 0.4s ease-out;
   }
@@ -308,7 +295,7 @@ $error: #ba1a1a;
 
   // --- Question card ---
   &__question-card {
-    background-color: $bg-elevated;
+    background-color: var(--color-bg-elevated);
     border-radius: 20px;
     padding: var(--space-xl, 32px) var(--space-lg, 24px);
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
@@ -325,7 +312,7 @@ $error: #ba1a1a;
   // --- Explanation ---
   &__explanation {
     padding: var(--space-md, 16px) var(--space-lg, 24px);
-    background-color: $bg-secondary;
+    background-color: var(--color-bg-secondary);
     border-radius: 14px;
   }
 
@@ -333,7 +320,7 @@ $error: #ba1a1a;
     margin: 0;
     font-size: 15px;
     line-height: 1.6;
-    color: $text-secondary;
+    color: var(--color-text-secondary);
   }
 
   // --- Bottom feedback ---
@@ -353,13 +340,13 @@ $error: #ba1a1a;
     padding-bottom: calc(var(--space-md, 16px) + env(safe-area-inset-bottom, 0px));
 
     &--correct {
-      background-color: $success;
+      background-color: var(--color-success);
       color: #ffffff;
     }
 
     &--wrong {
-      background-color: $bg-elevated;
-      color: $text-primary;
+      background-color: var(--color-bg-elevated);
+      color: var(--color-text-primary);
       box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
     }
   }

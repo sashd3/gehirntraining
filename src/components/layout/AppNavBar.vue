@@ -71,7 +71,7 @@ function navigateTo(tab: NavTab) {
   right: 0;
   z-index: 100;
   background-color: var(--color-bg-elevated, #FFFFFF);
-  box-shadow: 0 -1px 8px rgba(0, 0, 0, 0.06);
+  border-top: 1px solid var(--color-border-light, rgba(0,0,0,0.06));
   padding-bottom: var(--safe-area-bottom);
 
   &__inner {
@@ -125,7 +125,7 @@ function navigateTo(tab: NavTab) {
     top: -36px;
     left: -12%;
     right: -12%;
-    height: 80px;
+    height: 36px;
     transform: scaleY(0);
     transform-origin: bottom;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
@@ -136,11 +136,12 @@ function navigateTo(tab: NavTab) {
       width: 100%;
       height: 100%;
       display: block;
-      filter: drop-shadow(0 -1px 4px rgba(0, 0, 0, 0.06));
     }
 
     path {
       fill: var(--color-bg-elevated, #FFFFFF);
+      stroke: var(--color-border-light, rgba(0,0,0,0.06));
+      stroke-width: 1;
     }
   }
 

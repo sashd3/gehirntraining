@@ -27,7 +27,7 @@ const emit = defineEmits<{
 // State
 // ---------------------------------------------------------------------------
 
-type GamePhase = 'theme-select' | 'playing' | 'complete'
+type GamePhase = 'theme-select' | 'loading' | 'playing' | 'complete'
 
 const phase = ref<GamePhase>('theme-select')
 const selectedTheme = ref<MemoryTheme>('photo-nature')
@@ -78,7 +78,9 @@ function selectTheme(theme: MemoryTheme) {
   selectedTheme.value = theme
 }
 
-function startGame() {
+const loadProgress = ref(0)
+
+async function startGame() {
   const board = generateMemoryBoard(props.difficulty, selectedTheme.value)
   cards.value = board
   totalPairs.value = board.length / 2
@@ -87,6 +89,24 @@ function startGame() {
   flippedCards.value = []
   isLocked.value = false
   hintsUsed.value = 0
+
+  // Preload images if photo theme
+  const imageUrls = board.filter(c => c.imageUrl).map(c => c.imageUrl!)
+  const uniqueUrls = [...new Set(imageUrls)]
+  if (uniqueUrls.length > 0) {
+    phase.value = 'loading'
+    loadProgress.value = 0
+    let loaded = 0
+    await Promise.all(uniqueUrls.map(url =>
+      new Promise<void>(resolve => {
+        const img = new Image()
+        img.onload = () => { loaded++; loadProgress.value = Math.round((loaded / uniqueUrls.length) * 100); resolve() }
+        img.onerror = () => { loaded++; loadProgress.value = Math.round((loaded / uniqueUrls.length) * 100); resolve() }
+        img.src = url
+      })
+    ))
+  }
+
   startedAt.value = Date.now()
   elapsedTime.value = 0
   phase.value = 'playing'
@@ -270,6 +290,14 @@ watch(() => props.difficulty, () => {
     </div>
 
     <!-- Playing Phase -->
+    <!-- Loading -->
+    <div v-if="phase === 'loading'" class="memory-loading">
+      <p class="memory-loading__text">Bilder werden geladen...</p>
+      <div class="memory-loading__bar">
+        <div class="memory-loading__fill" :style="{ width: loadProgress + '%' }" />
+      </div>
+    </div>
+
     <template v-if="phase === 'playing' || phase === 'complete'">
       <!-- Header -->
       <div class="memory-header">

@@ -47,13 +47,6 @@ function navigateTo(tab: NavTab) {
         :aria-label="tab.label"
         @click="navigateTo(tab)"
       >
-        <!-- Hump SVG behind active icon -->
-        <span class="navbar__hump">
-          <svg viewBox="0 0 100 28" preserveAspectRatio="none">
-            <path d="M0 28 C25 28, 30 0, 50 0 S75 28, 100 28 Z" />
-          </svg>
-        </span>
-
         <span class="navbar__icon">
           <component :is="tab.icon" :size="22" />
         </span>
@@ -109,11 +102,6 @@ function navigateTo(tab: NavTab) {
     &--active {
       color: var(--color-primary);
 
-      .navbar__hump {
-        transform: scaleY(1);
-        opacity: 1;
-      }
-
       .navbar__icon {
         transform: translateY(-14px);
         background: var(--color-primary);
@@ -126,30 +114,6 @@ function navigateTo(tab: NavTab) {
         color: var(--color-primary);
         font-weight: 600;
       }
-    }
-  }
-
-  // Hump behind active icon
-  &__hump {
-    position: absolute;
-    top: -22px;
-    left: 4%;
-    right: 4%;
-    height: 36px;
-    transform: scaleY(0);
-    transform-origin: bottom;
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
-    opacity: 0;
-    pointer-events: none;
-
-    svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    path {
-      fill: var(--color-bg-elevated, #FFFFFF);
     }
   }
 
@@ -183,7 +147,6 @@ function navigateTo(tab: NavTab) {
 // Reduced motion
 @media (prefers-reduced-motion: reduce) {
   .navbar__icon,
-  .navbar__hump,
   .navbar__label {
     transition: none;
   }

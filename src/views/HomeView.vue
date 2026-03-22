@@ -35,9 +35,9 @@ const dailyChallengeSubtitle = computed(() => {
   if (!dailyGame.value) return ''
   const subtitles: Record<string, string> = {
     knowledge: 'Testen Sie Ihr Wissen heute',
-    language: 'Staerken Sie Ihren Wortschatz heute',
+    language: 'Stärken Sie Ihren Wortschatz heute',
     logic: 'Trainieren Sie Ihr logisches Denken heute',
-    memory: 'Schaerfen Sie Ihr Gedaechtnis heute',
+    memory: 'Schärfen Sie Ihr Gedächtnis heute',
     speed: 'Steigern Sie Ihre Reaktionszeit heute',
   }
   return subtitles[dailyGame.value.category] ?? ''
@@ -178,7 +178,7 @@ function openDailyChallenge() {
     <!-- Motivational Quote -->
     <div class="quote-block">
       <p class="quote-block__text">
-        {{ t('home.motivationalQuote', 'Der Geist ist kein Gefaess, das gefuellt, sondern ein Feuer, das entfacht werden will.') }}
+        {{ t('home.motivationalQuote', 'Der Geist ist kein Gefäß, das gefüllt, sondern ein Feuer, das entfacht werden will.') }}
       </p>
       <span class="quote-block__author">-- Plutarch</span>
     </div>

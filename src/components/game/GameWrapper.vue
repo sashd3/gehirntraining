@@ -138,7 +138,7 @@ onUnmounted(() => {
         <!-- Start button -->
         <button
           class="start-btn"
-          :style="{ background: `linear-gradient(135deg, ${gameColor}, ${gameColor}dd)` }"
+          :style="{ background: 'var(--color-primary, #9B8AB8)' }"
           @click="startGame"
         >
           {{ t('common.start') }}
@@ -237,7 +237,7 @@ onUnmounted(() => {
         <div class="complete-actions">
           <button
             class="action-primary"
-            :style="{ background: `linear-gradient(135deg, ${gameColor}, ${gameColor}dd)` }"
+            :style="{ background: 'var(--color-primary, #9B8AB8)' }"
             @click="playAgain"
           >
             {{ t('gameComplete.playAgain') }}

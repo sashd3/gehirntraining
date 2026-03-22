@@ -3,7 +3,7 @@ import { computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/stores/user.store'
 import { useTheme } from '@/composables/useTheme'
-import { colorPresets, applyPreset, applyColorFromHex } from '@/composables/useAccentColor'
+import { colorPresets, applyPreset, applyColorFromHex, getPresetById } from '@/composables/useAccentColor'
 import { ref } from 'vue'
 
 const { t, locale } = useI18n()
@@ -22,6 +22,12 @@ function onCustomColorChange(event: Event) {
   customColor.value = hex
   applyColorFromHex(hex)
   updateSetting('colorPreset', hex)
+}
+
+function resetColors() {
+  applyPreset('lilac')
+  customColor.value = '#9B8AB8'
+  updateSetting('colorPreset', 'lilac')
 }
 
 const settings = computed(() => userStore.settings)
@@ -135,6 +141,15 @@ const themeOptions = [
             <span class="color-picker-preview" :style="{ backgroundColor: customColor }" />
           </label>
         </div>
+
+        <div class="divider" />
+
+        <!-- Reset to default -->
+        <div class="setting-row">
+          <button class="reset-color-btn" @click="resetColors">
+            Farben zurücksetzen
+          </button>
+        </div>
       </div>
     </section>
 
@@ -238,7 +253,11 @@ const themeOptions = [
       <div class="group-card">
         <div class="about-content">
           <p class="about-name">Train your Brain</p>
-          <p class="about-version">Version 0.1.0</p>
+          <p class="about-version">Version 1.0.0</p>
+          <div class="about-dev">
+            <p class="about-dev-name">Sash Wegmüller — aarekraft.dev</p>
+            <a class="about-dev-email" href="mailto:hello@aarekraft.dev">hello@aarekraft.dev</a>
+          </div>
         </div>
       </div>
     </section>
@@ -523,5 +542,42 @@ const themeOptions = [
 .about-version {
   font-size: var(--font-size-footnote, 15px);
   color: var(--color-text-tertiary);
+  margin-bottom: var(--space-md);
+}
+
+.about-dev {
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border-light, rgba(0,0,0,0.06));
+}
+
+.about-dev-name {
+  font-size: var(--font-size-footnote, 15px);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2xs, 4px);
+}
+
+.about-dev-email {
+  font-size: var(--font-size-footnote, 15px);
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.reset-color-btn {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border-light, rgba(0,0,0,0.08));
+  border-radius: var(--radius-md, 12px);
+  background: var(--color-bg-primary);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-subhead, 15px);
+  font-family: inherit;
+  cursor: pointer;
+  min-height: var(--touch-target-min);
+  transition: background 0.2s ease;
+
+  &:active {
+    background: var(--color-bg-secondary);
+  }
 }
 </style>

@@ -28,7 +28,7 @@ export const photoThemes: PhotoTheme[] = [
       { id: 'lake', label: 'See', imageUrl: img('photo-1501785888041-af3ef285b470') },
       { id: 'beach', label: 'Strand', imageUrl: img('photo-1507525428034-b723cf961d3e') },
       { id: 'waterfall', label: 'Wasserfall', imageUrl: img('photo-1433086966358-54859d0ed716') },
-      { id: 'flower', label: 'Blume', imageUrl: img('photo-1462275646964-a0e3c11f18a6') },
+      { id: 'flower', label: 'Blume', imageUrl: img('photo-1472214103451-9374bd1c798e') },
       { id: 'sunset', label: 'Sonnenuntergang', imageUrl: img('photo-1495616811223-4d98c6e9c869') },
       { id: 'meadow', label: 'Wiese', imageUrl: img('photo-1500382017468-9049fed747ef') },
       { id: 'ocean', label: 'Ozean', imageUrl: img('photo-1505118380757-91f5f5632de0') },

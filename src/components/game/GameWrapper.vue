@@ -560,11 +560,11 @@ onUnmounted(() => {
 }
 
 .star {
-  color: #D4D0DC;
+  color: #C8C4D0;
   transition: all var(--duration-slow) var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
 
   &.filled {
-    color: #F5B731;
+    color: #F5B731 !important;
     transform: scale(1.1);
   }
 

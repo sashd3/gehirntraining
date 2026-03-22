@@ -1,4 +1,4 @@
-export type MemoryTheme = 'animals' | 'food' | 'nature' | 'symbols' | 'numbers' | 'photo-nature' | 'photo-animals' | 'photo-cities'
+export type MemoryTheme = 'animals' | 'food' | 'nature' | 'symbols' | 'numbers' | 'photo-nature' | 'photo-animals' | 'photo-cities' | 'photo-buildings'
 
 export interface MemoryCard {
   id: string

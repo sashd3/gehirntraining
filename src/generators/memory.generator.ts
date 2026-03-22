@@ -110,11 +110,11 @@ export function isPhotoTheme(theme: MemoryTheme): boolean {
 export function getGridDimensions(difficulty: Difficulty): { cols: number; rows: number } {
   switch (difficulty) {
     case 'easy':
-      return { cols: 2, rows: 6 }
+      return { cols: 3, rows: 4 }   // 6 pairs = 12 cards
     case 'medium':
-      return { cols: 2, rows: 8 }
+      return { cols: 4, rows: 4 }   // 8 pairs = 16 cards
     case 'hard':
-      return { cols: 2, rows: 10 }
+      return { cols: 4, rows: 5 }   // 10 pairs = 20 cards
   }
 }
 

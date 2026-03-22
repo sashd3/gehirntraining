@@ -8,6 +8,7 @@ export default {
     start: 'Starte',
     pause: 'Pause',
     resume: 'Wytermache',
+    tapToResume: 'Tippe zum Wytermache',
     quit: 'Ufhöre',
     back: 'Zrugg',
     next: 'Wyter',

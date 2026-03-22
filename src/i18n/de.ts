@@ -8,6 +8,7 @@ export default {
     start: 'Starten',
     pause: 'Pause',
     resume: 'Fortsetzen',
+    tapToResume: 'Tippen zum Fortsetzen',
     quit: 'Beenden',
     back: 'Zurück',
     next: 'Weiter',

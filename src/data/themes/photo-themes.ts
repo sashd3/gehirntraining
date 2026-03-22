@@ -75,8 +75,6 @@ export const photoThemes: PhotoTheme[] = [
       { id: 'istanbul', label: 'Istanbul', imageUrl: searchUrl('istanbul,mosque,turkey') },
     ],
   },
-]
-
   {
     id: 'photo-buildings',
     name: 'Gebäude',

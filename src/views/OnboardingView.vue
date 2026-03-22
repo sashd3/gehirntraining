@@ -125,7 +125,7 @@ async function complete() {
         </div>
 
         <div class="step-actions">
-          <button class="primary-btn gradient" @click="complete">Los geht's!</button>
+          <button class="primary-btn" @click="complete">Los geht's!</button>
         </div>
       </div>
     </Transition>
@@ -329,9 +329,6 @@ async function complete() {
     transform: scale(0.97);
   }
 
-  &.gradient {
-    background: linear-gradient(135deg, var(--color-primary, #9B8AB8) 0%, var(--color-accent, #6BBFAE) 100%);
-  }
 }
 
 .text-btn {

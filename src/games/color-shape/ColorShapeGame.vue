@@ -557,7 +557,7 @@ watch(() => props.difficulty, () => {
 
 .colorshape-timer__bar {
   height: 100%;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  background: var(--color-primary);
   border-radius: var(--radius-full);
   transition: width 50ms linear;
 }

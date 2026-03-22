@@ -13,11 +13,11 @@ import { colorShapeConfig } from '@/games/color-shape/color-shape.config'
 export const gameRegistry: GameConfig[] = [
   quizConfig,
   crosswordConfig,
-  sudokuConfig,
   memoryConfig,
   wordSearchConfig,
-  numberSequenceConfig,
   colorShapeConfig,
+  numberSequenceConfig,
+  sudokuConfig,
 ]
 
 /**

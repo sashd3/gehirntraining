@@ -23,6 +23,8 @@ const heroSlides = [
   '/images/slides/slide-3.jpg',
   '/images/slides/slide-4.jpg',
   '/images/slides/slide-5.jpg',
+  '/images/slides/slide-6.jpg',
+  '/images/slides/slide-7.jpg',
 ]
 const currentSlide = ref(0)
 let slideTimer: ReturnType<typeof setInterval> | null = null

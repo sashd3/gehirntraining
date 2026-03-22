@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onUnmounted } from 'vue'
 import type { Difficulty } from '@/types/game'
 import type { MemoryCard, MemoryTheme } from '@/types/memory'
 import {
@@ -7,8 +7,11 @@ import {
   getGridDimensions,
   getAvailableThemes,
   getThemePreview,
+  getThemeDisplayName,
+  getPhotoThemePreviewImages,
+  isPhotoTheme,
 } from '@/generators/memory.generator'
-import { Lightbulb, Trophy } from 'lucide-vue-next'
+import { Lightbulb, Trophy, Leaf, Camera } from 'lucide-vue-next'
 
 const props = defineProps<{
   difficulty: Difficulty
@@ -27,7 +30,7 @@ const emit = defineEmits<{
 type GamePhase = 'theme-select' | 'playing' | 'complete'
 
 const phase = ref<GamePhase>('theme-select')
-const selectedTheme = ref<MemoryTheme>('animals')
+const selectedTheme = ref<MemoryTheme>('photo-nature')
 const cards = ref<MemoryCard[]>([])
 const flippedCards = ref<string[]>([])
 const matchedPairs = ref(0)
@@ -45,6 +48,11 @@ let timerInterval: ReturnType<typeof setInterval> | null = null
 
 const gridDims = computed(() => getGridDimensions(props.difficulty))
 const availableThemes = computed(() => getAvailableThemes())
+
+const photoThemes = computed(() => availableThemes.value.filter(t => isPhotoTheme(t)))
+const emojiThemes = computed(() => availableThemes.value.filter(t => !isPhotoTheme(t)))
+
+const isCurrentThemePhoto = computed(() => isPhotoTheme(selectedTheme.value))
 
 const score = computed(() => {
   if (totalPairs.value === 0) return 0
@@ -203,21 +211,56 @@ watch(() => props.difficulty, () => {
   <div class="memory-game" :class="{ 'memory-game--paused': isPaused }">
     <!-- Theme Selection -->
     <div v-if="phase === 'theme-select'" class="memory-theme-select">
-      <h2 class="memory-theme-select__title">Thema wählen</h2>
-      <div class="memory-theme-select__grid">
-        <button
-          v-for="theme in availableThemes"
-          :key="theme"
-          class="memory-theme-btn"
-          :class="{ 'memory-theme-btn--selected': selectedTheme === theme }"
-          @click="selectTheme(theme)"
-        >
-          <span class="memory-theme-btn__preview">
-            {{ getThemePreview(theme).join(' ') }}
-          </span>
-          <span class="memory-theme-btn__name">{{ theme }}</span>
-        </button>
+      <h2 class="memory-theme-select__title">Thema waehlen</h2>
+
+      <!-- Photo Themes -->
+      <div class="memory-theme-section">
+        <div class="memory-theme-section__header">
+          <Camera :size="16" />
+          <span>Foto-Themen</span>
+        </div>
+        <div class="memory-theme-select__grid">
+          <button
+            v-for="theme in photoThemes"
+            :key="theme"
+            class="memory-theme-btn memory-theme-btn--photo"
+            :class="{ 'memory-theme-btn--selected': selectedTheme === theme }"
+            @click="selectTheme(theme)"
+          >
+            <div class="memory-theme-btn__photo-grid">
+              <div
+                v-for="(url, idx) in getPhotoThemePreviewImages(theme)"
+                :key="idx"
+                class="memory-theme-btn__photo-thumb"
+                :style="{ backgroundImage: `url(${url})` }"
+              />
+            </div>
+            <span class="memory-theme-btn__name">{{ getThemeDisplayName(theme) }}</span>
+          </button>
+        </div>
       </div>
+
+      <!-- Emoji Themes (Klassisch) -->
+      <div class="memory-theme-section">
+        <div class="memory-theme-section__header">
+          <span>Klassisch</span>
+        </div>
+        <div class="memory-theme-select__grid">
+          <button
+            v-for="theme in emojiThemes"
+            :key="theme"
+            class="memory-theme-btn"
+            :class="{ 'memory-theme-btn--selected': selectedTheme === theme }"
+            @click="selectTheme(theme)"
+          >
+            <span class="memory-theme-btn__preview">
+              {{ getThemePreview(theme).join(' ') }}
+            </span>
+            <span class="memory-theme-btn__name">{{ getThemeDisplayName(theme) }}</span>
+          </button>
+        </div>
+      </div>
+
       <button
         class="memory-start-btn"
         @click="startGame"
@@ -239,7 +282,7 @@ watch(() => props.difficulty, () => {
           <span class="memory-header__value">{{ matchedPairs }}/{{ totalPairs }}</span>
         </div>
         <div class="memory-header__stat">
-          <span class="memory-header__label">Züge</span>
+          <span class="memory-header__label">Zuege</span>
           <span class="memory-header__value">{{ moves }}</span>
         </div>
       </div>
@@ -247,9 +290,9 @@ watch(() => props.difficulty, () => {
       <!-- Card Grid -->
       <div
         class="memory-grid"
+        :class="{ 'memory-grid--photo': isCurrentThemePhoto }"
         :style="{
           gridTemplateColumns: `repeat(${gridDims.cols}, 1fr)`,
-          gridTemplateRows: `repeat(${gridDims.rows}, 1fr)`,
         }"
         role="grid"
         aria-label="Memory Spielfeld"
@@ -261,16 +304,29 @@ watch(() => props.difficulty, () => {
           :class="{
             'memory-card--flipped': card.isFlipped || card.isMatched,
             'memory-card--matched': card.isMatched,
+            'memory-card--photo': !!card.imageUrl,
           }"
           :aria-label="card.isFlipped || card.isMatched ? card.label : 'Verdeckte Karte'"
           @click="flipCard(card.id)"
         >
           <div class="memory-card__inner">
+            <!-- Card Front (face down) -->
             <div class="memory-card__front">
-              <span class="memory-card__symbol">?</span>
+              <Leaf v-if="card.imageUrl" :size="32" class="memory-card__leaf-icon" />
+              <span v-else class="memory-card__symbol">?</span>
             </div>
+            <!-- Card Back (face up / revealed) -->
             <div class="memory-card__back">
-              <span class="memory-card__emoji">{{ card.symbol }}</span>
+              <template v-if="card.imageUrl">
+                <div
+                  class="memory-card__photo"
+                  :style="{ backgroundImage: `url(${card.imageUrl})` }"
+                />
+                <span class="memory-card__photo-label">{{ card.label }}</span>
+              </template>
+              <template v-else>
+                <span class="memory-card__emoji">{{ card.symbol }}</span>
+              </template>
             </div>
           </div>
         </button>
@@ -297,7 +353,7 @@ watch(() => props.difficulty, () => {
             <h2 class="memory-complete__title">Alle Paare gefunden!</h2>
             <p class="memory-complete__score">{{ score }} Punkte</p>
             <p class="memory-complete__stats">
-              Zeit: {{ formattedTime }} &middot; Züge: {{ moves }} &middot; Hinweise: {{ hintsUsed }}
+              Zeit: {{ formattedTime }} &middot; Zuege: {{ moves }} &middot; Hinweise: {{ hintsUsed }}
             </p>
           </div>
         </div>
@@ -341,6 +397,24 @@ watch(() => props.difficulty, () => {
   margin: 0;
 }
 
+.memory-theme-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.memory-theme-section__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
 .memory-theme-select__grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -375,6 +449,27 @@ watch(() => props.difficulty, () => {
   transform: scale(0.97);
 }
 
+.memory-theme-btn--photo {
+  padding: var(--space-sm);
+  gap: var(--space-sm);
+}
+
+.memory-theme-btn__photo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.memory-theme-btn__photo-thumb {
+  aspect-ratio: 1;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--color-bg-secondary);
+}
+
 .memory-theme-btn__preview {
   font-size: var(--font-size-2xl);
   line-height: 1.4;
@@ -384,7 +479,6 @@ watch(() => props.difficulty, () => {
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
-  text-transform: capitalize;
 }
 
 .memory-start-btn {
@@ -411,7 +505,8 @@ watch(() => props.difficulty, () => {
 /* Header */
 .memory-header {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  gap: var(--space-sm);
   width: 100%;
   padding: var(--space-xs) 0;
 }
@@ -421,9 +516,9 @@ watch(() => props.difficulty, () => {
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  padding: var(--space-xs) var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
   background-color: var(--color-bg-elevated);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-full);
   box-shadow: var(--shadow-sm);
   min-width: 80px;
 }
@@ -447,19 +542,23 @@ watch(() => props.difficulty, () => {
 /* Card Grid */
 .memory-grid {
   display: grid;
-  gap: var(--space-xs);
+  gap: var(--space-sm);
   width: 100%;
   max-width: 400px;
 }
 
+.memory-grid--photo {
+  gap: var(--space-md);
+}
+
+/* Card */
 .memory-card {
   aspect-ratio: 1;
-  perspective: 600px;
+  perspective: 800px;
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
-  min-height: var(--touch-target-min);
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -467,7 +566,7 @@ watch(() => props.difficulty, () => {
   position: relative;
   width: 100%;
   height: 100%;
-  transition: transform var(--duration-slow) var(--ease-default);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
 }
 
@@ -483,12 +582,18 @@ watch(() => props.difficulty, () => {
   align-items: center;
   justify-content: center;
   backface-visibility: hidden;
-  border-radius: 12px;
+  border-radius: 16px;
+  overflow: hidden;
 }
 
+/* Card Front (face down) */
 .memory-card__front {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark, #7B6A9B));
+  background: var(--color-primary);
   box-shadow: var(--shadow-md);
+}
+
+.memory-card__leaf-icon {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .memory-card__symbol {
@@ -497,11 +602,45 @@ watch(() => props.difficulty, () => {
   font-weight: var(--font-weight-bold);
 }
 
+/* Card Back (face up) */
 .memory-card__back {
+  transform: rotateY(180deg);
+  flex-direction: column;
   background: var(--color-bg-elevated);
   border: 2px solid var(--color-border-light);
-  transform: rotateY(180deg);
   box-shadow: var(--shadow-sm);
+}
+
+/* Photo card back */
+.memory-card--photo .memory-card__back {
+  padding: 0;
+  border: none;
+  background: var(--color-bg-elevated);
+}
+
+.memory-card__photo {
+  position: absolute;
+  inset: 0;
+  bottom: 28px;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--color-bg-secondary);
+}
+
+.memory-card__photo-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 4px 0;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-primary);
+  background: var(--color-bg-elevated);
+  text-align: center;
+  line-height: 1.4;
 }
 
 .memory-card__emoji {
@@ -509,10 +648,15 @@ watch(() => props.difficulty, () => {
   line-height: 1;
 }
 
+/* Matched state */
 .memory-card--matched .memory-card__back {
   border-color: var(--color-success);
-  background-color: var(--color-success-bg);
-  box-shadow: 0 0 12px rgba(92, 184, 133, 0.3);
+  box-shadow: 0 0 16px rgba(72, 187, 120, 0.35);
+}
+
+.memory-card--matched.memory-card--photo .memory-card__back {
+  border: 2px solid var(--color-success);
+  box-shadow: 0 0 16px rgba(72, 187, 120, 0.35);
 }
 
 /* Actions */

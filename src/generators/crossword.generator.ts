@@ -1,23 +1,20 @@
 import type { Difficulty } from '@/types/game'
 import type { CrosswordPuzzleData } from '@/data/crossword-puzzles/types'
 import { easyPuzzles } from '@/data/crossword-puzzles/easy.de'
-import { easyPuzzles2 } from '@/data/crossword-puzzles/easy-2.de'
 import { mediumPuzzles } from '@/data/crossword-puzzles/medium.de'
-import { mediumPuzzles2 } from '@/data/crossword-puzzles/medium-2.de'
 import { hardPuzzles } from '@/data/crossword-puzzles/hard.de'
-import { hardPuzzles2 } from '@/data/crossword-puzzles/hard-2.de'
 
 /** Get the pool of puzzles for a given difficulty */
 function getPuzzlePool(difficulty: Difficulty): CrosswordPuzzleData[] {
   switch (difficulty) {
     case 'easy':
-      return [...easyPuzzles, ...easyPuzzles2]
+      return [...easyPuzzles]
     case 'medium':
-      return [...mediumPuzzles, ...mediumPuzzles2]
+      return [...mediumPuzzles]
     case 'hard':
-      return [...hardPuzzles, ...hardPuzzles2]
+      return [...hardPuzzles]
     default:
-      return [...easyPuzzles, ...easyPuzzles2]
+      return [...easyPuzzles]
   }
 }
 

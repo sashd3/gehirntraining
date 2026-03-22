@@ -1,10 +1,11 @@
-export type MemoryTheme = 'animals' | 'food' | 'nature' | 'symbols' | 'numbers'
+export type MemoryTheme = 'animals' | 'food' | 'nature' | 'symbols' | 'numbers' | 'photo-nature' | 'photo-animals' | 'photo-cities'
 
 export interface MemoryCard {
   id: string
   pairId: string
   symbol: string
   label: string
+  imageUrl?: string
   isFlipped: boolean
   isMatched: boolean
 }

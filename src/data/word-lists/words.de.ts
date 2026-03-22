@@ -133,6 +133,30 @@ export const wordsByDifficulty: Record<string, WordEntry[]> = {
     { word: 'FEST', category: 'alltag' },
     { word: 'LIED', category: 'alltag' },
     { word: 'HELD', category: 'alltag' },
+    // Familie
+    { word: 'MAMA', category: 'familie' },
+    { word: 'PAPA', category: 'familie' },
+    { word: 'KIND', category: 'familie' },
+    { word: 'SOHN', category: 'familie' },
+    { word: 'OMA', category: 'familie' },
+    { word: 'OPA', category: 'familie' },
+    { word: 'BABY', category: 'familie' },
+    // Schule
+    { word: 'TAFEL', category: 'schule' },
+    { word: 'HEFT', category: 'schule' },
+    { word: 'KULI', category: 'schule' },
+    { word: 'NOTE', category: 'schule' },
+    { word: 'KREIDE', category: 'schule' },
+    // Farben
+    { word: 'ROT', category: 'farben' },
+    { word: 'BLAU', category: 'farben' },
+    { word: 'ROSA', category: 'farben' },
+    { word: 'GRAU', category: 'farben' },
+    // Werkzeug
+    { word: 'NAGEL', category: 'werkzeug' },
+    { word: 'DRAHT', category: 'werkzeug' },
+    { word: 'BAND', category: 'werkzeug' },
+    { word: 'KETTE', category: 'werkzeug' },
   ],
   medium: [
     // Tiere
@@ -268,6 +292,42 @@ export const wordsByDifficulty: Record<string, WordEntry[]> = {
     { word: 'TRAUER', category: 'gefuehle' },
     { word: 'HUNGER', category: 'gefuehle' },
     { word: 'NEUGIER', category: 'gefuehle' },
+    // Werkzeuge & Gegenstände
+    { word: 'HAMMER', category: 'werkzeug' },
+    { word: 'SCHERE', category: 'werkzeug' },
+    { word: 'NADEL', category: 'werkzeug' },
+    { word: 'FLASCHE', category: 'alltag' },
+    { word: 'SPIEGEL', category: 'alltag' },
+    { word: 'KOFFER', category: 'alltag' },
+    { word: 'BRILLE', category: 'alltag' },
+    { word: 'KERZE', category: 'alltag' },
+    // Materialien
+    { word: 'KUPFER', category: 'material' },
+    { word: 'EISEN', category: 'material' },
+    { word: 'GUMMI', category: 'material' },
+    { word: 'WOLLE', category: 'material' },
+    { word: 'LEINEN', category: 'material' },
+    { word: 'MARMOR', category: 'material' },
+    // Pflanzen
+    { word: 'TULPE', category: 'natur' },
+    { word: 'ORCHIDEE', category: 'natur' },
+    { word: 'LILIE', category: 'natur' },
+    { word: 'KAKTUS', category: 'natur' },
+    { word: 'EFEU', category: 'natur' },
+    // Transport
+    { word: 'SCHIFF', category: 'verkehr' },
+    { word: 'FAHRRAD', category: 'verkehr' },
+    { word: 'ROLLER', category: 'verkehr' },
+    { word: 'KUTSCHE', category: 'verkehr' },
+    { word: 'GONDEL', category: 'verkehr' },
+    // Familie
+    { word: 'TOCHTER', category: 'familie' },
+    { word: 'BRUDER', category: 'familie' },
+    { word: 'SCHWESTER', category: 'familie' },
+    { word: 'COUSINE', category: 'familie' },
+    { word: 'ENKEL', category: 'familie' },
+    { word: 'TANTE', category: 'familie' },
+    { word: 'ONKEL', category: 'familie' },
   ],
   hard: [
     // Lange und zusammengesetzte Wörter
@@ -372,6 +432,26 @@ export const wordsByDifficulty: Record<string, WordEntry[]> = {
     { word: 'BEGEISTERUNG', category: 'abstrakt' },
     { word: 'GEMEINSCHAFT', category: 'abstrakt' },
     { word: 'VERANTWORTUNG', category: 'abstrakt' },
+    // Natur erweitert
+    { word: 'REGENWALD', category: 'natur' },
+    { word: 'SCHNEEFLOCKE', category: 'natur' },
+    { word: 'SONNENSCHEIN', category: 'natur' },
+    { word: 'WALDLICHTUNG', category: 'natur' },
+    { word: 'BERGGIPFEL', category: 'natur' },
+    { word: 'WILDBLUME', category: 'natur' },
+    // Sport erweitert
+    { word: 'WETTKAMPF', category: 'sport' },
+    { word: 'TURNHALLE', category: 'sport' },
+    { word: 'SCHIEDSRICHTER', category: 'sport' },
+    { word: 'MEISTERSCHAFT', category: 'sport' },
+    // Essen erweitert
+    { word: 'SCHWARZBROT', category: 'essen' },
+    { word: 'BRATKARTOFFELN', category: 'essen' },
+    { word: 'PFANNKUCHEN', category: 'essen' },
+    { word: 'SAUERTEIG', category: 'essen' },
+    { word: 'BREZEL', category: 'essen' },
+    { word: 'KNOBLAUCH', category: 'essen' },
+    { word: 'MEERRETTICH', category: 'essen' },
   ],
 }
 

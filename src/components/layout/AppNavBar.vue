@@ -35,112 +35,157 @@ function navigateTo(tab: NavTab) {
 </script>
 
 <template>
-  <nav class="app-navbar" role="tablist" aria-label="Hauptnavigation">
-    <div class="app-navbar__inner">
+  <nav class="navbar" role="tablist" aria-label="Hauptnavigation">
+    <div class="navbar__inner">
       <button
         v-for="tab in tabs"
         :key="tab.name"
-        class="app-navbar__tab"
-        :class="{ 'app-navbar__tab--active': activeTab === tab.name }"
+        class="navbar__tab"
+        :class="{ 'navbar__tab--active': activeTab === tab.name }"
         role="tab"
         :aria-selected="activeTab === tab.name"
         :aria-label="tab.label"
         @click="navigateTo(tab)"
       >
-        <span class="app-navbar__icon">
-          <component :is="tab.icon" :size="24" />
+        <!-- Hump SVG behind active icon -->
+        <span class="navbar__hump">
+          <svg viewBox="0 0 100 28" preserveAspectRatio="none">
+            <path d="M0 28 C25 28, 30 0, 50 0 S75 28, 100 28 Z" />
+          </svg>
         </span>
-        <span class="app-navbar__label">{{ tab.label }}</span>
+
+        <span class="navbar__icon">
+          <component :is="tab.icon" :size="22" />
+        </span>
+        <span class="navbar__label">{{ tab.label }}</span>
       </button>
     </div>
   </nav>
 </template>
 
 <style scoped lang="scss">
-.app-navbar {
+.navbar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: var(--z-header);
-
-  // iOS translucent tab bar effect
-  background-color: rgba(255, 255, 255, 0.82);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-
-  // Very subtle top separator — iOS style
-  border-top: 0.5px solid var(--color-border-light);
-
-  // Safe area at bottom (iPhone notch area)
+  z-index: 100;
+  background-color: var(--color-bg-elevated, #FFFFFF);
+  border-top: 1px solid var(--color-border-light, rgba(0,0,0,0.06));
   padding-bottom: var(--safe-area-bottom);
-
-  // Dark mode adjustments
-  [data-theme='dark'] & {
-    background-color: rgba(26, 22, 37, 0.85);
-    border-top-color: var(--color-border);
-  }
 
   &__inner {
     display: flex;
-    align-items: stretch;
+    align-items: flex-end;
     justify-content: space-around;
-    height: 49px; // iOS standard tab bar height
+    height: 56px;
     max-width: var(--content-max-width);
     margin: 0 auto;
+    position: relative;
   }
 
   &__tab {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     gap: 2px;
     flex: 1;
     min-width: var(--touch-target-min);
-    padding: var(--space-2xs) var(--space-xs);
+    padding-bottom: 6px;
     color: var(--color-text-tertiary);
+    position: relative;
     -webkit-tap-highlight-color: transparent;
-    transition:
-      color var(--duration-fast) var(--ease-default),
-      transform var(--duration-fast) var(--ease-default);
+    border: none;
+    background: none;
+    font-family: inherit;
+    cursor: pointer;
 
     &:active {
-      transform: scale(0.90);
+      transform: scale(0.92);
     }
 
-    &:focus-visible {
-      outline: 3px solid var(--color-border-focus);
-      outline-offset: -3px;
-      border-radius: var(--radius-md);
-    }
-
-    // Active tab — Flieder/lilac color
+    // Active state
     &--active {
       color: var(--color-primary);
+
+      .navbar__hump {
+        transform: scaleY(1);
+        opacity: 1;
+      }
+
+      .navbar__icon {
+        transform: translateY(-14px);
+        background: var(--color-primary);
+        color: #FFFFFF;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+      }
+
+      .navbar__label {
+        opacity: 1;
+        color: var(--color-primary);
+        font-weight: 600;
+      }
     }
   }
 
+  // Hump behind active icon
+  &__hump {
+    position: absolute;
+    top: -14px;
+    left: 10%;
+    right: 10%;
+    height: 28px;
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+
+    svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    path {
+      fill: var(--color-bg-elevated, #FFFFFF);
+    }
+  }
+
+  // Icon circle
   &__icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: var(--radius-full);
-    transition: color var(--duration-fast) var(--ease-default);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: transparent;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                background 0.3s ease,
+                color 0.3s ease,
+                box-shadow 0.3s ease;
+    z-index: 1;
   }
 
+  // Label
   &__label {
-    font-size: 10px; // iOS tab bar label size — intentionally small
-    font-weight: var(--font-weight-medium);
+    font-size: 10px;
+    font-weight: 500;
     line-height: 1;
     letter-spacing: 0.01em;
+    opacity: 0.7;
+    transition: opacity 0.3s ease, color 0.3s ease;
+  }
+}
 
-    .app-navbar__tab--active & {
-      font-weight: var(--font-weight-semibold);
-      color: var(--color-primary);
-    }
+// Reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .navbar__icon,
+  .navbar__hump,
+  .navbar__label {
+    transition: none;
   }
 }
 </style>

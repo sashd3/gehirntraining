@@ -113,12 +113,14 @@ function openDailyChallenge() {
     <!-- Stats Row -->
     <div class="stats-row">
       <div class="stat-chip">
-        <Flame :size="18" class="stat-chip__icon stat-chip__icon--flame" />
-        <span class="stat-chip__text">{{ streak }} {{ t('home.streakLabel', 'Tage in Folge') }}</span>
+        <Flame :size="16" class="stat-chip__icon stat-chip__icon--flame" />
+        <span class="stat-chip__number">{{ streak }}</span>
+        <span class="stat-chip__label">Tage</span>
       </div>
       <div class="stat-chip">
-        <Star :size="18" class="stat-chip__icon stat-chip__icon--star" />
-        <span class="stat-chip__text">{{ totalScore.toLocaleString('de-DE') }} {{ t('home.totalPointsLabel', 'Gesamtpunkte') }}</span>
+        <Star :size="16" class="stat-chip__icon stat-chip__icon--star" />
+        <span class="stat-chip__number">{{ totalScore.toLocaleString('de-DE') }}</span>
+        <span class="stat-chip__label">Punkte</span>
       </div>
     </div>
 
@@ -179,8 +181,8 @@ function openDailyChallenge() {
         class="game-card"
         @click="openGame(game.id)"
       >
-        <div class="game-card__icon-area" :style="{ backgroundColor: (categoryColors[game.category] || game.color) + '12' }">
-          <component :is="getGameIconComponent(game.id)" :size="28" :color="categoryColors[game.category] || game.color" />
+        <div class="game-card__icon-area">
+          <component :is="getGameIconComponent(game.id)" :size="28" class="game-card__icon-svg" />
         </div>
         <div class="game-card__body">
           <span class="game-card__name">{{ t(game.nameKey) }}</span>
@@ -199,7 +201,7 @@ function openDailyChallenge() {
               cx="18" cy="18" r="15.9"
               fill="none"
               stroke-width="3"
-              :stroke="categoryColors[game.category] || game.color"
+              stroke="var(--color-primary, #9B8AB8)"
               :stroke-dasharray="`${getGameCompletion(game.id) * 100} ${100 - getGameCompletion(game.id) * 100}`"
               stroke-dashoffset="25"
             />
@@ -244,17 +246,17 @@ function openDailyChallenge() {
   display: flex;
   gap: var(--space-sm, 8px);
   margin-bottom: var(--space-xl, 32px);
-  flex-wrap: wrap;
 }
 
 .stat-chip {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+  flex: 1;
   background: var(--color-bg-elevated);
   border: 1px solid var(--color-border-light, rgba(0,0,0,0.06));
   border-radius: 20px;
-  padding: 8px 14px;
+  padding: 8px 12px;
 
   &__icon {
     flex-shrink: 0;
@@ -268,10 +270,17 @@ function openDailyChallenge() {
     }
   }
 
-  &__text {
-    font-size: 13px;
-    font-weight: 600;
+  &__number {
+    font-size: 17px;
+    font-weight: 700;
     color: var(--color-text-primary);
+    white-space: nowrap;
+  }
+
+  &__label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
     white-space: nowrap;
   }
 }
@@ -461,6 +470,12 @@ function openDailyChallenge() {
     display: flex;
     align-items: center;
     justify-content: center;
+    background: var(--color-primary-bg, #F3EFF8);
+    color: var(--color-primary, #9B8AB8);
+  }
+
+  &__icon-svg {
+    color: var(--color-primary, #9B8AB8);
   }
 
   &__body {

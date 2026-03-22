@@ -3,16 +3,25 @@ import { computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/stores/user.store'
 import { useTheme } from '@/composables/useTheme'
-import { colorPresets, applyColorPreset, getPresetById } from '@/composables/useAccentColor'
+import { colorPresets, applyPreset, applyColorFromHex } from '@/composables/useAccentColor'
+import { ref } from 'vue'
 
 const { t, locale } = useI18n()
 const userStore = useUserStore()
 const { toggleTheme, currentTheme } = useTheme()
 
-function selectColor(presetId: string) {
-  const preset = getPresetById(presetId)
-  applyColorPreset(preset)
+const customColor = ref(userStore.settings.colorPreset?.startsWith('#') ? userStore.settings.colorPreset : '#9B8AB8')
+
+function selectPreset(presetId: string) {
+  applyPreset(presetId)
   updateSetting('colorPreset', presetId)
+}
+
+function onCustomColorChange(event: Event) {
+  const hex = (event.target as HTMLInputElement).value
+  customColor.value = hex
+  applyColorFromHex(hex)
+  updateSetting('colorPreset', hex)
 }
 
 const settings = computed(() => userStore.settings)
@@ -87,10 +96,11 @@ const themeOptions = [
       </div>
     </section>
 
-    <!-- Color Preset Section -->
+    <!-- Color Section -->
     <section class="settings-group">
       <h2 class="group-header">Farbe</h2>
       <div class="group-card">
+        <!-- Presets -->
         <div class="setting-row">
           <div class="color-presets">
             <button
@@ -99,13 +109,31 @@ const themeOptions = [
               class="color-preset-btn"
               :class="{ active: settings.colorPreset === preset.id }"
               :title="preset.name"
-              @click="selectColor(preset.id)"
+              @click="selectPreset(preset.id)"
             >
-              <span class="color-dot" :style="{ backgroundColor: preset.primary }" />
-              <span class="color-dot-accent" :style="{ backgroundColor: preset.accent }" />
+              <span class="color-swatch">
+                <span class="color-dot" :style="{ backgroundColor: preset.primary }" />
+                <span class="color-dot-sm" :style="{ backgroundColor: preset.accent }" />
+              </span>
               <span class="color-preset-label">{{ preset.name }}</span>
             </button>
           </div>
+        </div>
+
+        <div class="divider" />
+
+        <!-- Custom color picker -->
+        <div class="setting-row color-picker-row">
+          <span class="setting-label">Eigene Farbe</span>
+          <label class="color-picker-label">
+            <input
+              type="color"
+              class="color-picker-input"
+              :value="customColor"
+              @input="onCustomColorChange"
+            />
+            <span class="color-picker-preview" :style="{ backgroundColor: customColor }" />
+          </label>
         </div>
       </div>
     </section>
@@ -386,37 +414,93 @@ const themeOptions = [
   padding: 12px 8px;
   background: var(--color-bg-primary);
   border: 2px solid transparent;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-lg, 16px);
   cursor: pointer;
   transition: all 0.2s ease;
   min-height: 70px;
+  font-family: inherit;
 
   &.active {
     border-color: var(--color-primary);
     background: var(--color-bg-elevated);
-    box-shadow: 0 0 0 1px var(--color-primary);
+  }
+
+  &:active {
+    transform: scale(0.96);
   }
 }
 
-.color-dot {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+.color-swatch {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.color-dot-accent {
+.color-dot {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.color-dot-sm {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  margin-top: -8px;
-  border: 2px solid var(--color-bg-elevated);
+  position: absolute;
+  bottom: -2px;
+  right: -4px;
+  border: 2px solid var(--color-bg-elevated, #fff);
 }
 
 .color-preset-label {
   font-size: 11px;
   font-weight: 600;
   color: var(--color-text-secondary);
+}
+
+// Custom color picker
+.color-picker-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .setting-label {
+    margin-bottom: 0;
+    flex: 1;
+  }
+}
+
+.color-picker-label {
+  position: relative;
+  cursor: pointer;
+}
+
+.color-picker-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.color-picker-preview {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid var(--color-bg-secondary, #F0EDF5);
+  transition: border-color 0.2s ease;
+  cursor: pointer;
+}
+
+.color-picker-label:hover .color-picker-preview {
+  border-color: var(--color-primary-light);
+}
+
+// Make the native color picker open on tap
+.color-picker-input:focus + .color-picker-preview {
+  border-color: var(--color-primary);
 }
 
 .about-content {

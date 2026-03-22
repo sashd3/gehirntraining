@@ -6,7 +6,7 @@ import { useProgressStore } from '@/stores/progress.store'
 import { useDailyChallengeStore } from '@/stores/daily-challenge.store'
 import { useTheme } from '@/composables/useTheme'
 import { cloudLoad, cloudRestore, cloudSaveDebounced } from '@/services/cloud-sync.service'
-import { applyColorPreset, getPresetById } from '@/composables/useAccentColor'
+import { applyPreset, applyColorFromHex } from '@/composables/useAccentColor'
 
 const { locale } = useI18n()
 const userStore = useUserStore()
@@ -26,7 +26,12 @@ onMounted(async () => {
   await dailyChallengeStore.loadToday()
   applyTheme()
   locale.value = userStore.settings.language
-  applyColorPreset(getPresetById(userStore.settings.colorPreset || 'lilac'))
+  const colorPref = userStore.settings.colorPreset || 'lilac'
+  if (colorPref.startsWith('#')) {
+    applyColorFromHex(colorPref)
+  } else {
+    applyPreset(colorPref)
+  }
 
   // Background: check cloud for newer data
   cloudLoad().then(cloudData => {

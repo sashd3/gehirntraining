@@ -1,108 +1,110 @@
 /**
  * Dynamic accent color system.
- * User picks a base color, and we generate the full palette from it.
+ * Presets for quick selection + free color picker that auto-generates the full palette.
  */
 
 export interface ColorPreset {
   id: string
   name: string
   primary: string
-  primaryLight: string
-  primaryLighter: string
-  primaryBg: string
-  primaryDark: string
   accent: string
-  accentLight: string
-  accentLighter: string
 }
 
 export const colorPresets: ColorPreset[] = [
-  {
-    id: 'lilac',
-    name: 'Flieder',
-    primary: '#9B8AB8',
-    primaryLight: '#C4B5D4',
-    primaryLighter: '#E8E0F0',
-    primaryBg: '#F3EFF8',
-    primaryDark: '#7B6A9B',
-    accent: '#6BBFAE',
-    accentLight: '#8DD4C5',
-    accentLighter: '#E5F5F1',
-  },
-  {
-    id: 'ocean',
-    name: 'Ozean',
-    primary: '#5B8DB8',
-    primaryLight: '#9DC0DB',
-    primaryLighter: '#E0EDF5',
-    primaryBg: '#EFF5FA',
-    primaryDark: '#3D6F9B',
-    accent: '#6BBFAE',
-    accentLight: '#8DD4C5',
-    accentLighter: '#E5F5F1',
-  },
-  {
-    id: 'sage',
-    name: 'Salbei',
-    primary: '#7BA68E',
-    primaryLight: '#A8C9B5',
-    primaryLighter: '#E0F0E7',
-    primaryBg: '#EFF7F2',
-    primaryDark: '#5E8A72',
-    accent: '#B8A06B',
-    accentLight: '#D4C48D',
-    accentLighter: '#F5F0E5',
-  },
-  {
-    id: 'rose',
-    name: 'Rosenholz',
-    primary: '#B88A98',
-    primaryLight: '#D4B5BF',
-    primaryLighter: '#F0E0E6',
-    primaryBg: '#F8EFF2',
-    primaryDark: '#9B6A7B',
-    accent: '#8DB8AE',
-    accentLight: '#B5D4CC',
-    accentLighter: '#E5F2EF',
-  },
-  {
-    id: 'earth',
-    name: 'Erdton',
-    primary: '#A68B6B',
-    primaryLight: '#C9B5A0',
-    primaryLighter: '#F0E6DA',
-    primaryBg: '#F7F2EC',
-    primaryDark: '#8A705A',
-    accent: '#6BA6A6',
-    accentLight: '#A0C9C9',
-    accentLighter: '#E0F0F0',
-  },
-  {
-    id: 'berry',
-    name: 'Beere',
-    primary: '#8B6BA6',
-    primaryLight: '#B5A0C9',
-    primaryLighter: '#E6DAF0',
-    primaryBg: '#F2ECF7',
-    primaryDark: '#705A8A',
-    accent: '#A6886B',
-    accentLight: '#C9B5A0',
-    accentLighter: '#F0E6DA',
-  },
+  { id: 'lilac', name: 'Flieder', primary: '#9B8AB8', accent: '#6BBFAE' },
+  { id: 'ocean', name: 'Ozean', primary: '#5B8DB8', accent: '#6BBFAE' },
+  { id: 'sage', name: 'Salbei', primary: '#7BA68E', accent: '#B8A06B' },
+  { id: 'rose', name: 'Rosenholz', primary: '#B88A98', accent: '#8DB8AE' },
+  { id: 'earth', name: 'Erdton', primary: '#A68B6B', accent: '#6BA6A6' },
+  { id: 'berry', name: 'Beere', primary: '#8B6BA6', accent: '#A6886B' },
 ]
 
-export function applyColorPreset(preset: ColorPreset): void {
+// --- HSL Utilities ---
+
+function hexToHsl(hex: string): [number, number, number] {
+  const r = parseInt(hex.slice(1, 3), 16) / 255
+  const g = parseInt(hex.slice(3, 5), 16) / 255
+  const b = parseInt(hex.slice(5, 7), 16) / 255
+  const max = Math.max(r, g, b), min = Math.min(r, g, b)
+  const l = (max + min) / 2
+  let h = 0, s = 0
+  if (max !== min) {
+    const d = max - min
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
+    switch (max) {
+      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break
+      case g: h = ((b - r) / d + 2) / 6; break
+      case b: h = ((r - g) / d + 4) / 6; break
+    }
+  }
+  return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)]
+}
+
+function hslToHex(h: number, s: number, l: number): string {
+  s /= 100; l /= 100
+  const a = s * Math.min(l, 1 - l)
+  const f = (n: number) => {
+    const k = (n + h / 30) % 12
+    const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)
+    return Math.round(255 * color).toString(16).padStart(2, '0')
+  }
+  return `#${f(0)}${f(8)}${f(4)}`
+}
+
+// --- Palette Generation ---
+
+export function generatePaletteFromHex(primary: string): Record<string, string> {
+  const [h, s, l] = hexToHsl(primary)
+
+  // Generate complementary accent: shift hue by ~150°
+  const accentH = (h + 150) % 360
+
+  return {
+    primary: primary,
+    primaryDark: hslToHex(h, Math.min(s + 10, 100), Math.max(l - 15, 20)),
+    primaryLight: hslToHex(h, Math.max(s - 10, 10), Math.min(l + 18, 85)),
+    primaryLighter: hslToHex(h, Math.max(s - 25, 5), Math.min(l + 30, 93)),
+    primaryBg: hslToHex(h, Math.max(s - 35, 3), Math.min(l + 36, 96)),
+    accent: hslToHex(accentH, Math.min(s + 5, 60), Math.min(l + 5, 55)),
+    accentLight: hslToHex(accentH, Math.max(s - 15, 10), Math.min(l + 22, 82)),
+    accentLighter: hslToHex(accentH, Math.max(s - 30, 5), Math.min(l + 35, 94)),
+    borderFocus: primary,
+  }
+}
+
+// --- Apply to DOM ---
+
+export function applyColorFromHex(hex: string): void {
+  const palette = generatePaletteFromHex(hex)
   const root = document.documentElement
-  root.style.setProperty('--color-primary', preset.primary)
-  root.style.setProperty('--color-primary-light', preset.primaryLight)
-  root.style.setProperty('--color-primary-lighter', preset.primaryLighter)
-  root.style.setProperty('--color-primary-bg', preset.primaryBg)
-  root.style.setProperty('--color-primary-dark', preset.primaryDark)
-  root.style.setProperty('--color-primary-darker', preset.primaryDark)
-  root.style.setProperty('--color-accent', preset.accent)
-  root.style.setProperty('--color-accent-light', preset.accentLight)
-  root.style.setProperty('--color-accent-lighter', preset.accentLighter)
-  root.style.setProperty('--color-border-focus', preset.primary)
+  root.style.setProperty('--color-primary', palette.primary)
+  root.style.setProperty('--color-primary-dark', palette.primaryDark)
+  root.style.setProperty('--color-primary-darker', palette.primaryDark)
+  root.style.setProperty('--color-primary-light', palette.primaryLight)
+  root.style.setProperty('--color-primary-lighter', palette.primaryLighter)
+  root.style.setProperty('--color-primary-bg', palette.primaryBg)
+  root.style.setProperty('--color-accent', palette.accent)
+  root.style.setProperty('--color-accent-light', palette.accentLight)
+  root.style.setProperty('--color-accent-lighter', palette.accentLighter)
+  root.style.setProperty('--color-border-focus', palette.borderFocus)
+}
+
+export function applyPreset(presetId: string): void {
+  const preset = colorPresets.find(p => p.id === presetId)
+  if (preset) {
+    applyColorFromHex(preset.primary)
+    // Override accent with preset's specific accent
+    const root = document.documentElement
+    const accentPalette = generatePaletteFromHex(preset.accent)
+    root.style.setProperty('--color-accent', preset.accent)
+    root.style.setProperty('--color-accent-light', accentPalette.primaryLight)
+    root.style.setProperty('--color-accent-lighter', accentPalette.primaryLighter)
+  }
+}
+
+// Backwards compat
+export function applyColorPreset(preset: ColorPreset): void {
+  applyPreset(preset.id)
 }
 
 export function getPresetById(id: string): ColorPreset {

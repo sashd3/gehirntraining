@@ -49,15 +49,18 @@ function navigateTo(tab: NavTab) {
       >
         <!-- Hump SVG behind active icon -->
         <span class="navbar__hump">
-          <svg viewBox="0 0 120 80" preserveAspectRatio="none">
-            <path d="M0 80 C10 80, 18 78, 26 66 C34 50, 38 10, 60 10 C82 10, 86 50, 94 66 C102 78, 110 80, 120 80 Z" />
+          <svg viewBox="0 0 100 28" preserveAspectRatio="none">
+            <!-- Filled shape (no stroke) -->
+            <path d="M0 28 C25 28, 30 0, 50 0 S75 28, 100 28 Z" class="hump-fill" />
+            <!-- Stroke only on the curve, not the bottom -->
+            <path d="M0 28 C25 28, 30 0, 50 0 S75 28, 100 28" class="hump-stroke" />
           </svg>
         </span>
 
         <span class="navbar__icon">
           <component :is="tab.icon" :size="22" />
         </span>
-        <span v-if="activeTab === tab.name" class="navbar__label">{{ tab.label }}</span>
+        <span class="navbar__label">{{ tab.label }}</span>
       </button>
     </div>
   </nav>
@@ -78,11 +81,10 @@ function navigateTo(tab: NavTab) {
     display: flex;
     align-items: flex-end;
     justify-content: space-around;
-    height: 60px;
+    height: 56px;
     max-width: var(--content-max-width);
     margin: 0 auto;
     position: relative;
-    overflow: visible;
   }
 
   &__tab {
@@ -90,10 +92,10 @@ function navigateTo(tab: NavTab) {
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    gap: 3px;
+    gap: 2px;
     flex: 1;
     min-width: var(--touch-target-min);
-    padding-bottom: 8px;
+    padding-bottom: 6px;
     color: var(--color-text-tertiary);
     position: relative;
     -webkit-tap-highlight-color: transparent;
@@ -101,6 +103,10 @@ function navigateTo(tab: NavTab) {
     background: none;
     font-family: inherit;
     cursor: pointer;
+
+    &:active {
+      transform: scale(0.92);
+    }
 
     // Active state
     &--active {
@@ -112,10 +118,16 @@ function navigateTo(tab: NavTab) {
       }
 
       .navbar__icon {
-        transform: translateY(-16px);
+        transform: translateY(-14px);
         background: var(--color-primary);
         color: #FFFFFF;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+        box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+      }
+
+      .navbar__label {
+        opacity: 1;
+        color: var(--color-primary);
+        font-weight: 600;
       }
     }
   }
@@ -123,11 +135,10 @@ function navigateTo(tab: NavTab) {
   // Hump behind active icon
   &__hump {
     position: absolute;
-    top: -44px;
-    left: -12%;
-    right: -12%;
-    height: 60px;
-    overflow: hidden;
+    top: -14px;
+    left: 10%;
+    right: 10%;
+    height: 28px;
     transform: scaleY(0);
     transform-origin: bottom;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
@@ -140,10 +151,15 @@ function navigateTo(tab: NavTab) {
       display: block;
     }
 
-    path {
+    .hump-fill {
       fill: var(--color-bg-elevated, #FFFFFF);
-      stroke: var(--color-border-light, rgba(0,0,0,0.12));
-      stroke-width: 1.5;
+      stroke: none;
+    }
+
+    .hump-stroke {
+      fill: none;
+      stroke: var(--color-border-light, rgba(0,0,0,0.06));
+      stroke-width: 1;
       vector-effect: non-scaling-stroke;
     }
   }
@@ -153,8 +169,8 @@ function navigateTo(tab: NavTab) {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: transparent;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -164,13 +180,14 @@ function navigateTo(tab: NavTab) {
     z-index: 1;
   }
 
-  // Label — only shown for active tab
+  // Label
   &__label {
-    font-size: 11px;
-    font-weight: 600;
+    font-size: 10px;
+    font-weight: 500;
     line-height: 1;
-    letter-spacing: 0.02em;
-    color: var(--color-primary);
+    letter-spacing: 0.01em;
+    opacity: 0.7;
+    transition: opacity 0.3s ease, color 0.3s ease;
   }
 }
 

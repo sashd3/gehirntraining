@@ -51,13 +51,11 @@ function handleClick(event: MouseEvent) {
 
 <style scoped lang="scss">
 .base-card {
-  // Stitch spec: white (#ffffff) card on cream (#f2ede8) parent
-  // NO borders — use background color shifts for depth
-  // Corner radius: 1.5rem (24px) — Stitch spec
-  background-color: var(--color-bg-elevated); // #ffffff
-  border-radius: var(--radius-lg); // 24px — Stitch spec
-  box-shadow: var(--shadow-card); // Navy-tinted ambient: 0 2px 24px rgba(39, 91, 181, 0.06)
-  border: none; // NO borders — Stitch spec
+  // iOS-style card: white background, rounded corners, subtle shadow
+  background-color: var(--color-bg-elevated);
+  border-radius: var(--radius-lg); // 12px — iOS standard
+  box-shadow: var(--shadow-card); // Very subtle: 0 1px 3px
+  border: none; // No borders — shadows only, like iOS
   transition:
     box-shadow var(--duration-fast) var(--ease-default),
     transform var(--duration-fast) var(--ease-default);
@@ -67,9 +65,9 @@ function handleClick(event: MouseEvent) {
     box-shadow: var(--shadow-md);
   }
 
-  // ---- Inset — grouped style (surface container bg, no shadow) ----
+  // ---- Inset — grouped table style (no shadow, secondary bg) ----
   &--inset {
-    background-color: var(--color-bg-secondary); // #f2ede8
+    background-color: var(--color-bg-secondary);
     box-shadow: none;
   }
 

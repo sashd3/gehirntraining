@@ -1,9 +1,9 @@
 // ==========================================================================
-// Button Base Styles — Sage Mind Design System
+// Button Base Styles — iOS-Native
 // ==========================================================================
-// Deep Navy primary, Classic Orange gradient CTAs. Rounded corners (1rem).
-// NO borders on any buttons. Min-height 64px for primary actions.
-// Touch targets: 48px minimum, 72px for large answer choices.
+// Lilac (Flieder) primary, soft rounded corners, subtle press animation.
+// Variants: filled, tinted, outline, plain — matching iOS button paradigms.
+// Touch targets: 44px minimum (iOS HIG), 50px preferred for elderly.
 // ==========================================================================
 
 .btn {
@@ -11,7 +11,7 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-xs);
-  min-height: var(--touch-target-preferred); // 56px
+  min-height: var(--touch-target-preferred); // 50px — comfortable for elderly
   padding: var(--space-sm) var(--space-lg);
   font-family: var(--font-family);
   font-size: var(--font-size-body);
@@ -20,19 +20,18 @@
   text-align: center;
   text-decoration: none;
   white-space: nowrap;
-  border: none; // NO borders — Stitch spec
-  border-radius: var(--radius-md); // 16px — 1rem
+  border: none;
+  border-radius: var(--radius-md); // 10px — iOS button standard
   cursor: pointer;
   transition:
     background-color var(--duration-fast) var(--ease-default),
     color var(--duration-fast) var(--ease-default),
     transform var(--duration-fast) var(--ease-default),
-    opacity var(--duration-fast) var(--ease-default),
-    box-shadow var(--duration-fast) var(--ease-default);
+    opacity var(--duration-fast) var(--ease-default);
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 
-  // Scale-down on press
+  // iOS-style scale-down on press
   &:active:not(:disabled) {
     transform: scale(0.97);
   }
@@ -53,40 +52,34 @@
 }
 
 // --------------------------------------------------------------------------
-// Variant: Primary (Orange Gradient CTA)
-// Stitch spec: gradient from #944a00 to #fc8f34, min-height 64px
+// Variant: Primary (Filled)
+// Solid lilac background, white text
 // --------------------------------------------------------------------------
 .btn--primary {
-  background: linear-gradient(135deg, #944a00 0%, #fc8f34 100%);
+  background-color: var(--color-primary);
   color: var(--color-text-on-accent);
-  min-height: 64px; // Stitch spec
-  border-radius: var(--radius-lg); // 1.5rem — Stitch spec for large buttons
-  border: none;
-  box-shadow: 0 2px 12px rgba(148, 74, 0, 0.2);
 
   &:hover:not(:disabled) {
-    background: linear-gradient(135deg, #7d3e00 0%, #e87d20 100%);
-    box-shadow: 0 4px 16px rgba(148, 74, 0, 0.25);
+    background-color: var(--color-primary-dark);
   }
 
   &:active:not(:disabled) {
-    background: linear-gradient(135deg, #6b3500 0%, #d97218 100%);
-    box-shadow: 0 1px 8px rgba(148, 74, 0, 0.15);
+    background-color: var(--color-primary-darker);
   }
 }
 
 // --------------------------------------------------------------------------
 // Variant: Secondary / Tinted
-// Navy tinted background with deep navy text
+// Light lilac background, dark lilac text — iOS "tinted" button style
 // --------------------------------------------------------------------------
 .btn--secondary,
 .btn--tinted {
-  background-color: var(--color-primary-light);
-  color: var(--color-primary);
+  background-color: var(--color-primary-lighter);
+  color: var(--color-primary-darker);
   border: none;
 
   &:hover:not(:disabled) {
-    background-color: var(--color-primary-lighter);
+    background-color: var(--color-primary-light);
   }
 
   &:active:not(:disabled) {
@@ -96,15 +89,15 @@
 
 // --------------------------------------------------------------------------
 // Variant: Outline
-// NO visible border — use subtle background instead (Stitch: no 1px borders)
+// Subtle lilac border, transparent background
 // --------------------------------------------------------------------------
 .btn--outline {
-  background-color: var(--color-bg-secondary);
+  background-color: transparent;
   color: var(--color-primary);
-  border: none; // NO borders — Stitch spec
+  border: 1.5px solid var(--color-primary-light);
 
   &:hover:not(:disabled) {
-    background-color: var(--color-bg-tertiary);
+    background-color: var(--color-primary-bg);
   }
 
   &:active:not(:disabled) {
@@ -114,39 +107,36 @@
 
 // --------------------------------------------------------------------------
 // Variant: Ghost / Plain
-// No background, just text
+// No background, just text — iOS "plain" button style
 // --------------------------------------------------------------------------
 .btn--ghost,
 .btn--plain {
   background-color: transparent;
   color: var(--color-primary);
-  border: none;
 
   &:hover:not(:disabled) {
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-primary-bg);
   }
 
   &:active:not(:disabled) {
-    background-color: var(--color-bg-tertiary);
+    background-color: var(--color-primary-lighter);
   }
 }
 
 // --------------------------------------------------------------------------
-// Variant: Accent (Orange — for start, continue actions)
+// Variant: Accent (Green-Turquoise)
+// For positive actions like "Start", "Continue"
 // --------------------------------------------------------------------------
 .btn--accent {
-  background: linear-gradient(135deg, #944a00 0%, #fc8f34 100%);
+  background-color: var(--color-accent);
   color: var(--color-text-on-accent);
-  border: none;
-  box-shadow: 0 2px 12px rgba(148, 74, 0, 0.15);
 
   &:hover:not(:disabled) {
-    background: linear-gradient(135deg, #7d3e00 0%, #e87d20 100%);
-    box-shadow: 0 4px 16px rgba(148, 74, 0, 0.2);
+    background-color: var(--color-accent-hover);
   }
 
   &:active:not(:disabled) {
-    background: linear-gradient(135deg, #6b3500 0%, #d97218 100%);
+    background-color: var(--color-accent-active);
   }
 }
 
@@ -157,14 +147,13 @@
 .btn--danger {
   background-color: var(--color-error);
   color: var(--color-text-on-accent);
-  border: none;
 
   &:hover:not(:disabled) {
-    background-color: #a11515;
+    background-color: #c94444;
   }
 
   &:active:not(:disabled) {
-    background-color: #8a1212;
+    background-color: #b53a3a;
   }
 }
 
@@ -173,23 +162,23 @@
 // --------------------------------------------------------------------------
 
 .btn--sm {
-  min-height: var(--touch-target-min); // 48px
+  min-height: var(--touch-target-min); // 44px
   padding: var(--space-xs) var(--space-md);
   font-size: var(--font-size-subhead);
   border-radius: var(--radius-sm);
 }
 
 .btn--md {
-  min-height: var(--touch-target-preferred); // 56px
+  min-height: var(--touch-target-preferred); // 50px
   padding: var(--space-sm) var(--space-lg);
   font-size: var(--font-size-body);
 }
 
 .btn--lg {
-  min-height: 64px; // Stitch spec — 64px primary buttons
+  min-height: var(--touch-target-large); // 56px
   padding: var(--space-md) var(--space-xl);
   font-size: var(--font-size-headline);
-  border-radius: var(--radius-lg); // 1.5rem
+  border-radius: var(--radius-lg);
 }
 
 // --------------------------------------------------------------------------

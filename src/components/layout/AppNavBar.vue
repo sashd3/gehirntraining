@@ -64,28 +64,28 @@ function navigateTo(tab: NavTab) {
   right: 0;
   z-index: var(--z-header);
 
-  // Warm cream translucent tab bar — Stitch spec
-  background-color: rgba(254, 248, 243, 0.85);
+  // iOS translucent tab bar effect
+  background-color: rgba(255, 255, 255, 0.82);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
 
-  // NO border — use background shift only (Stitch spec)
-  border-top: none;
+  // Very subtle top separator — iOS style
+  border-top: 0.5px solid var(--color-border-light);
 
   // Safe area at bottom (iPhone notch area)
   padding-bottom: var(--safe-area-bottom);
 
-  // Dark mode adjustments — navy-based
+  // Dark mode adjustments
   [data-theme='dark'] & {
-    background-color: rgba(17, 24, 39, 0.88);
-    border-top: none;
+    background-color: rgba(26, 22, 37, 0.85);
+    border-top-color: var(--color-border);
   }
 
   &__inner {
     display: flex;
     align-items: stretch;
     justify-content: space-around;
-    height: 49px; // Standard tab bar height
+    height: 49px; // iOS standard tab bar height
     max-width: var(--content-max-width);
     margin: 0 auto;
   }
@@ -99,7 +99,7 @@ function navigateTo(tab: NavTab) {
     flex: 1;
     min-width: var(--touch-target-min);
     padding: var(--space-2xs) var(--space-xs);
-    color: var(--color-text-tertiary); // #737783 — muted
+    color: var(--color-text-tertiary);
     -webkit-tap-highlight-color: transparent;
     transition:
       color var(--duration-fast) var(--ease-default),
@@ -115,9 +115,8 @@ function navigateTo(tab: NavTab) {
       border-radius: var(--radius-md);
     }
 
-    // Active tab — Deep Navy (Stitch spec: #003173)
+    // Active tab — Flieder/lilac color
     &--active {
-      color: #003173;
       color: var(--color-primary);
     }
   }
@@ -133,14 +132,13 @@ function navigateTo(tab: NavTab) {
   }
 
   &__label {
-    font-size: 10px; // Tab bar label size — intentionally small
+    font-size: 10px; // iOS tab bar label size — intentionally small
     font-weight: var(--font-weight-medium);
     line-height: 1;
     letter-spacing: 0.01em;
 
     .app-navbar__tab--active & {
       font-weight: var(--font-weight-semibold);
-      color: #003173;
       color: var(--color-primary);
     }
   }

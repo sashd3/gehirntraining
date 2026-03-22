@@ -1,9 +1,8 @@
 // ==========================================================================
-// CSS Reset — Sage Mind Design System
+// iOS-Native CSS Reset
 // ==========================================================================
-// Warm cream background (#fef8f3). Optimized for Capacitor iOS app.
-// Removes browser chrome artifacts, prevents unwanted iOS behaviors,
-// ensures native-feeling interactions.
+// Optimized for Capacitor iOS app. Removes browser chrome artifacts,
+// prevents unwanted iOS behaviors, ensures native-feeling interactions.
 // ==========================================================================
 
 *,
@@ -23,7 +22,7 @@ html {
   -webkit-text-size-adjust: none;
   text-size-adjust: none;
 
-  // Smooth scroll
+  // Smooth scroll — iOS-native momentum
   @media (prefers-reduced-motion: no-preference) {
     scroll-behavior: smooth;
   }
@@ -32,22 +31,23 @@ html {
 body {
   min-height: 100vh;
   min-height: 100dvh;
-  line-height: var(--line-height-relaxed, 1.6); // Stitch spec: 1.6x body line-height
+  line-height: var(--line-height-normal, 1.4);
   font-family: var(--font-family);
   color: var(--color-text-primary);
-  background-color: #fef8f3; // Warm cream — Stitch spec hardcoded fallback
   background-color: var(--color-bg-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  // Remove iOS tap highlight globally
+  // Remove iOS tap highlight globally — we handle our own feedback
   -webkit-tap-highlight-color: transparent;
 
-  // Prevent overscroll bounce
+  // Prevent overscroll bounce on the body (content areas can opt in)
   overscroll-behavior-y: none;
+
+  // Prevent pull-to-refresh in Capacitor webview
   overscroll-behavior: none;
 
-  // Prevent text selection on UI elements
+  // Prevent text selection on UI elements (games can override)
   -webkit-user-select: none;
   user-select: none;
 
@@ -95,7 +95,7 @@ select {
   color: inherit;
 }
 
-// Remove default button styles
+// Remove default button styles — iOS native feel
 button {
   cursor: pointer;
   border: none;
@@ -171,17 +171,18 @@ input[type='number']::-webkit-outer-spin-button {
   margin: 0;
 }
 
-// iOS scrolling containers
+// iOS scrolling containers — smooth momentum scrolling
 .scroll-container {
   -webkit-overflow-scrolling: touch;
   overflow-y: auto;
 
+  // Prevent rubber-banding on scrollable containers that aren't full page
   &--contained {
     overscroll-behavior: contain;
   }
 }
 
-// Hide scrollbars
+// Hide scrollbars for iOS-native feel (content is still scrollable)
 .hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;

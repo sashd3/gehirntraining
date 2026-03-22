@@ -58,13 +58,7 @@
       </button>
     </div>
 
-    <!-- Fallback keyboard only for desktop -->
-    <CrosswordKeyboard
-      v-if="!isMobile"
-      @key-press="onKeyPress"
-      @backspace="onBackspace"
-      @enter="onEnter"
-    />
+    <!-- Keyboard removed — use native keyboard on mobile, physical keyboard on desktop -->
   </div>
 </template>
 
@@ -88,7 +82,7 @@ onMounted(() => {
 })
 
 function focusHiddenInput() {
-  if (isMobile.value && hiddenInput.value) {
+  if (hiddenInput.value) {
     hiddenInput.value.value = ''
     hiddenInput.value.focus()
   }

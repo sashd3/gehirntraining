@@ -57,7 +57,7 @@ const indexLabel = computed(() => String.fromCharCode(65 + props.index))
   width: 100%;
   min-height: 72px;
   padding: 14px 12px;
-  border: none;
+  border: 1.5px solid var(--color-border, #E0DAE8);
   border-radius: 16px;
   background-color: var(--color-bg-elevated);
   color: var(--color-text-primary);
@@ -66,18 +66,18 @@ const indexLabel = computed(() => String.fromCharCode(65 + props.index))
   font-family: var(--font-family, -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif);
   line-height: 1.35;
   cursor: pointer;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease, border-color 0.2s ease;
   text-align: center;
   -webkit-tap-highlight-color: transparent;
   position: relative;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 
   &:active:not(:disabled) {
     transform: scale(0.97);
   }
 
   &:hover:not(:disabled) {
-    background-color: var(--color-bg-secondary);
+    border-color: var(--color-primary-light, #C4B5D4);
+    background-color: var(--color-primary-bg, #F3EFF8);
   }
 
   // Letter badge
@@ -85,12 +85,12 @@ const indexLabel = computed(() => String.fromCharCode(65 + props.index))
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     border-radius: 10px;
-    background-color: var(--color-bg-secondary);
-    color: var(--color-text-tertiary);
-    font-size: 13px;
+    background-color: var(--color-primary-lighter, #E8E0F0);
+    color: var(--color-primary, #9B8AB8);
+    font-size: 14px;
     font-weight: 800;
     flex-shrink: 0;
     transition: background-color 0.2s ease, color 0.2s ease;
@@ -114,7 +114,7 @@ const indexLabel = computed(() => String.fromCharCode(65 + props.index))
   }
 
   &__circle {
-    color: var(--color-text-tertiary);
+    color: var(--color-primary-light, #C4B5D4);
   }
 
   &__check {

@@ -119,7 +119,7 @@ export function applyColorFromHex(hex: string): void {
   root.style.setProperty('--color-accent-lighter', palette.accentLighter)
 
   // Update browser theme-color (status bar on iOS/Android)
-  updateThemeColor(palette.bgPrimary)
+  updateThemeColor(palette.primary)
 }
 
 export function applyPreset(presetId: string): void {
@@ -152,7 +152,7 @@ function resetToDefaults(): void {
     '--color-accent', '--color-accent-light', '--color-accent-lighter',
   ]
   props.forEach(p => root.style.removeProperty(p))
-  updateThemeColor('#F8F6FB') // default lilac bg
+  updateThemeColor('#9B8AB8') // default lilac primary
 }
 
 function updateThemeColor(color: string): void {

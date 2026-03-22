@@ -470,7 +470,8 @@ function openDailyChallenge() {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--color-primary-bg, #F3EFF8);
+    background: transparent;
+    border: 1.5px solid var(--color-primary, #9B8AB8);
     color: var(--color-primary, #9B8AB8);
   }
 

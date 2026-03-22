@@ -132,10 +132,10 @@ function navigateTo(tab: NavTab) {
   // Hump behind active icon
   &__hump {
     position: absolute;
-    top: -14px;
-    left: 10%;
-    right: 10%;
-    height: 28px;
+    top: -22px;
+    left: 4%;
+    right: 4%;
+    height: 36px;
     transform: scaleY(0);
     transform-origin: bottom;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;

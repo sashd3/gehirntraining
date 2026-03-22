@@ -174,6 +174,124 @@ function generatePowerOfTwo(): SequenceResult {
   }
 }
 
+function generateCube(): SequenceResult {
+  const offset = randInt(0, 2)
+  const length = 5
+  const sequence: number[] = []
+
+  for (let i = 1; i <= length; i++) {
+    const n = i + offset
+    sequence.push(n * n * n)
+  }
+
+  return {
+    sequence,
+    pattern: 'cube',
+    hint: 'Jede Zahl ist eine Kubikzahl (n hoch 3).',
+    explanation: `Kubikzahlen: ${offset + 1}^3, ${offset + 2}^3, ${offset + 3}^3, ...`,
+  }
+}
+
+function generateDoublingWithOffset(): SequenceResult {
+  const offset = pickRandom([1, -1, 3, -3, 5])
+  const start = randInt(1, 5)
+  const length = 6
+  const sequence: number[] = [start]
+
+  for (let i = 1; i < length; i++) {
+    sequence.push(sequence[i - 1] * 2 + offset)
+  }
+
+  return {
+    sequence,
+    pattern: 'custom',
+    hint: `Jede Zahl wird verdoppelt und dann ${offset > 0 ? '+' : ''}${offset} gerechnet.`,
+    explanation: `Verdopplung mit Verschiebung: x*2 ${offset > 0 ? '+' : ''}${offset} pro Schritt.`,
+  }
+}
+
+function generateAlternatingOperations(): SequenceResult {
+  const opA = pickRandom([2, 3, 4])
+  const opB = pickRandom([-2, -3, -4])
+  const start = randInt(2, 10)
+  const length = 7
+  const sequence: number[] = [start]
+
+  for (let i = 1; i < length; i++) {
+    if (i % 2 === 1) {
+      sequence.push(sequence[i - 1] * opA)
+    } else {
+      sequence.push(sequence[i - 1] + opB)
+    }
+  }
+
+  return {
+    sequence,
+    pattern: 'alternating',
+    hint: `Die Operationen wechseln zwischen ×${opA} und ${opB}.`,
+    explanation: `Abwechselnd ×${opA} und ${opB}.`,
+  }
+}
+
+function generateDigitSum(): SequenceResult {
+  // Generate numbers where each number is the previous + its digit sum
+  const start = randInt(10, 30)
+  const length = 6
+  const sequence: number[] = [start]
+
+  function digitSum(n: number): number {
+    return Math.abs(n).toString().split('').reduce((s, d) => s + parseInt(d, 10), 0)
+  }
+
+  for (let i = 1; i < length; i++) {
+    sequence.push(sequence[i - 1] + digitSum(sequence[i - 1]))
+  }
+
+  return {
+    sequence,
+    pattern: 'custom',
+    hint: 'Jede Zahl = vorherige Zahl + Quersumme der vorherigen Zahl.',
+    explanation: `Quersummen-Folge: Jedes Glied = Vorgaenger + dessen Quersumme.`,
+  }
+}
+
+function generateArithmeticLarge(): SequenceResult {
+  const step = randInt(7, 25) * (Math.random() < 0.5 ? -1 : 1)
+  const start = randInt(-50, 100)
+  const length = randInt(5, 7)
+  const sequence: number[] = []
+
+  for (let i = 0; i < length; i++) {
+    sequence.push(start + step * i)
+  }
+
+  const sign = step > 0 ? '+' : '-'
+  return {
+    sequence,
+    pattern: 'arithmetic',
+    hint: `Jede Zahl wird um ${Math.abs(step)} ${step > 0 ? 'erhoeht' : 'verringert'}.`,
+    explanation: `Arithmetische Folge: ${sign}${Math.abs(step)} pro Schritt.`,
+  }
+}
+
+function generateGeometricNegative(): SequenceResult {
+  const factor = pickRandom([-2, -3])
+  const start = pickRandom([1, -1, 2, -2])
+  const length = 6
+  const sequence: number[] = []
+
+  for (let i = 0; i < length; i++) {
+    sequence.push(start * Math.pow(factor, i))
+  }
+
+  return {
+    sequence,
+    pattern: 'geometric',
+    hint: `Jede Zahl wird mit ${factor} multipliziert (Vorzeichen wechselt!).`,
+    explanation: `Geometrische Folge mit negativem Faktor: x(${factor}) pro Schritt.`,
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Main generator
 // ---------------------------------------------------------------------------
@@ -182,11 +300,27 @@ function generatePowerOfTwo(): SequenceResult {
 function getGeneratorsForDifficulty(difficulty: Difficulty): (() => SequenceResult)[] {
   switch (difficulty) {
     case 'easy':
-      return [generateArithmetic]
+      return [generateArithmetic, generateArithmetic]
     case 'medium':
-      return [generateGeometric, generateSquare, generateAlternating, generatePowerOfTwo]
+      return [
+        generateGeometric,
+        generateSquare,
+        generateAlternating,
+        generatePowerOfTwo,
+        generateCube,
+        generateDoublingWithOffset,
+      ]
     case 'hard':
-      return [generateFibonacciLike, generatePrime, generateTriangular, generateAlternating]
+      return [
+        generateFibonacciLike,
+        generatePrime,
+        generateTriangular,
+        generateAlternatingOperations,
+        generateDigitSum,
+        generateArithmeticLarge,
+        generateGeometricNegative,
+        generateCube,
+      ]
   }
 }
 

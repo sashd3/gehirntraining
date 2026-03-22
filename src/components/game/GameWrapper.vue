@@ -583,10 +583,10 @@ onUnmounted(() => {
 // Result card
 .result-card {
   background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-light, rgba(0,0,0,0.06));
   border-radius: var(--radius-lg);
   padding: var(--space-md);
   width: 100%;
-  box-shadow: var(--shadow-card);
 }
 
 .result-item {
@@ -651,7 +651,7 @@ onUnmounted(() => {
 .action-secondary {
   width: 100%;
   padding: var(--space-md) var(--space-lg);
-  border: none;
+  border: 1px solid var(--color-border-light, rgba(0,0,0,0.06));
   border-radius: var(--radius-lg);
   background: var(--color-bg-elevated);
   color: var(--color-text-primary);
@@ -660,7 +660,6 @@ onUnmounted(() => {
   font-family: inherit;
   cursor: pointer;
   min-height: var(--touch-target-preferred);
-  box-shadow: var(--shadow-sm);
 
   &:active {
     transform: scale(0.97);

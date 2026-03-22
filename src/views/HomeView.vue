@@ -217,7 +217,8 @@ function openDailyChallenge() {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: var(--color-bg-secondary);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-light, rgba(0,0,0,0.06));
   border-radius: 20px;
   padding: 8px 14px;
 
@@ -246,11 +247,11 @@ function openDailyChallenge() {
 // ---------------------------------------------------------------------------
 .daily-card {
   background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-light, rgba(0,0,0,0.06));
   border-radius: 20px;
   padding: var(--space-xl, 32px) var(--space-lg, 24px);
   margin-bottom: var(--space-xl, 32px);
   text-align: center;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
 
   &--completed {
     opacity: 0.75;
@@ -360,7 +361,7 @@ function openDailyChallenge() {
   align-items: center;
   gap: var(--space-md, 16px);
   background: var(--color-bg-elevated);
-  border: none;
+  border: 1px solid var(--color-border-light, rgba(0,0,0,0.06));
   border-radius: 16px;
   padding: 14px 16px;
   cursor: pointer;
@@ -368,7 +369,6 @@ function openDailyChallenge() {
   font-family: inherit;
   min-height: 72px;
   width: 100%;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 
   &:active {

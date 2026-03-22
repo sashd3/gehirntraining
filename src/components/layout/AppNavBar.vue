@@ -112,7 +112,7 @@ function navigateTo(tab: NavTab) {
       }
 
       .navbar__icon {
-        transform: translateY(-12px);
+        transform: translateY(-16px);
         background: var(--color-primary);
         color: #FFFFFF;
         box-shadow: 0 4px 14px rgba(0,0,0,0.18);
@@ -123,10 +123,11 @@ function navigateTo(tab: NavTab) {
   // Hump behind active icon
   &__hump {
     position: absolute;
-    bottom: 100%;
+    top: -44px;
     left: -12%;
     right: -12%;
-    height: 80px;
+    height: 60px;
+    overflow: hidden;
     transform: scaleY(0);
     transform-origin: bottom;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
@@ -141,8 +142,9 @@ function navigateTo(tab: NavTab) {
 
     path {
       fill: var(--color-bg-elevated, #FFFFFF);
-      stroke: var(--color-border-light, rgba(0,0,0,0.06));
-      stroke-width: 1;
+      stroke: var(--color-border-light, rgba(0,0,0,0.12));
+      stroke-width: 1.5;
+      vector-effect: non-scaling-stroke;
     }
   }
 

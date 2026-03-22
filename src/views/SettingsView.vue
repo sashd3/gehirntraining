@@ -209,7 +209,7 @@ const themeOptions = [
       <h2 class="group-header">{{ t('settings.about') }}</h2>
       <div class="group-card">
         <div class="about-content">
-          <p class="about-name">Gehirntraining</p>
+          <p class="about-name">Train your Brain</p>
           <p class="about-version">Version 0.1.0</p>
         </div>
       </div>

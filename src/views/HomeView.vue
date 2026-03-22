@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useProgressStore } from '@/stores/progress.store'
@@ -15,6 +15,27 @@ const router = useRouter()
 const { t } = useI18n()
 const progressStore = useProgressStore()
 const dailyChallengeStore = useDailyChallengeStore()
+
+// Background slideshow for daily challenge
+const heroSlides = [
+  '/images/slides/slide-1.jpg',
+  '/images/slides/slide-2.jpg',
+  '/images/slides/slide-3.jpg',
+  '/images/slides/slide-4.jpg',
+  '/images/slides/slide-5.jpg',
+]
+const currentSlide = ref(0)
+let slideTimer: ReturnType<typeof setInterval> | null = null
+
+onMounted(() => {
+  slideTimer = setInterval(() => {
+    currentSlide.value = (currentSlide.value + 1) % heroSlides.length
+  }, 5000)
+})
+
+onUnmounted(() => {
+  if (slideTimer) clearInterval(slideTimer)
+})
 
 const streak = computed(() => progressStore.streak.currentStreak)
 const totalScore = computed(() => {
@@ -100,12 +121,24 @@ function openDailyChallenge() {
       </div>
     </div>
 
-    <!-- Daily Challenge -->
+    <!-- Daily Challenge with background slideshow -->
     <div
       v-if="dailyGame && dailyChallenge"
       class="daily-card"
       :class="{ 'daily-card--completed': dailyChallenge.completed }"
     >
+      <!-- Slideshow background -->
+      <div class="daily-card__slides">
+        <img
+          v-for="(slide, i) in heroSlides"
+          :key="i"
+          :src="slide"
+          :class="{ active: currentSlide === i }"
+          class="daily-card__slide"
+          alt=""
+        />
+        <div class="daily-card__overlay" />
+      </div>
       <span class="daily-card__label">{{ t('home.dailyChallengeLabel', 'Tagesherausforderung') }}</span>
       <h2 class="daily-card__title">{{ t(dailyGame.nameKey) }}</h2>
       <p class="daily-card__desc">{{ dailyChallengeSubtitle }}</p>
@@ -246,22 +279,62 @@ function openDailyChallenge() {
 // Daily Challenge Card
 // ---------------------------------------------------------------------------
 .daily-card {
-  background: var(--color-bg-elevated);
-  border: 1px solid var(--color-border-light, rgba(0,0,0,0.06));
+  position: relative;
+  overflow: hidden;
   border-radius: 20px;
   padding: var(--space-xl, 32px) var(--space-lg, 24px);
   margin-bottom: var(--space-xl, 32px);
   text-align: center;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 
   &--completed {
     opacity: 0.75;
+  }
+
+  // Slideshow
+  &__slides {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  &__slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+
+    &.active {
+      opacity: 1;
+    }
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1;
+  }
+
+  // All content above the overlay
+  &__label, &__title, &__desc, &__meta, &__btn {
+    position: relative;
+    z-index: 2;
   }
 
   &__label {
     display: inline-block;
     font-size: 11px;
     font-weight: 700;
-    color: var(--color-accent);
+    color: rgba(255, 255, 255, 0.85);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     margin-bottom: var(--space-sm, 8px);
@@ -270,14 +343,14 @@ function openDailyChallenge() {
   &__title {
     font-size: 26px;
     font-weight: 800;
-    color: var(--color-primary);
+    color: #FFFFFF;
     margin: 0 0 6px 0;
     line-height: 1.15;
   }
 
   &__desc {
     font-size: 15px;
-    color: var(--color-text-secondary);
+    color: rgba(255, 255, 255, 0.85);
     margin: 0 0 var(--space-md, 16px) 0;
     line-height: 1.45;
   }
@@ -296,11 +369,11 @@ function openDailyChallenge() {
     gap: 4px;
     font-size: 13px;
     font-weight: 500;
-    color: var(--color-text-tertiary);
+    color: rgba(255, 255, 255, 0.7);
 
     svg {
       flex-shrink: 0;
-      color: var(--color-text-tertiary);
+      color: rgba(255, 255, 255, 0.7);
     }
   }
 

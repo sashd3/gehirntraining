@@ -47,27 +47,36 @@ withDefaults(defineProps<AppLayoutProps>(), {
   }
 }
 
-// Page transition
+// Page transition — soft and smooth
 .page-fade-enter-active {
-  transition: opacity 0.2s ease;
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .page-fade-leave-active {
-  transition: opacity 0.15s ease;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 1, 1),
+              transform 0.2s cubic-bezier(0.4, 0, 1, 1);
 }
 
 .page-fade-enter-from {
   opacity: 0;
+  transform: translateY(8px) scale(0.99);
 }
 
 .page-fade-leave-to {
   opacity: 0;
+  transform: scale(0.99);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .page-fade-enter-active,
   .page-fade-leave-active {
     transition: none;
+  }
+
+  .page-fade-enter-from,
+  .page-fade-leave-to {
+    transform: none;
   }
 }
 </style>

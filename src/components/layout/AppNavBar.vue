@@ -57,7 +57,7 @@ function navigateTo(tab: NavTab) {
         <span class="navbar__icon">
           <component :is="tab.icon" :size="22" />
         </span>
-        <span class="navbar__label">{{ tab.label }}</span>
+        <span v-if="activeTab === tab.name" class="navbar__label">{{ tab.label }}</span>
       </button>
     </div>
   </nav>
@@ -78,7 +78,7 @@ function navigateTo(tab: NavTab) {
     display: flex;
     align-items: flex-end;
     justify-content: space-around;
-    height: 56px;
+    height: 60px;
     max-width: var(--content-max-width);
     margin: 0 auto;
     position: relative;
@@ -89,10 +89,10 @@ function navigateTo(tab: NavTab) {
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    gap: 2px;
+    gap: 3px;
     flex: 1;
     min-width: var(--touch-target-min);
-    padding-bottom: 6px;
+    padding-bottom: 8px;
     color: var(--color-text-tertiary);
     position: relative;
     -webkit-tap-highlight-color: transparent;
@@ -100,10 +100,6 @@ function navigateTo(tab: NavTab) {
     background: none;
     font-family: inherit;
     cursor: pointer;
-
-    &:active {
-      transform: scale(0.92);
-    }
 
     // Active state
     &--active {
@@ -115,16 +111,10 @@ function navigateTo(tab: NavTab) {
       }
 
       .navbar__icon {
-        transform: translateY(-14px);
+        transform: translateY(-18px);
         background: var(--color-primary);
         color: #FFFFFF;
-        box-shadow: 0 3px 12px rgba(0,0,0,0.15);
-      }
-
-      .navbar__label {
-        opacity: 1;
-        color: var(--color-primary);
-        font-weight: 600;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.18);
       }
     }
   }
@@ -132,10 +122,10 @@ function navigateTo(tab: NavTab) {
   // Hump behind active icon
   &__hump {
     position: absolute;
-    top: -14px;
-    left: 10%;
-    right: 10%;
-    height: 28px;
+    top: -16px;
+    left: 5%;
+    right: 5%;
+    height: 30px;
     transform: scaleY(0);
     transform-origin: bottom;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
@@ -158,8 +148,8 @@ function navigateTo(tab: NavTab) {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     background: transparent;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -169,14 +159,13 @@ function navigateTo(tab: NavTab) {
     z-index: 1;
   }
 
-  // Label
+  // Label — only shown for active tab
   &__label {
-    font-size: 10px;
-    font-weight: 500;
+    font-size: 11px;
+    font-weight: 600;
     line-height: 1;
-    letter-spacing: 0.01em;
-    opacity: 0.7;
-    transition: opacity 0.3s ease, color 0.3s ease;
+    letter-spacing: 0.02em;
+    color: var(--color-primary);
   }
 }
 

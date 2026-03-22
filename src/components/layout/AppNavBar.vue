@@ -111,7 +111,7 @@ function navigateTo(tab: NavTab) {
       }
 
       .navbar__icon {
-        transform: translateY(-18px);
+        transform: translateY(-24px);
         background: var(--color-primary);
         color: #FFFFFF;
         box-shadow: 0 4px 14px rgba(0,0,0,0.18);
@@ -122,10 +122,10 @@ function navigateTo(tab: NavTab) {
   // Hump behind active icon
   &__hump {
     position: absolute;
-    top: -16px;
-    left: 5%;
-    right: 5%;
-    height: 30px;
+    top: -20px;
+    left: 2%;
+    right: 2%;
+    height: 36px;
     transform: scaleY(0);
     transform-origin: bottom;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;

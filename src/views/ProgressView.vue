@@ -62,7 +62,6 @@ function formatTime(seconds: number): string {
           v-for="game in gameStats"
           :key="game.id"
           class="game-stat-card"
-          :style="{ borderLeftColor: game.color }"
         >
           <div class="gsc-body">
             <div class="gsc-header">
@@ -149,12 +148,14 @@ function formatTime(seconds: number): string {
   text-align: center;
 
   &.accent {
-    background: linear-gradient(135deg, var(--color-primary, #9B8AB8) 0%, var(--color-accent, #6BBFAE) 100%);
+    background: var(--color-primary-lighter, #E8E0F0);
 
-    .stat-icon,
-    .stat-number,
+    .stat-number {
+      color: var(--color-primary-dark, #7B6A9B);
+    }
+
     .stat-label {
-      color: #FFFFFF;
+      color: var(--color-primary, #9B8AB8);
     }
   }
 }
@@ -201,7 +202,7 @@ function formatTime(seconds: number): string {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
   overflow: hidden;
-  border-left: 4px solid transparent;
+  border: 1px solid var(--color-border-light, rgba(0,0,0,0.06));
 }
 
 .gsc-body {

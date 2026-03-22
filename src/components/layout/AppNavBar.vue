@@ -49,8 +49,8 @@ function navigateTo(tab: NavTab) {
       >
         <!-- Hump SVG behind active icon -->
         <span class="navbar__hump">
-          <svg viewBox="0 0 100 28" preserveAspectRatio="none">
-            <path d="M0 28 C25 28, 30 0, 50 0 S75 28, 100 28 Z" />
+          <svg viewBox="0 0 120 80" preserveAspectRatio="none">
+            <path d="M0 80 C10 80, 18 78, 26 66 C34 50, 38 10, 60 10 C82 10, 86 50, 94 66 C102 78, 110 80, 120 80 Z" />
           </svg>
         </span>
 
@@ -111,7 +111,7 @@ function navigateTo(tab: NavTab) {
       }
 
       .navbar__icon {
-        transform: translateY(-16px);
+        transform: translateY(-12px);
         background: var(--color-primary);
         color: #FFFFFF;
         box-shadow: 0 4px 14px rgba(0,0,0,0.18);
@@ -122,10 +122,10 @@ function navigateTo(tab: NavTab) {
   // Hump behind active icon
   &__hump {
     position: absolute;
-    top: -32px;
-    left: 0;
-    right: 0;
-    height: 48px;
+    top: -36px;
+    left: -12%;
+    right: -12%;
+    height: 80px;
     transform: scaleY(0);
     transform-origin: bottom;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;

@@ -2,7 +2,6 @@
 import AppNavBar from './AppNavBar.vue'
 
 export interface AppLayoutProps {
-  /** Whether to show the bottom tab bar */
   showNav?: boolean
 }
 
@@ -13,15 +12,15 @@ withDefaults(defineProps<AppLayoutProps>(), {
 
 <template>
   <div class="app-layout">
-    <!--
-      No fixed header. Content scrolls freely with inline titles.
-      Each view includes its own AppHeader for iOS-style large titles.
-    -->
     <main
       class="app-layout__main"
       :class="{ 'app-layout__main--with-nav': showNav }"
     >
-      <router-view />
+      <router-view v-slot="{ Component }">
+        <transition name="page-fade" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </main>
 
     <AppNavBar v-if="showNav" />
@@ -40,14 +39,35 @@ withDefaults(defineProps<AppLayoutProps>(), {
     flex: 1;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-
-    // Safe area top — content can scroll under the status bar area
     padding-top: var(--safe-area-top);
 
     &--with-nav {
-      // Reserve space for the bottom tab bar + safe area
       padding-bottom: var(--navbar-total-height);
     }
+  }
+}
+
+// Page transition
+.page-fade-enter-active {
+  transition: opacity 0.2s ease;
+}
+
+.page-fade-leave-active {
+  transition: opacity 0.15s ease;
+}
+
+.page-fade-enter-from {
+  opacity: 0;
+}
+
+.page-fade-leave-to {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-fade-enter-active,
+  .page-fade-leave-active {
+    transition: none;
   }
 }
 </style>

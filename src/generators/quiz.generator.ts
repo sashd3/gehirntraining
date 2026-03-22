@@ -1,9 +1,17 @@
 import type { Difficulty } from '@/types/game'
 import type { QuizQuestion, QuizCategory } from '@/types/quiz'
 import { historyQuestions } from '@/data/quiz-questions/history.de'
+import { historyQuestions2 } from '@/data/quiz-questions/history-2.de'
+import { historyQuestions3 } from '@/data/quiz-questions/history-3.de'
 import { scienceQuestions } from '@/data/quiz-questions/science.de'
+import { scienceQuestions2 } from '@/data/quiz-questions/science-2.de'
+import { scienceQuestions3 } from '@/data/quiz-questions/science-3.de'
 import { geographyQuestions } from '@/data/quiz-questions/geography.de'
+import { geographyQuestions2 } from '@/data/quiz-questions/geography-2.de'
+import { geographyQuestions3 } from '@/data/quiz-questions/geography-3.de'
 import { generalQuestions } from '@/data/quiz-questions/general.de'
+import { generalQuestions2 } from '@/data/quiz-questions/general-2.de'
+import { generalQuestions3 } from '@/data/quiz-questions/general-3.de'
 import { swissEuropeQuestions } from '@/data/quiz-questions/swiss-europe.de'
 import { swissEuropeQuestions2 } from '@/data/quiz-questions/swiss-europe-2.de'
 
@@ -26,13 +34,13 @@ function toQuizQuestion(raw: RawQuestion, category: QuizCategory): QuizQuestion 
 function getQuestionsByCategory(category: QuizCategory): QuizQuestion[] {
   switch (category) {
     case 'history':
-      return historyQuestions.map((q) => toQuizQuestion(q, 'history'))
+      return [...historyQuestions, ...historyQuestions2, ...historyQuestions3].map((q) => toQuizQuestion(q, 'history'))
     case 'science':
-      return scienceQuestions.map((q) => toQuizQuestion(q, 'science'))
+      return [...scienceQuestions, ...scienceQuestions2, ...scienceQuestions3].map((q) => toQuizQuestion(q, 'science'))
     case 'geography':
-      return geographyQuestions.map((q) => toQuizQuestion(q, 'geography'))
+      return [...geographyQuestions, ...geographyQuestions2, ...geographyQuestions3].map((q) => toQuizQuestion(q, 'geography'))
     case 'general':
-      return generalQuestions.map((q) => toQuizQuestion(q, 'general'))
+      return [...generalQuestions, ...generalQuestions2, ...generalQuestions3].map((q) => toQuizQuestion(q, 'general'))
     case 'swiss-europe':
       return [...swissEuropeQuestions, ...swissEuropeQuestions2].map((q) => toQuizQuestion(q, 'swiss-europe'))
   }

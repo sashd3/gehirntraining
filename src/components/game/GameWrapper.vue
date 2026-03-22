@@ -138,7 +138,6 @@ onUnmounted(() => {
         <!-- Start button -->
         <button
           class="start-btn"
-          :style="{ background: 'var(--color-primary, #9B8AB8)' }"
           @click="startGame"
         >
           {{ t('common.start') }}
@@ -237,7 +236,6 @@ onUnmounted(() => {
         <div class="complete-actions">
           <button
             class="action-primary"
-            :style="{ background: 'var(--color-primary, #9B8AB8)' }"
             @click="playAgain"
           >
             {{ t('gameComplete.playAgain') }}
@@ -377,18 +375,20 @@ onUnmounted(() => {
   padding: var(--space-md) var(--space-lg);
   border: none;
   border-radius: var(--radius-lg);
-  color: #FFFFFF;
+  background: var(--color-primary-light, #C4B5D4);
+  color: var(--color-primary-dark, #5C4D7A);
   font-size: var(--font-size-title3, 23px);
   font-weight: var(--font-weight-semibold);
   font-family: inherit;
   cursor: pointer;
   min-height: var(--touch-target-large);
-  transition: transform var(--duration-fast) var(--ease-default);
-  box-shadow: var(--shadow-md);
+  transition: transform var(--duration-fast) var(--ease-default), background 0.2s ease;
   margin-top: var(--space-sm);
 
   &:active {
     transform: scale(0.97);
+    background: var(--color-primary, #9B8AB8);
+    color: #FFFFFF;
   }
 }
 
@@ -560,7 +560,7 @@ onUnmounted(() => {
 }
 
 .star {
-  color: var(--color-border, #E0DAE8);
+  color: #D4D0DC;
   transition: all var(--duration-slow) var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
 
   &.filled {
@@ -634,6 +634,7 @@ onUnmounted(() => {
   padding: var(--space-md) var(--space-lg);
   border: none;
   border-radius: var(--radius-lg);
+  background: var(--color-primary, #9B8AB8);
   color: #FFFFFF;
   font-size: var(--font-size-title3, 23px);
   font-weight: var(--font-weight-semibold);
@@ -641,7 +642,6 @@ onUnmounted(() => {
   cursor: pointer;
   min-height: var(--touch-target-large);
   transition: transform var(--duration-fast) var(--ease-default);
-  box-shadow: var(--shadow-md);
 
   &:active {
     transform: scale(0.97);

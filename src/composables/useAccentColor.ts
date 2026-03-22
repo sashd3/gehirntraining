@@ -121,15 +121,34 @@ export function applyColorFromHex(hex: string): void {
 
 export function applyPreset(presetId: string): void {
   const preset = colorPresets.find(p => p.id === presetId)
-  if (preset) {
-    applyColorFromHex(preset.primary)
-    // Override accent with preset's specific accent
-    const root = document.documentElement
-    const accentPalette = generatePaletteFromHex(preset.accent)
-    root.style.setProperty('--color-accent', preset.accent)
-    root.style.setProperty('--color-accent-light', accentPalette.primaryLight)
-    root.style.setProperty('--color-accent-lighter', accentPalette.primaryLighter)
+  if (!preset) return
+
+  if (presetId === 'lilac') {
+    // Lilac = default theme. Remove all overrides to use _variables.scss defaults
+    resetToDefaults()
+    return
   }
+
+  applyColorFromHex(preset.primary)
+  // Override accent with preset's specific accent
+  const root = document.documentElement
+  const accentPalette = generatePaletteFromHex(preset.accent)
+  root.style.setProperty('--color-accent', preset.accent)
+  root.style.setProperty('--color-accent-light', accentPalette.primaryLight)
+  root.style.setProperty('--color-accent-lighter', accentPalette.primaryLighter)
+}
+
+function resetToDefaults(): void {
+  const root = document.documentElement
+  const props = [
+    '--color-primary', '--color-primary-dark', '--color-primary-darker',
+    '--color-primary-light', '--color-primary-lighter', '--color-primary-bg',
+    '--color-bg-primary', '--color-bg-secondary', '--color-bg-tertiary',
+    '--color-border', '--color-border-light', '--color-border-focus',
+    '--color-text-primary', '--color-text-secondary', '--color-text-tertiary',
+    '--color-accent', '--color-accent-light', '--color-accent-lighter',
+  ]
+  props.forEach(p => root.style.removeProperty(p))
 }
 
 // Backwards compat

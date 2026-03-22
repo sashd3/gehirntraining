@@ -82,6 +82,7 @@ function navigateTo(tab: NavTab) {
     max-width: var(--content-max-width);
     margin: 0 auto;
     position: relative;
+    overflow: visible;
   }
 
   &__tab {
@@ -122,10 +123,10 @@ function navigateTo(tab: NavTab) {
   // Hump behind active icon
   &__hump {
     position: absolute;
-    top: -36px;
+    bottom: 100%;
     left: -12%;
     right: -12%;
-    height: 36px;
+    height: 80px;
     transform: scaleY(0);
     transform-origin: bottom;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;

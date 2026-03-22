@@ -65,6 +65,18 @@ export function generatePaletteFromHex(primary: string): Record<string, string> 
     primaryLight: hslToHex(h, Math.max(s - 10, 10), Math.min(l + 18, 85)),
     primaryLighter: hslToHex(h, Math.max(s - 25, 5), Math.min(l + 30, 93)),
     primaryBg: hslToHex(h, Math.max(s - 35, 3), Math.min(l + 36, 96)),
+    // Backgrounds — very light tint of the primary color
+    bgPrimary: hslToHex(h, Math.max(s - 40, 3), 97),
+    bgSecondary: hslToHex(h, Math.max(s - 35, 4), 94),
+    bgTertiary: hslToHex(h, Math.max(s - 30, 5), 91),
+    // Borders — subtle tint
+    border: hslToHex(h, Math.max(s - 20, 8), 88),
+    borderLight: hslToHex(h, Math.max(s - 25, 5), 92),
+    // Text stays readable — dark tinted
+    textPrimary: hslToHex(h, Math.min(s, 30), 16),
+    textSecondary: hslToHex(h, Math.min(s - 5, 20), 38),
+    textTertiary: hslToHex(h, Math.min(s - 10, 15), 58),
+    // Accent — complementary
     accent: hslToHex(accentH, Math.min(s + 5, 60), Math.min(l + 5, 55)),
     accentLight: hslToHex(accentH, Math.max(s - 15, 10), Math.min(l + 22, 82)),
     accentLighter: hslToHex(accentH, Math.max(s - 30, 5), Math.min(l + 35, 94)),
@@ -77,16 +89,34 @@ export function generatePaletteFromHex(primary: string): Record<string, string> 
 export function applyColorFromHex(hex: string): void {
   const palette = generatePaletteFromHex(hex)
   const root = document.documentElement
+
+  // Primary palette
   root.style.setProperty('--color-primary', palette.primary)
   root.style.setProperty('--color-primary-dark', palette.primaryDark)
   root.style.setProperty('--color-primary-darker', palette.primaryDark)
   root.style.setProperty('--color-primary-light', palette.primaryLight)
   root.style.setProperty('--color-primary-lighter', palette.primaryLighter)
   root.style.setProperty('--color-primary-bg', palette.primaryBg)
+
+  // Backgrounds — tinted with the chosen color
+  root.style.setProperty('--color-bg-primary', palette.bgPrimary)
+  root.style.setProperty('--color-bg-secondary', palette.bgSecondary)
+  root.style.setProperty('--color-bg-tertiary', palette.bgTertiary)
+
+  // Borders — subtle tint
+  root.style.setProperty('--color-border', palette.border)
+  root.style.setProperty('--color-border-light', palette.borderLight)
+  root.style.setProperty('--color-border-focus', palette.borderFocus)
+
+  // Text — tinted dark
+  root.style.setProperty('--color-text-primary', palette.textPrimary)
+  root.style.setProperty('--color-text-secondary', palette.textSecondary)
+  root.style.setProperty('--color-text-tertiary', palette.textTertiary)
+
+  // Accent — complementary
   root.style.setProperty('--color-accent', palette.accent)
   root.style.setProperty('--color-accent-light', palette.accentLight)
   root.style.setProperty('--color-accent-lighter', palette.accentLighter)
-  root.style.setProperty('--color-border-focus', palette.borderFocus)
 }
 
 export function applyPreset(presetId: string): void {

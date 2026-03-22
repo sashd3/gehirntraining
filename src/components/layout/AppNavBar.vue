@@ -71,7 +71,7 @@ function navigateTo(tab: NavTab) {
   right: 0;
   z-index: 100;
   background-color: var(--color-bg-elevated, #FFFFFF);
-  border-top: 1px solid var(--color-border-light, rgba(0,0,0,0.06));
+  box-shadow: 0 -1px 8px rgba(0, 0, 0, 0.06);
   padding-bottom: var(--safe-area-bottom);
 
   &__inner {
@@ -136,6 +136,7 @@ function navigateTo(tab: NavTab) {
       width: 100%;
       height: 100%;
       display: block;
+      filter: drop-shadow(0 -1px 4px rgba(0, 0, 0, 0.06));
     }
 
     path {

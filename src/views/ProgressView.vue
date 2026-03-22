@@ -65,7 +65,7 @@ function formatTime(seconds: number): string {
         >
           <div class="gsc-body">
             <div class="gsc-header">
-              <component :is="getGameIconComponent(game.id)" :size="24" :color="game.color" class="gsc-icon" />
+              <component :is="getGameIconComponent(game.id)" :size="24" class="gsc-icon" />
               <div class="gsc-title-area">
                 <h3 class="gsc-name">{{ t(game.nameKey) }}</h3>
                 <span class="gsc-count">{{ game.progress!.totalPlayed }} Spiele</span>
@@ -220,6 +220,7 @@ function formatTime(seconds: number): string {
 .gsc-icon {
   font-size: 24px;
   line-height: 1;
+  color: var(--color-primary, #9B8AB8);
 }
 
 .gsc-title-area {

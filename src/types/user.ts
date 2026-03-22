@@ -4,6 +4,7 @@ export type AppLanguage = 'de' | 'en' | 'be'
 
 export interface UserSettings {
   theme: ThemeMode
+  colorPreset: string
   soundEnabled: boolean
   hapticEnabled: boolean
   fontSize: FontSize
@@ -23,6 +24,7 @@ export interface UserProfile {
 
 export const defaultUserSettings: UserSettings = {
   theme: 'light',
+  colorPreset: 'lilac',
   soundEnabled: true,
   hapticEnabled: true,
   fontSize: 'normal',

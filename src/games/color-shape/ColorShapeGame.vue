@@ -7,6 +7,7 @@ import {
   getTimePerStimulus,
   calculateStimulusScore,
   getColorValue,
+  getGameModeLabel,
 } from '@/generators/color-shape.generator'
 
 const props = defineProps<{
@@ -67,17 +68,42 @@ const formattedTime = computed(() => {
 
 const matchPropertyLabel = computed(() => {
   if (!currentStimulus.value) return ''
+  if (currentStimulus.value.gameMode === 'stroop') return 'Farbe der Form'
   return currentStimulus.value.matchProperty === 'color' ? 'Farbe' : 'Form'
 })
 
+const questionText = computed(() => {
+  if (!currentStimulus.value) return ''
+  if (currentStimulus.value.gameMode === 'stroop') {
+    return 'Passt das Wort zur tatsächlichen Farbe der Form?'
+  }
+  return `Passt das Wort zur ${matchPropertyLabel.value}?`
+})
+
+const gameModeDisplay = computed(() => {
+  if (!currentStimulus.value) return ''
+  return getGameModeLabel(currentStimulus.value.gameMode)
+})
+
+const readyDescription = computed(() => {
+  switch (props.difficulty) {
+    case 'easy':
+      return 'Entscheide so schnell wie möglich, ob das angezeigte Wort zur Farbe der Form passt.'
+    case 'medium':
+      return 'Gemischter Modus: Entscheide, ob das Wort zur Farbe ODER zur Form passt. Achte auf die Frage!'
+    case 'hard':
+      return 'Stroop-Effekt: Das Wort nennt eine Farbe, aber die Form hat eine andere Farbe. Stimmt das Wort mit der tatsächlichen Farbe der Form überein?'
+  }
+})
+
 // ---------------------------------------------------------------------------
-// Shape SVG paths
+// Shape SVG paths (viewBox 0 0 100 100)
 // ---------------------------------------------------------------------------
 
 function getShapePath(shape: string): string {
   switch (shape) {
     case 'circle':
-      return '' // handled separately
+      return '' // handled separately via <circle>
     case 'square':
       return 'M 15,15 L 85,15 L 85,85 L 15,85 Z'
     case 'triangle':
@@ -86,6 +112,23 @@ function getShapePath(shape: string): string {
       return 'M 50,5 L 61,35 L 95,35 L 68,57 L 79,90 L 50,70 L 21,90 L 32,57 L 5,35 L 39,35 Z'
     case 'diamond':
       return 'M 50,5 L 90,50 L 50,95 L 10,50 Z'
+    case 'hexagon':
+      // Regular hexagon
+      return 'M 50,5 L 93,27.5 L 93,72.5 L 50,95 L 7,72.5 L 7,27.5 Z'
+    case 'pentagon':
+      // Regular pentagon
+      return 'M 50,5 L 97,38 L 79,92 L 21,92 L 3,38 Z'
+    case 'heart':
+      return 'M 50,88 C 25,68 5,50 5,32 C 5,17 17,5 32,5 C 40,5 47,10 50,17 C 53,10 60,5 68,5 C 83,5 95,17 95,32 C 95,50 75,68 50,88 Z'
+    case 'arrow':
+      // Upward-pointing arrow
+      return 'M 50,5 L 85,45 L 65,45 L 65,95 L 35,95 L 35,45 L 15,45 Z'
+    case 'cross':
+      // Plus / cross shape
+      return 'M 35,5 L 65,5 L 65,35 L 95,35 L 95,65 L 65,65 L 65,95 L 35,95 L 35,65 L 5,65 L 5,35 L 35,35 Z'
+    case 'crescent':
+      // Crescent moon (right-facing)
+      return 'M 65,5 C 35,5 10,27 10,55 C 10,80 30,95 55,95 C 40,85 30,70 30,55 C 30,35 42,15 65,5 Z'
     default:
       return ''
   }
@@ -270,8 +313,7 @@ watch(() => props.difficulty, () => {
     <div v-if="phase === 'ready'" class="colorshape-ready">
       <h2 class="colorshape-ready__title">Farben &amp; Formen</h2>
       <p class="colorshape-ready__desc">
-        Entscheide so schnell wie möglich, ob das angezeigte Wort
-        zur {{ difficulty === 'easy' ? 'Farbe' : 'Farbe oder Form' }} passt.
+        {{ readyDescription }}
       </p>
       <p class="colorshape-ready__info">
         {{ totalStimuli }} Runden &middot; {{ (timePerStimulus / 1000).toFixed(1) }}s pro Runde
@@ -286,6 +328,7 @@ watch(() => props.difficulty, () => {
       <!-- Header -->
       <div class="colorshape-header">
         <div class="colorshape-header__progress">{{ currentIndex + 1 }}/{{ totalStimuli }}</div>
+        <div class="colorshape-header__mode" v-if="gameModeDisplay">{{ gameModeDisplay }}</div>
         <div class="colorshape-header__streak" v-if="streak > 1">Serie: {{ streak }}</div>
         <div class="colorshape-header__score">{{ totalScore }}</div>
       </div>
@@ -304,7 +347,7 @@ watch(() => props.difficulty, () => {
       <!-- Stimulus display -->
       <div class="colorshape-stimulus" v-if="currentStimulus">
         <div class="colorshape-stimulus__question">
-          Passt das Wort zur {{ matchPropertyLabel }}?
+          {{ questionText }}
         </div>
 
         <!-- Shape -->
@@ -324,7 +367,10 @@ watch(() => props.difficulty, () => {
         </div>
 
         <!-- Label -->
-        <div class="colorshape-stimulus__label">
+        <div
+          class="colorshape-stimulus__label"
+          :class="{ 'colorshape-stimulus__label--stroop': currentStimulus.gameMode === 'stroop' }"
+        >
           {{ currentStimulus.label }}
         </div>
       </div>
@@ -465,8 +511,10 @@ watch(() => props.difficulty, () => {
 .colorshape-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
   padding: var(--space-xs) 0;
+  gap: var(--space-xs);
 }
 
 .colorshape-header__progress,
@@ -478,6 +526,15 @@ watch(() => props.difficulty, () => {
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
   box-shadow: var(--shadow-sm);
+}
+
+.colorshape-header__mode {
+  padding: var(--space-xs) var(--space-sm);
+  background-color: var(--color-bg-tertiary, var(--color-bg-secondary));
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
 }
 
 .colorshape-header__streak {
@@ -526,6 +583,7 @@ watch(() => props.difficulty, () => {
   font-size: var(--font-size-md);
   color: var(--color-text-secondary);
   text-align: center;
+  padding: 0 var(--space-md);
 }
 
 .colorshape-stimulus__shape {
@@ -543,6 +601,13 @@ watch(() => props.difficulty, () => {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
+}
+
+.colorshape-stimulus__label--stroop {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 /* Feedback */

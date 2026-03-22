@@ -3,10 +3,17 @@ import { computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/stores/user.store'
 import { useTheme } from '@/composables/useTheme'
+import { colorPresets, applyColorPreset, getPresetById } from '@/composables/useAccentColor'
 
 const { t, locale } = useI18n()
 const userStore = useUserStore()
 const { toggleTheme, currentTheme } = useTheme()
+
+function selectColor(presetId: string) {
+  const preset = getPresetById(presetId)
+  applyColorPreset(preset)
+  updateSetting('colorPreset', presetId)
+}
 
 const settings = computed(() => userStore.settings)
 
@@ -74,6 +81,29 @@ const themeOptions = [
               @click="updateSetting('fontSize', opt.value)"
             >
               {{ opt.label }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Color Preset Section -->
+    <section class="settings-group">
+      <h2 class="group-header">Farbe</h2>
+      <div class="group-card">
+        <div class="setting-row">
+          <div class="color-presets">
+            <button
+              v-for="preset in colorPresets"
+              :key="preset.id"
+              class="color-preset-btn"
+              :class="{ active: settings.colorPreset === preset.id }"
+              :title="preset.name"
+              @click="selectColor(preset.id)"
+            >
+              <span class="color-dot" :style="{ backgroundColor: preset.primary }" />
+              <span class="color-dot-accent" :style="{ backgroundColor: preset.accent }" />
+              <span class="color-preset-label">{{ preset.name }}</span>
             </button>
           </div>
         </div>
@@ -340,6 +370,55 @@ const themeOptions = [
 // ---------------------------------------------------------------------------
 // About section
 // ---------------------------------------------------------------------------
+// Color presets
+.color-presets {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+
+.color-preset-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 8px;
+  background: var(--color-bg-primary);
+  border: 2px solid transparent;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 70px;
+
+  &.active {
+    border-color: var(--color-primary);
+    background: var(--color-bg-elevated);
+    box-shadow: 0 0 0 1px var(--color-primary);
+  }
+}
+
+.color-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.color-dot-accent {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-top: -8px;
+  border: 2px solid var(--color-bg-elevated);
+}
+
+.color-preset-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
 .about-content {
   padding: var(--space-xl) var(--space-md);
   text-align: center;

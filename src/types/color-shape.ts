@@ -1,5 +1,32 @@
-export type ShapeType = 'circle' | 'square' | 'triangle' | 'diamond' | 'star' | 'hexagon'
-export type ColorType = 'red' | 'blue' | 'green' | 'yellow' | 'purple' | 'orange'
+export type ShapeType =
+  | 'circle'
+  | 'square'
+  | 'triangle'
+  | 'diamond'
+  | 'star'
+  | 'hexagon'
+  | 'pentagon'
+  | 'heart'
+  | 'arrow'
+  | 'cross'
+  | 'crescent'
+
+export type ColorType =
+  | 'red'
+  | 'blue'
+  | 'green'
+  | 'yellow'
+  | 'purple'
+  | 'orange'
+  | 'pink'
+  | 'brown'
+  | 'cyan'
+  | 'gold'
+  | 'silver'
+  | 'navy'
+  | 'lime'
+
+export type GameMode = 'color' | 'shape' | 'mixed' | 'stroop'
 
 export interface ColorShapeStimulus {
   id: string
@@ -9,6 +36,8 @@ export interface ColorShapeStimulus {
   isCongruent: boolean   // does the label match the actual property?
   matchProperty: 'color' | 'shape' // what should the user match on?
   correctAnswer: boolean // should the user accept or reject?
+  gameMode: GameMode     // which mode generated this stimulus
+  stroopColor?: ColorType // for stroop mode: the color the word text claims
 }
 
 export interface ColorShapeResponse {

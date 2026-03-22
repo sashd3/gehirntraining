@@ -153,13 +153,13 @@ const indexLabel = computed(() => String.fromCharCode(65 + props.index))
     }
   }
 
-  // Wrong + selected: red
+  // Wrong + selected: white bg, red border only
   &--wrong {
-    background-color: var(--color-error-bg, #FDECEC);
+    background-color: var(--color-bg-elevated, #FFFFFF);
     box-shadow: 0 0 0 2px var(--color-error);
 
     .quiz-answer__letter {
-      background-color: var(--color-error-bg, #FDECEC);
+      background-color: var(--color-bg-secondary);
       color: var(--color-error);
     }
 

@@ -171,12 +171,12 @@ function navigateTo(tab: NavTab) {
 
   // Label
   &__label {
-    font-size: 10px;
-    font-weight: 500;
+    font-size: 13px;
+    font-weight: 600;
     line-height: 1;
     letter-spacing: 0.01em;
-    opacity: 0.7;
-    transition: opacity 0.3s ease, color 0.3s ease;
+    color: var(--color-primary);
+    transition: color 0.3s ease;
   }
 }
 
